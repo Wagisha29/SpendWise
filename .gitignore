@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.DS_Store
+
+# backend
+apps/backend/venv/
+apps/backend/__pycache__/
+apps/backend/**/__pycache__/
+apps/backend/*.db
