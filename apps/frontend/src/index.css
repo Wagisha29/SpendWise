@@ -1,15 +1,11 @@
+@import "tailwindcss";
+
 :root {
   color-scheme: dark;
-  font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  background: #0f0f0f;
-  color: #e4e4e4;
+  @apply m-0 min-h-screen bg-[#0f0f12] text-[#e4e4e4] antialiased;
 }
 
 #root {
