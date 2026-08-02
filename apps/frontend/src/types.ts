@@ -16,3 +16,7 @@ export interface Income {
 }
 
 export type IncomeInput = Omit<Income, "id">;
+
+export type Transaction =
+  | { kind: "income"; data: Income }
+  | { kind: "expense"; data: Expense };
