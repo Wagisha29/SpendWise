@@ -74,10 +74,19 @@ function ExpenseTracker({
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
   const [date, setDate] = useState(todayISO());
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
     loadExpenses();
   }, []);
+
+  function handleEditClick(expense: Expense) {
+    setEditingId(expense.id);
+    setTitle(expense.title);
+    setAmount(String(expense.amount));
+    setCategory(expense.category);
+    setDate(expense.date);
+  }
 
   async function loadExpenses() {
     setLoading(true);
@@ -90,6 +99,13 @@ function ExpenseTracker({
       setLoading(false);
     }
   }
+  function resetForm() {
+    setEditingId(null);
+    setTitle("");
+    setAmount("");
+    setCategory(CATEGORIES[0]);
+    setDate(todayISO());
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -99,19 +115,26 @@ function ExpenseTracker({
     setSubmitting(true);
     setError(null);
     try {
-      const created = await api.createExpense({
-        title: title.trim(),
-        amount: parsedAmount,
-        category,
-        date,
-      });
-      setExpenses((prev) => [created, ...prev]);
-      setTitle("");
-      setAmount("");
-      setCategory(CATEGORIES[0]);
-      setDate(todayISO());
+      const payload = { title: title.trim(), amount: parsedAmount, category, date };
+
+      if(editingId !== null){
+        const updated = await api.updateExpense(editingId, payload);
+        setExpenses((prev) =>
+          prev.map((expense) => (expense.id === editingId ? updated : expense)),
+        );
+      } else {
+        const created = await api.createExpense(payload);
+        setExpenses((prev) => [created, ...prev]);
+      }
+      resetForm();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to add expense");
+      setError(
+        err instanceof Error
+          ? err.message
+          : editingId !== null
+            ? "Failed to update expense"
+            : "Failed to add expense",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -214,8 +237,19 @@ function ExpenseTracker({
           className="cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-indigo-500 to-violet-500 px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-white transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={submitting}
         >
-          {submitting ? "Adding…" : "Add Expense"}
+          {submitting
+            ? editingId !== null ? "Saving…" : "Adding…"
+            : editingId !== null ? "Save Changes" : "Add Expense"}
         </button>
+        {editingId !== null && (
+        <button
+          type="button"
+          className="cursor-pointer rounded-[9px] border border-[#2f2f36] bg-transparent px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-[#c4c4c4] transition hover:border-red-400 hover:text-red-400"
+          onClick={resetForm}
+        >
+          Cancel
+        </button>
+        )}
       </form>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
@@ -255,6 +289,13 @@ function ExpenseTracker({
                     ₹{expense.amount.toFixed(2)}
                   </span>
                   <button
+                    className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#6a6a6a] transition hover:bg-indigo-400/10 hover:text-indigo-400"
+                    onClick={() => handleEditClick(expense)}
+                    aria-label="Edit expense"
+                  >
+                    ✎
+                  </button>
+                  <button
                     className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#6a6a6a] transition hover:bg-red-400/10 hover:text-red-400"
                     onClick={() => handleDelete(expense.id)}
                     aria-label="Delete expense"
@@ -272,3 +313,4 @@ function ExpenseTracker({
 }
 
 export default App;
+

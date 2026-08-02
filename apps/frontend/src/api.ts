@@ -36,4 +36,9 @@ export const api = {
     }),
   deleteExpense: (id: number) =>
     request<void>(`/api/expenses/${id}`, { method: "DELETE" }),
+  updateExpense: (id: number, expense: ExpenseInput) => 
+    request<Expense>(`/api/expenses/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(expense),
+    }),
 };
