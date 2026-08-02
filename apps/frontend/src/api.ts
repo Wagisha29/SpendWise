@@ -1,5 +1,5 @@
 import { supabase } from "./lib/supabaseClient";
-import type { Expense, ExpenseInput } from "./types";
+import type { Expense, ExpenseInput, Income, IncomeInput } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -44,5 +44,18 @@ export const api = {
     request<Expense>(`/api/expenses/${id}?op=updateExpense`, {
       method: "PATCH",
       body: JSON.stringify(expense),
+    }),
+  listIncome: () => request<Income[]>("/api/income?op=listIncome"),
+  createIncome: (income: IncomeInput) =>
+    request<Income>("/api/income?op=createIncome", {
+      method: "POST",
+      body: JSON.stringify(income),
+    }),
+  deleteIncome: (id: number) =>
+    request<void>(`/api/income/${id}?op=deleteIncome`, { method: "DELETE" }),
+  updateIncome: (id: number, income: IncomeInput) =>
+    request<Income>(`/api/income/${id}?op=updateIncome`, {
+      method: "PATCH",
+      body: JSON.stringify(income),
     }),
 };

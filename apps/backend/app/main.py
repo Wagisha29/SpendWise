@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import ALLOWED_ORIGINS
 from app.core.database import Base, engine
-from app.routers import expenses
+from app.routers import expenses, income
 
 Base.metadata.create_all(bind=engine)
 
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(expenses.router)
+app.include_router(income.router)
 
 
 @app.get("/api/health")
