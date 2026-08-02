@@ -240,42 +240,48 @@ function ExpenseTracker({
   }, [income, expenses]);
 
   return (
-    <div className="mx-auto max-w-[680px] px-6 pt-10 pb-16">
+    <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
       <Header userEmail={userEmail} onSignOut={onSignOut} />
 
       <SummaryCards income={monthlyIncomeTotal} expense={monthlyExpenseTotal} savings={savings} />
 
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Income</h2>
-      <IncomeForm
-        source={incomeSource}
-        amount={incomeAmount}
-        date={incomeDate}
-        onSourceChange={setIncomeSource}
-        onAmountChange={setIncomeAmount}
-        onDateChange={setIncomeDate}
-        onSubmit={handleIncomeSubmit}
-        onCancel={resetIncomeForm}
-        submitting={incomeSubmitting}
-        isEditing={editingIncomeId !== null}
-      />
-      {incomeError && <p className="mb-4 text-sm text-red-500">{incomeError}</p>}
+      <div className="mb-2 grid grid-cols-1 gap-x-8 lg:grid-cols-2">
+        <div>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Income</h2>
+          <IncomeForm
+            source={incomeSource}
+            amount={incomeAmount}
+            date={incomeDate}
+            onSourceChange={setIncomeSource}
+            onAmountChange={setIncomeAmount}
+            onDateChange={setIncomeDate}
+            onSubmit={handleIncomeSubmit}
+            onCancel={resetIncomeForm}
+            submitting={incomeSubmitting}
+            isEditing={editingIncomeId !== null}
+          />
+          {incomeError && <p className="mb-4 text-sm text-red-500">{incomeError}</p>}
+        </div>
 
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Expenses</h2>
-      <ExpenseForm
-        title={title}
-        amount={amount}
-        category={category}
-        date={date}
-        onTitleChange={setTitle}
-        onAmountChange={setAmount}
-        onCategoryChange={setCategory}
-        onDateChange={setDate}
-        onSubmit={handleSubmit}
-        onCancel={resetForm}
-        submitting={submitting}
-        isEditing={editingId !== null}
-      />
-      {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+        <div>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Expenses</h2>
+          <ExpenseForm
+            title={title}
+            amount={amount}
+            category={category}
+            date={date}
+            onTitleChange={setTitle}
+            onAmountChange={setAmount}
+            onCategoryChange={setCategory}
+            onDateChange={setDate}
+            onSubmit={handleSubmit}
+            onCancel={resetForm}
+            submitting={submitting}
+            isEditing={editingId !== null}
+          />
+          {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+        </div>
+      </div>
 
       <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Transactions</h2>
       <TransactionsList
