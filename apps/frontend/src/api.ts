@@ -27,17 +27,21 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+// The "?op=" query param is purely cosmetic: it makes each call show up with
+// a readable name (e.g. "6?op=updateExpense") in the browser's Network tab,
+// since Chrome names requests after the last URL segment + query string.
+// The backend ignores unknown query params, so this has no effect on behavior.
 export const api = {
-  listExpenses: () => request<Expense[]>("/api/expenses"),
+  listExpenses: () => request<Expense[]>("/api/expenses?op=listExpenses"),
   createExpense: (expense: ExpenseInput) =>
-    request<Expense>("/api/expenses", {
+    request<Expense>("/api/expenses?op=createExpense", {
       method: "POST",
       body: JSON.stringify(expense),
     }),
   deleteExpense: (id: number) =>
-    request<void>(`/api/expenses/${id}`, { method: "DELETE" }),
-  updateExpense: (id: number, expense: ExpenseInput) => 
-    request<Expense>(`/api/expenses/${id}`, {
+    request<void>(`/api/expenses/${id}?op=deleteExpense`, { method: "DELETE" }),
+  updateExpense: (id: number, expense: ExpenseInput) =>
+    request<Expense>(`/api/expenses/${id}?op=updateExpense`, {
       method: "PATCH",
       body: JSON.stringify(expense),
     }),
