@@ -163,7 +163,7 @@ function ExpenseTracker({
 
       <section className="mb-6 flex flex-col gap-1 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 px-7 py-6 shadow-[0_12px_30px_-12px_rgba(99,102,241,0.55)]">
         <span className="text-xs tracking-wider text-white/75 uppercase">Total spent</span>
-        <span className="text-4xl font-bold text-white">${total.toFixed(2)}</span>
+        <span className="text-4xl font-bold text-white">₹{total.toFixed(2)}</span>
         <span className="text-sm text-white/75">
           {expenses.length} {expenses.length === 1 ? "expense" : "expenses"}
         </span>
@@ -252,7 +252,7 @@ function ExpenseTracker({
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-bold whitespace-nowrap text-red-400">
-                    ${expense.amount.toFixed(2)}
+                    ₹{expense.amount.toFixed(2)}
                   </span>
                   <button
                     className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#6a6a6a] transition hover:bg-red-400/10 hover:text-red-400"
