@@ -14,6 +14,6 @@ class Expense(Base):
     user_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
-    category: Mapped[str] = mapped_column(String(100), nullable=False, default="Other")
+    category: Mapped[str] = mapped_column(String(100), nullable=False, default="Others")
     date: Mapped[date_type] = mapped_column(Date, nullable=False, default=date_type.today)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

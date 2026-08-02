@@ -1,14 +1,29 @@
-export const CATEGORIES = ["Food", "Transport", "Housing", "Utilities", "Entertainment", "Other"] as const;
+export const CATEGORIES = [
+  "Food",
+  "Grocery",
+  "Travel",
+  "Shopping",
+  "Bills",
+  "Entertainment",
+  "Investment",
+  "Medical",
+  "Rent",
+  "Others",
+] as const;
 
 export const CATEGORY_META: Record<string, { icon: string; color: string }> = {
   Food: { icon: "🍔", color: "#f59e0b" },
-  Transport: { icon: "🚗", color: "#38bdf8" },
-  Housing: { icon: "🏠", color: "#a78bfa" },
-  Utilities: { icon: "💡", color: "#facc15" },
+  Grocery: { icon: "🛒", color: "#84cc16" },
+  Travel: { icon: "✈️", color: "#38bdf8" },
+  Shopping: { icon: "🛍️", color: "#ec4899" },
+  Bills: { icon: "🧾", color: "#facc15" },
   Entertainment: { icon: "🎬", color: "#f472b6" },
-  Other: { icon: "📦", color: "#94a3b8" },
+  Investment: { icon: "📈", color: "#22c55e" },
+  Medical: { icon: "💊", color: "#ef4444" },
+  Rent: { icon: "🏠", color: "#a78bfa" },
+  Others: { icon: "📦", color: "#94a3b8" },
 };
 
 export function getCategoryMeta(category: string) {
-  return CATEGORY_META[category] ?? CATEGORY_META.Other;
+  return CATEGORY_META[category] ?? CATEGORY_META.Others;
 }

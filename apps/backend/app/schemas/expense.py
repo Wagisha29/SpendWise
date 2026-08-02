@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class ExpenseBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
     amount: float = Field(gt=0)
-    category: str = Field(default="Other", max_length=100)
+    category: str = Field(default="Others", max_length=100)
     date: date_type = Field(default_factory=date_type.today)
 
 
