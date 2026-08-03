@@ -59,6 +59,12 @@ function ExpenseTracker({
   const [date, setDate] = useState(todayISO());
   const [editingId, setEditingId] = useState<number | null>(null);
 
+  const [privacyMode, setPrivacyMode] = useState(() => localStorage.getItem("privacyMode") === "true");
+
+  useEffect(() => {
+    localStorage.setItem("privacyMode", String(privacyMode));
+  }, [privacyMode]);
+
   const [income, setIncome] = useState<Income[]>([]);
   const [incomeLoading, setIncomeLoading] = useState(true);
   const [incomeError, setIncomeError] = useState<string | null>(null);
@@ -247,9 +253,19 @@ function ExpenseTracker({
 
   return (
     <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
-      <Header userEmail={userEmail} onSignOut={onSignOut} />
+      <Header
+        userEmail={userEmail}
+        privacyMode={privacyMode}
+        onTogglePrivacy={() => setPrivacyMode((prev) => !prev)}
+        onSignOut={onSignOut}
+      />
 
-      <SummaryCards income={monthlyIncomeTotal} expense={monthlyExpenseTotal} savings={savings} />
+      <SummaryCards
+        income={monthlyIncomeTotal}
+        expense={monthlyExpenseTotal}
+        savings={savings}
+        hideAmounts={privacyMode}
+      />
 
       <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Income</h2>
       <IncomeForm
@@ -287,6 +303,7 @@ function ExpenseTracker({
       <TransactionsList
         transactions={transactions}
         loading={loading || incomeLoading}
+        hideAmounts={privacyMode}
         onEditIncome={handleIncomeEditClick}
         onDeleteIncome={handleIncomeDelete}
         onEditExpense={handleEditClick}
@@ -296,7 +313,7 @@ function ExpenseTracker({
       <h2 className="mt-8 mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
         Spending by Category
       </h2>
-      <CategoryPieChart expenses={monthlyExpenses} />
+      <CategoryPieChart expenses={monthlyExpenses} hideAmounts={privacyMode} />
     </div>
   );
 }

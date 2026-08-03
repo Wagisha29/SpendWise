@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { getCategoryMeta } from "../categories";
-import { CARD } from "../lib/ui";
+import { CARD, formatAmount } from "../lib/ui";
 import type { Expense, Income, Transaction } from "../types";
 
 const COLLAPSED_COUNT = 3;
@@ -9,6 +9,7 @@ const COLLAPSED_COUNT = 3;
 interface TransactionsListProps {
   transactions: Transaction[];
   loading: boolean;
+  hideAmounts: boolean;
   onEditIncome: (entry: Income) => void;
   onDeleteIncome: (id: number) => void;
   onEditExpense: (expense: Expense) => void;
@@ -18,6 +19,7 @@ interface TransactionsListProps {
 export function TransactionsList({
   transactions,
   loading,
+  hideAmounts,
   onEditIncome,
   onDeleteIncome,
   onEditExpense,
@@ -65,7 +67,7 @@ export function TransactionsList({
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-bold whitespace-nowrap text-emerald-600">
-                    + ₹{entry.amount.toFixed(2)}
+                    + ₹{formatAmount(entry.amount, hideAmounts)}
                   </span>
                   <button
                     className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-emerald-100 hover:text-emerald-600"
@@ -107,7 +109,7 @@ export function TransactionsList({
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-bold whitespace-nowrap text-rose-600">
-                  - ₹{expense.amount.toFixed(2)}
+                  - ₹{formatAmount(expense.amount, hideAmounts)}
                 </span>
                 <button
                   className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-amber-100 hover:text-amber-600"

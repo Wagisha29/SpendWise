@@ -1,8 +1,14 @@
+import { EyeIcon } from "./EyeIcon";
+
 export function Header({
   userEmail,
+  privacyMode,
+  onTogglePrivacy,
   onSignOut,
 }: {
   userEmail: string | undefined;
+  privacyMode: boolean;
+  onTogglePrivacy: () => void;
   onSignOut: () => Promise<void>;
 }) {
   const initial = userEmail ? userEmail.charAt(0).toUpperCase() : "?";
@@ -19,6 +25,16 @@ export function Header({
         </div>
       </div>
       <div className="flex items-center gap-3">
+        <button
+          type="button"
+          className="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-full border border-[#ece9f4] bg-transparent text-[#7a7590] transition hover:border-violet-300 hover:text-violet-500"
+          onClick={onTogglePrivacy}
+          aria-pressed={privacyMode}
+          aria-label={privacyMode ? "Show amounts" : "Hide amounts"}
+          title={privacyMode ? "Show amounts" : "Hide amounts"}
+        >
+          <EyeIcon open={!privacyMode} />
+        </button>
         <div
           className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gradient-to-br from-violet-200 to-fuchsia-200 text-[0.85rem] font-bold text-violet-800"
           title={userEmail}

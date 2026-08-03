@@ -2,11 +2,12 @@ import { useMemo } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import { getCategoryMeta } from "../categories";
-import { CARD } from "../lib/ui";
+import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { Expense } from "../types";
 
 interface CategoryPieChartProps {
   expenses: Expense[];
+  hideAmounts: boolean;
 }
 
 interface CategorySlice {
@@ -16,7 +17,7 @@ interface CategorySlice {
   icon: string;
 }
 
-export function CategoryPieChart({ expenses }: CategoryPieChartProps) {
+export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProps) {
   const data = useMemo<CategorySlice[]>(() => {
     const totals = new Map<string, number>();
     for (const expense of expenses) {
@@ -61,7 +62,7 @@ export function CategoryPieChart({ expenses }: CategoryPieChartProps) {
             </Pie>
             <Tooltip
               formatter={(value, _name, entry) => [
-                `₹${Number(value).toFixed(2)}`,
+                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${Number(value).toFixed(2)}`,
                 String(entry.payload?.category ?? ""),
               ]}
               contentStyle={{
@@ -87,7 +88,7 @@ export function CategoryPieChart({ expenses }: CategoryPieChartProps) {
                 {slice.icon} {slice.category}
               </span>
               <span className="text-sm font-semibold text-[#3f3b52]">
-                ₹{slice.amount.toFixed(2)}
+                ₹{formatAmount(slice.amount, hideAmounts)}
               </span>
               <span className="w-12 text-right text-xs text-[#8c86a3]">
                 {percent.toFixed(0)}%
