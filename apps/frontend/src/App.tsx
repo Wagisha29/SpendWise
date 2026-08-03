@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import { CATEGORIES } from "./categories";
+import { CategoryPieChart } from "./components/CategoryPieChart";
 import { ExpenseForm } from "./components/ExpenseForm";
 import { Header } from "./components/Header";
 import { IncomeForm } from "./components/IncomeForm";
@@ -228,6 +229,11 @@ function ExpenseTracker({
 
   const savings = monthlyIncomeTotal - monthlyExpenseTotal;
 
+  const monthlyExpenses = useMemo(
+    () => expenses.filter((expense) => isCurrentMonth(expense.date)),
+    [expenses],
+  );
+
   const transactions = useMemo<Transaction[]>(() => {
     const items: Transaction[] = [
       ...income.map((entry) => ({ kind: "income" as const, data: entry })),
@@ -286,6 +292,11 @@ function ExpenseTracker({
         onEditExpense={handleEditClick}
         onDeleteExpense={handleDelete}
       />
+
+      <h2 className="mt-8 mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+        Spending by Category
+      </h2>
+      <CategoryPieChart expenses={monthlyExpenses} />
     </div>
   );
 }
