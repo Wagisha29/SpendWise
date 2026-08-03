@@ -60,9 +60,9 @@ export function CategoryPieChart({ expenses }: CategoryPieChartProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number, _name, entry) => [
-                `₹${value.toFixed(2)}`,
-                entry.payload.category,
+              formatter={(value, _name, entry) => [
+                `₹${Number(value).toFixed(2)}`,
+                String(entry.payload?.category ?? ""),
               ]}
               contentStyle={{
                 borderRadius: 10,
