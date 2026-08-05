@@ -9,6 +9,7 @@ export const CATEGORIES = [
   "Investment",
   "Medical",
   "Rent",
+  "Fitness",
   "Others",
 ] as const;
 
@@ -23,6 +24,7 @@ export const CATEGORY_META: Record<string, { icon: string; color: string }> = {
   Investment: { icon: "📈", color: "#22c55e" },
   Medical: { icon: "💊", color: "#ef4444" },
   Rent: { icon: "🏠", color: "#a78bfa" },
+  Fitness: { icon: "🏋️", color: "#14b8a6" },
   Others: { icon: "📦", color: "#94a3b8" },
 };
 
