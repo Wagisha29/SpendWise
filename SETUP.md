@@ -35,8 +35,10 @@ table automatically on startup.
 1. In Supabase: **Authentication → Providers → Google** → toggle it on.
 2. Paste the Google **Client ID** and **Client secret** → **Save**.
 3. Go to **Authentication → URL Configuration**:
-   - Site URL: `http://localhost:5173`
-   - Redirect URLs: add `http://localhost:5173/**`
+   - Site URL: `https://spendwise-io.vercel.app` (use `http://localhost:5173` for local-only)
+   - Redirect URLs: add
+     - `http://localhost:5173/**`
+     - `https://spendwise-io.vercel.app/**`
 
 ## 4. Fill in your `.env` files
 

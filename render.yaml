@@ -13,5 +13,7 @@ services:
         sync: false
       - key: SUPABASE_JWT_SECRET
         sync: false
+      # Set in Render dashboard to:
+      # http://localhost:5173,https://spendwise-io.vercel.app
       - key: ALLOWED_ORIGINS
         sync: false
