@@ -38,13 +38,19 @@ function App() {
     return <LoginScreen onSignIn={signInWithGoogle} />;
   }
 
-  return <ExpenseTracker userEmail={session.user.email} onSignOut={signOut} />;
+  const userName = session.user.user_metadata?.full_name ?? session.user.user_metadata?.name;
+
+  return (
+    <ExpenseTracker userName={userName} userEmail={session.user.email} onSignOut={signOut} />
+  );
 }
 
 function ExpenseTracker({
+  userName,
   userEmail,
   onSignOut,
 }: {
+  userName: string | undefined;
   userEmail: string | undefined;
   onSignOut: () => Promise<void>;
 }) {
@@ -254,6 +260,7 @@ function ExpenseTracker({
   return (
     <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
       <Header
+        userName={userName}
         userEmail={userEmail}
         privacyMode={privacyMode}
         onTogglePrivacy={() => setPrivacyMode((prev) => !prev)}

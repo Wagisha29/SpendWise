@@ -1,17 +1,20 @@
 import { EyeIcon } from "./EyeIcon";
 
 export function Header({
+  userName,
   userEmail,
   privacyMode,
   onTogglePrivacy,
   onSignOut,
 }: {
+  userName: string | undefined;
   userEmail: string | undefined;
   privacyMode: boolean;
   onTogglePrivacy: () => void;
   onSignOut: () => Promise<void>;
 }) {
-  const initial = userEmail ? userEmail.charAt(0).toUpperCase() : "?";
+  const displayName = userName || "";
+  const initial = displayName ? displayName.charAt(0).toUpperCase() : "?";
 
   return (
     <header className="mb-7 flex flex-wrap items-center justify-between gap-4">
@@ -21,7 +24,9 @@ export function Header({
         </div>
         <div>
           <h1 className="m-0 text-2xl font-semibold tracking-tight text-[#3f3b52]">Expense Tracker</h1>
-          <p className="m-0 mt-0.5 text-[0.8rem] text-[#8c86a3]">{userEmail}</p>
+          <p className="m-0 mt-0.5 text-[0.8rem] text-[#8c86a3]" title={userEmail}>
+            {displayName}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-3">
@@ -37,7 +42,7 @@ export function Header({
         </button>
         <div
           className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gradient-to-br from-violet-200 to-fuchsia-200 text-[0.85rem] font-bold text-violet-800"
-          title={userEmail}
+          title={displayName}
         >
           {initial}
         </div>
