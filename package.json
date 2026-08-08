@@ -1,6 +1,6 @@
 
 {
-  "name": "expense-tracker-monorepo",
+  "name": "spendwise-monorepo",
   "private": true,
   "workspaces": [
     "apps/frontend"

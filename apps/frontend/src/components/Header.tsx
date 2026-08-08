@@ -23,7 +23,7 @@ export function Header({
           💸
         </div>
         <div>
-          <h1 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">Expense Tracker</h1>
+          <h1 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">SpendWise</h1>
           <p className="m-0 mt-0.5 text-[0.8rem] text-[#8c86a3]" title={userEmail}>
             {displayName}
           </p>

@@ -13,7 +13,7 @@ export function LoginScreen({ onSignIn }: { onSignIn: () => Promise<void> }) {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-2xl shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)] transition-transform duration-500 hover:rotate-[12deg] hover:scale-110">
           💸
         </div>
-        <h1 className="mt-4 mb-1 text-2xl font-extrabold text-[#28223f]">Expense Tracker</h1>
+        <h1 className="mt-4 mb-1 text-2xl font-extrabold text-[#28223f]">SpendWise</h1>
         <p className="mb-7 text-sm leading-relaxed text-[#8c86a3]">
           Track where your money goes, one expense at a time.
         </p>

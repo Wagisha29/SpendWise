@@ -7,7 +7,7 @@ from app.routers import expenses, income
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Expense Tracker API")
+app = FastAPI(title="SpendWise API")
 
 app.add_middleware(
     CORSMiddleware,
