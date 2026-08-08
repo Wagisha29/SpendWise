@@ -1,4 +1,5 @@
 import { EyeIcon } from "./EyeIcon";
+import { Logo } from "./Logo";
 
 export function Header({
   userName,
@@ -19,8 +20,8 @@ export function Header({
   return (
     <header className="mb-7 flex flex-wrap items-center justify-between gap-4">
       <div className="flex items-center gap-3.5">
-        <div className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-xl shadow-[0_8px_20px_-6px_rgba(129,80,240,0.55)] transition-transform duration-300 hover:scale-105 hover:rotate-6">
-          💸
+        <div className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-white shadow-[0_8px_20px_-6px_rgba(129,80,240,0.55)] transition-transform duration-300 hover:scale-105 hover:rotate-6">
+          <Logo size={24} />
         </div>
         <div>
           <h1 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">SpendWise</h1>

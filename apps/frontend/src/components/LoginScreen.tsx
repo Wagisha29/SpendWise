@@ -1,4 +1,5 @@
 import { GoogleIcon } from "./GoogleIcon";
+import { Logo } from "./Logo";
 
 export function LoginScreen({ onSignIn }: { onSignIn: () => Promise<void> }) {
   return (
@@ -10,8 +11,8 @@ export function LoginScreen({ onSignIn }: { onSignIn: () => Promise<void> }) {
       }}
     >
       <div className="animate-pop-in flex w-full max-w-[380px] flex-col items-center gap-2 rounded-[24px] border border-[#eceafb] bg-white px-10 py-12 text-center shadow-[0_24px_60px_-20px_rgba(99,60,220,0.22)] transition-shadow duration-300 hover:shadow-[0_28px_70px_-16px_rgba(99,60,220,0.28)]">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-2xl shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)] transition-transform duration-500 hover:rotate-[12deg] hover:scale-110">
-          💸
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-white shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)] transition-transform duration-500 hover:rotate-[12deg] hover:scale-110">
+          <Logo size={32} />
         </div>
         <h1 className="mt-4 mb-1 text-2xl font-extrabold text-[#28223f]">SpendWise</h1>
         <p className="mb-7 text-sm leading-relaxed text-[#8c86a3]">
