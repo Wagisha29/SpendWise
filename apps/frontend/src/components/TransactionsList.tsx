@@ -30,7 +30,7 @@ export function TransactionsList({
   if (loading) {
     return (
       <div className="flex min-h-32 items-center justify-center">
-        <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#ece9f4] border-t-violet-300" />
+        <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#ece9f4] border-t-indigo-400" />
       </div>
     );
   }
@@ -50,15 +50,16 @@ export function TransactionsList({
   return (
     <div className="flex flex-col gap-2.5">
       <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
-        {visibleTransactions.map((item) => {
+        {visibleTransactions.map((item, index) => {
           if (item.kind === "income") {
             const entry = item.data;
             return (
               <li
                 key={`income-${entry.id}`}
-                className={`${CARD} flex items-center gap-3.5 px-[1.1rem] py-[0.85rem] transition hover:border-emerald-200`}
+                style={{ animationDelay: `${Math.min(index, 6) * 40}ms` }}
+                className={`${CARD} animate-fade-in-up group flex items-center gap-3.5 px-[1.1rem] py-[0.85rem] hover:translate-x-1 hover:border-emerald-200 hover:shadow-md`}
               >
-                <div className="flex h-10 w-10 min-w-10 items-center justify-center rounded-[10px] bg-emerald-100 text-lg text-emerald-600">
+                <div className="flex h-10 w-10 min-w-10 items-center justify-center rounded-[10px] bg-emerald-100 text-lg text-emerald-600 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                   💰
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5 text-left">
@@ -66,18 +67,18 @@ export function TransactionsList({
                   <span className="text-[0.8rem] text-[#8c86a3]">Income · {entry.date}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-bold whitespace-nowrap text-emerald-600">
+                  <span className="font-bold whitespace-nowrap text-emerald-600 tabular-nums">
                     + ₹{formatAmount(entry.amount, hideAmounts)}
                   </span>
                   <button
-                    className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-emerald-100 hover:text-emerald-600"
+                    className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-emerald-100 hover:text-emerald-600"
                     onClick={() => onEditIncome(entry)}
                     aria-label="Edit income"
                   >
                     ✎
                   </button>
                   <button
-                    className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-rose-100 hover:text-rose-500"
+                    className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-rose-100 hover:text-rose-500"
                     onClick={() => onDeleteIncome(entry.id)}
                     aria-label="Delete income"
                   >
@@ -93,10 +94,11 @@ export function TransactionsList({
           return (
             <li
               key={`expense-${expense.id}`}
-              className={`${CARD} flex items-center gap-3.5 px-[1.1rem] py-[0.85rem] transition hover:border-rose-200`}
+              style={{ animationDelay: `${Math.min(index, 6) * 40}ms` }}
+              className={`${CARD} animate-fade-in-up group flex items-center gap-3.5 px-[1.1rem] py-[0.85rem] hover:translate-x-1 hover:border-rose-200 hover:shadow-md`}
             >
               <div
-                className="flex h-10 w-10 min-w-10 items-center justify-center rounded-[10px] text-lg"
+                className="flex h-10 w-10 min-w-10 items-center justify-center rounded-[10px] text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
                 style={{ background: `${meta.color}26`, color: meta.color }}
               >
                 {meta.icon}
@@ -108,18 +110,18 @@ export function TransactionsList({
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-bold whitespace-nowrap text-rose-600">
+                <span className="font-bold whitespace-nowrap text-rose-600 tabular-nums">
                   - ₹{formatAmount(expense.amount, hideAmounts)}
                 </span>
                 <button
-                  className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-amber-100 hover:text-amber-600"
+                  className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-amber-100 hover:text-amber-600"
                   onClick={() => onEditExpense(expense)}
                   aria-label="Edit expense"
                 >
                   ✎
                 </button>
                 <button
-                  className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition hover:bg-rose-100 hover:text-rose-500"
+                  className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-rose-100 hover:text-rose-500"
                   onClick={() => onDeleteExpense(expense.id)}
                   aria-label="Delete expense"
                 >
@@ -134,7 +136,7 @@ export function TransactionsList({
         <button
           type="button"
           onClick={() => setExpanded((prev) => !prev)}
-          className="cursor-pointer self-center rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition hover:border-violet-200 hover:text-violet-500"
+          className="cursor-pointer self-center rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:text-indigo-500 hover:shadow-md active:translate-y-0"
         >
           {expanded ? "Show less ▲" : `Show all ${transactions.length} ▾`}
         </button>

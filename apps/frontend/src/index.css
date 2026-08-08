@@ -1,13 +1,57 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
 :root {
   color-scheme: light;
 }
 
 body {
-  @apply m-0 min-h-screen bg-[#faf8fc] text-[#3f3b52] antialiased;
+  @apply m-0 min-h-screen font-sans text-[#282342] antialiased;
+  background-color: #f6f5fc;
+  background-image:
+    radial-gradient(circle at 8% 0%, rgba(99, 102, 241, 0.1), transparent 40%),
+    radial-gradient(circle at 92% 12%, rgba(236, 72, 153, 0.09), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(34, 211, 238, 0.08), transparent 45%);
+  background-attachment: fixed;
 }
 
 #root {
   min-height: 100vh;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

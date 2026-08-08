@@ -29,7 +29,7 @@ function App() {
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#ece9f4] border-t-violet-300" />
+        <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#ece9f4] border-t-indigo-400" />
       </div>
     );
   }
@@ -258,7 +258,7 @@ function ExpenseTracker({
   }, [income, expenses]);
 
   return (
-    <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
+    <div className="animate-fade-in-up mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
       <Header
         userName={userName}
         userEmail={userEmail}
@@ -274,7 +274,9 @@ function ExpenseTracker({
         hideAmounts={privacyMode}
       />
 
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Income</h2>
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income
+      </h2>
       <IncomeForm
         source={incomeSource}
         amount={incomeAmount}
@@ -289,7 +291,9 @@ function ExpenseTracker({
       />
       {incomeError && <p className="mb-4 text-sm text-red-500">{incomeError}</p>}
 
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Expenses</h2>
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+        <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Expenses
+      </h2>
       <ExpenseForm
         title={title}
         amount={amount}
@@ -306,7 +310,9 @@ function ExpenseTracker({
       />
       {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
 
-      <h2 className="mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">Transactions</h2>
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> Transactions
+      </h2>
       <TransactionsList
         transactions={transactions}
         loading={loading || incomeLoading}
@@ -317,8 +323,8 @@ function ExpenseTracker({
         onDeleteExpense={handleDelete}
       />
 
-      <h2 className="mt-8 mb-3 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        Spending by Category
+      <h2 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+        <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" /> Spending by Category
       </h2>
       <CategoryPieChart expenses={monthlyExpenses} hideAmounts={privacyMode} />
     </div>
