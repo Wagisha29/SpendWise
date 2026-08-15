@@ -5,7 +5,7 @@ import { CategoryPieChart } from "./components/CategoryPieChart";
 import { ExpenseForm } from "./components/ExpenseForm";
 import { Header } from "./components/Header";
 import { IncomeForm } from "./components/IncomeForm";
-import { LoginScreen } from "./components/LoginScreen";
+import { LandingPage } from "./components/LandingPage";
 import { SummaryCards } from "./components/SummaryCards";
 import { TransactionsList } from "./components/TransactionsList";
 import { useAuth } from "./context/AuthContext";
@@ -35,7 +35,7 @@ function App() {
   }
 
   if (!session) {
-    return <LoginScreen onSignIn={signInWithGoogle} />;
+    return <LandingPage onSignIn={signInWithGoogle} />;
   }
 
   const userName = session.user.user_metadata?.full_name ?? session.user.user_metadata?.name;
