@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import { CATEGORIES } from "./categories";
-import { CategoryPieChart } from "./components/CategoryPieChart";
-import { ExpenseForm } from "./components/ExpenseForm";
-import { Header } from "./components/Header";
-import { IncomeForm } from "./components/IncomeForm";
+import { AnalyticsView } from "./components/AnalyticsView";
+import { DashboardView } from "./components/DashboardView";
+import { Header, type AppTab } from "./components/Header";
 import { LandingPage } from "./components/LandingPage";
 import { SummaryCards } from "./components/SummaryCards";
-import { TransactionsList } from "./components/TransactionsList";
 import { useAuth } from "./context/AuthContext";
 import type { Expense, Income, Transaction } from "./types";
 
@@ -54,6 +52,8 @@ function SpendWiseApp({
   userEmail: string | undefined;
   onSignOut: () => Promise<void>;
 }) {
+  const [activeTab, setActiveTab] = useState<AppTab>("dashboard");
+
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,11 +87,15 @@ function SpendWiseApp({
   }, []);
 
   function handleEditClick(expense: Expense) {
+    setActiveTab("dashboard");
     setEditingId(expense.id);
     setTitle(expense.title);
     setAmount(String(expense.amount));
     setCategory(expense.category);
     setDate(expense.date);
+    requestAnimationFrame(() => {
+      document.getElementById("expense-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   async function loadExpenses() {
@@ -105,6 +109,7 @@ function SpendWiseApp({
       setLoading(false);
     }
   }
+
   function resetForm() {
     setEditingId(null);
     setTitle("");
@@ -123,11 +128,9 @@ function SpendWiseApp({
     try {
       const payload = { title: title.trim(), amount: parsedAmount, category, date };
 
-      if(editingId !== null){
+      if (editingId !== null) {
         const updated = await api.updateExpense(editingId, payload);
-        setExpenses((prev) =>
-          prev.map((expense) => (expense.id === editingId ? updated : expense)),
-        );
+        setExpenses((prev) => prev.map((expense) => (expense.id === editingId ? updated : expense)));
       } else {
         const created = await api.createExpense(payload);
         setExpenses((prev) => [created, ...prev]);
@@ -156,10 +159,14 @@ function SpendWiseApp({
   }
 
   function handleIncomeEditClick(incomeEntry: Income) {
+    setActiveTab("dashboard");
     setEditingIncomeId(incomeEntry.id);
     setIncomeSource(incomeEntry.source);
     setIncomeAmount(String(incomeEntry.amount));
     setIncomeDate(incomeEntry.date);
+    requestAnimationFrame(() => {
+      document.getElementById("income-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   async function loadIncome() {
@@ -193,9 +200,7 @@ function SpendWiseApp({
 
       if (editingIncomeId !== null) {
         const updated = await api.updateIncome(editingIncomeId, payload);
-        setIncome((prev) =>
-          prev.map((entry) => (entry.id === editingIncomeId ? updated : entry)),
-        );
+        setIncome((prev) => prev.map((entry) => (entry.id === editingIncomeId ? updated : entry)));
       } else {
         const created = await api.createIncome(payload);
         setIncome((prev) => [created, ...prev]);
@@ -246,6 +251,11 @@ function SpendWiseApp({
     [expenses],
   );
 
+  const topExpenses = useMemo(
+    () => [...monthlyExpenses].sort((a, b) => b.amount - a.amount).slice(0, 5),
+    [monthlyExpenses],
+  );
+
   const transactions = useMemo<Transaction[]>(() => {
     const items: Transaction[] = [
       ...income.map((entry) => ({ kind: "income" as const, data: entry })),
@@ -263,6 +273,8 @@ function SpendWiseApp({
         userName={userName}
         userEmail={userEmail}
         privacyMode={privacyMode}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
         onTogglePrivacy={() => setPrivacyMode((prev) => !prev)}
         onSignOut={onSignOut}
       />
@@ -274,59 +286,49 @@ function SpendWiseApp({
         hideAmounts={privacyMode}
       />
 
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income
-      </h2>
-      <IncomeForm
-        source={incomeSource}
-        amount={incomeAmount}
-        date={incomeDate}
-        onSourceChange={setIncomeSource}
-        onAmountChange={setIncomeAmount}
-        onDateChange={setIncomeDate}
-        onSubmit={handleIncomeSubmit}
-        onCancel={resetIncomeForm}
-        submitting={incomeSubmitting}
-        isEditing={editingIncomeId !== null}
-      />
-      {incomeError && <p className="mb-4 text-sm text-red-500">{incomeError}</p>}
+      {activeTab === "dashboard" && (
+        <DashboardView
+          hideAmounts={privacyMode}
+          loading={loading || incomeLoading}
+          incomeSource={incomeSource}
+          incomeAmount={incomeAmount}
+          incomeDate={incomeDate}
+          incomeSubmitting={incomeSubmitting}
+          incomeError={incomeError}
+          editingIncomeId={editingIncomeId}
+          onIncomeSourceChange={setIncomeSource}
+          onIncomeAmountChange={setIncomeAmount}
+          onIncomeDateChange={setIncomeDate}
+          onIncomeSubmit={handleIncomeSubmit}
+          onIncomeCancel={resetIncomeForm}
+          title={title}
+          amount={amount}
+          category={category}
+          date={date}
+          submitting={submitting}
+          error={error}
+          editingId={editingId}
+          onTitleChange={setTitle}
+          onAmountChange={setAmount}
+          onCategoryChange={setCategory}
+          onDateChange={setDate}
+          onExpenseSubmit={handleSubmit}
+          onExpenseCancel={resetForm}
+          transactions={transactions}
+          onEditIncome={handleIncomeEditClick}
+          onDeleteIncome={handleIncomeDelete}
+          onEditExpense={handleEditClick}
+          onDeleteExpense={handleDelete}
+        />
+      )}
 
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Expenses
-      </h2>
-      <ExpenseForm
-        title={title}
-        amount={amount}
-        category={category}
-        date={date}
-        onTitleChange={setTitle}
-        onAmountChange={setAmount}
-        onCategoryChange={setCategory}
-        onDateChange={setDate}
-        onSubmit={handleSubmit}
-        onCancel={resetForm}
-        submitting={submitting}
-        isEditing={editingId !== null}
-      />
-      {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
-
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> Transactions
-      </h2>
-      <TransactionsList
-        transactions={transactions}
-        loading={loading || incomeLoading}
-        hideAmounts={privacyMode}
-        onEditIncome={handleIncomeEditClick}
-        onDeleteIncome={handleIncomeDelete}
-        onEditExpense={handleEditClick}
-        onDeleteExpense={handleDelete}
-      />
-
-      <h2 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" /> Spending by Category
-      </h2>
-      <CategoryPieChart expenses={monthlyExpenses} hideAmounts={privacyMode} />
+      {activeTab === "analytics" && (
+        <AnalyticsView
+          monthlyExpenses={monthlyExpenses}
+          topExpenses={topExpenses}
+          hideAmounts={privacyMode}
+        />
+      )}
     </div>
   );
 }

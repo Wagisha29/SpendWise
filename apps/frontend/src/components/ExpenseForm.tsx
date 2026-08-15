@@ -14,6 +14,7 @@ interface ExpenseFormProps {
   onCancel: () => void;
   submitting: boolean;
   isEditing: boolean;
+  bare?: boolean;
 }
 
 const INPUT_CLASS =
@@ -32,10 +33,15 @@ export function ExpenseForm({
   onCancel,
   submitting,
   isEditing,
+  bare = false,
 }: ExpenseFormProps) {
   return (
     <form
-      className={`${CARD} mb-6 grid grid-cols-2 gap-2.5 p-[1.1rem] hover:shadow-md md:grid-cols-[2fr_1fr_1fr_1fr_auto]`}
+      className={
+        bare
+          ? "flex flex-col gap-3"
+          : `${CARD} mb-6 grid grid-cols-2 gap-2.5 p-[1.1rem] hover:shadow-md md:grid-cols-[2fr_1fr_1fr_1fr_auto]`
+      }
       onSubmit={onSubmit}
     >
       <input
@@ -76,15 +82,15 @@ export function ExpenseForm({
       />
       <button
         type="submit"
-        className="cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-rose-300 to-orange-300 px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-rose-900 shadow-[0_4px_14px_-4px_rgba(251,113,133,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(251,113,133,0.6)] active:scale-[0.97] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-rose-300 to-orange-300 px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-rose-900 shadow-[0_4px_14px_-4px_rgba(251,113,133,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(251,113,133,0.6)] active:scale-[0.97] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 ${bare ? "w-full" : ""}`}
         disabled={submitting}
       >
         {submitting ? (isEditing ? "Saving…" : "Adding…") : isEditing ? "Save Changes" : "Add Expense"}
       </button>
-      {isEditing && (
+      {(isEditing || bare) && (
         <button
           type="button"
-          className="cursor-pointer rounded-[9px] border border-[#ece9f4] bg-transparent px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-[#7a7590] transition-all duration-200 hover:border-rose-300 hover:text-rose-500"
+          className={`cursor-pointer rounded-[9px] border border-[#ece9f4] bg-transparent px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-[#7a7590] transition-all duration-200 hover:border-rose-300 hover:text-rose-500 ${bare ? "w-full" : ""}`}
           onClick={onCancel}
         >
           Cancel
