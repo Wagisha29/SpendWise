@@ -61,6 +61,7 @@ function SpendWiseApp({
 
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
   const [date, setDate] = useState(todayISO());
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -91,6 +92,7 @@ function SpendWiseApp({
     setEditingId(expense.id);
     setTitle(expense.title);
     setAmount(String(expense.amount));
+    setQuantity("1");
     setCategory(expense.category);
     setDate(expense.date);
     requestAnimationFrame(() => {
@@ -114,6 +116,7 @@ function SpendWiseApp({
     setEditingId(null);
     setTitle("");
     setAmount("");
+    setQuantity("1");
     setCategory(CATEGORIES[0]);
     setDate(todayISO());
   }
@@ -121,12 +124,20 @@ function SpendWiseApp({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsedAmount = Number(amount);
+    const parsedQuantity = Number(quantity);
     if (!title.trim() || !parsedAmount || parsedAmount <= 0) return;
+    if (!parsedQuantity || parsedQuantity <= 0) return;
 
     setSubmitting(true);
     setError(null);
     try {
-      const payload = { title: title.trim(), amount: parsedAmount, category, date };
+      const payload = {
+        title: title.trim(),
+        amount: parsedAmount,
+        quantity: parsedQuantity,
+        category,
+        date,
+      };
 
       if (editingId !== null) {
         const updated = await api.updateExpense(editingId, payload);
@@ -303,6 +314,7 @@ function SpendWiseApp({
           onIncomeCancel={resetIncomeForm}
           title={title}
           amount={amount}
+          quantity={quantity}
           category={category}
           date={date}
           submitting={submitting}
@@ -310,6 +322,7 @@ function SpendWiseApp({
           editingId={editingId}
           onTitleChange={setTitle}
           onAmountChange={setAmount}
+          onQuantityChange={setQuantity}
           onCategoryChange={setCategory}
           onDateChange={setDate}
           onExpenseSubmit={handleSubmit}

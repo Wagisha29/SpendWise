@@ -12,12 +12,14 @@ class ExpenseBase(BaseModel):
 
 
 class ExpenseCreate(ExpenseBase):
-    pass
+    # Input-only: unit price is `amount`; total stored = amount * quantity
+    quantity: float = Field(default=1, gt=0)
 
 
 class ExpenseUpdate(BaseModel):
     title: Optional[str] = Field(default=None, min_length=1, max_length=255)
     amount: Optional[float] = Field(default=None, gt=0)
+    quantity: Optional[float] = Field(default=None, gt=0)
     category: Optional[str] = Field(default=None, max_length=100)
     date: Optional[date_type] = None
 

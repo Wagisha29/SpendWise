@@ -6,7 +6,7 @@ export interface Expense {
   date: string;
 }
 
-export type ExpenseInput = Omit<Expense, "id">;
+export type ExpenseInput = Omit<Expense, "id"> & { quantity?: number };
 
 export interface Income {
   id: number;

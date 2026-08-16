@@ -21,6 +21,7 @@ interface DashboardViewProps {
 
   title: string;
   amount: string;
+  quantity: string;
   category: string;
   date: string;
   submitting: boolean;
@@ -28,6 +29,7 @@ interface DashboardViewProps {
   editingId: number | null;
   onTitleChange: (value: string) => void;
   onAmountChange: (value: string) => void;
+  onQuantityChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
   onDateChange: (value: string) => void;
   onExpenseSubmit: (e: React.FormEvent) => void;
@@ -56,6 +58,7 @@ export function DashboardView({
   onIncomeCancel,
   title,
   amount,
+  quantity,
   category,
   date,
   submitting,
@@ -63,6 +66,7 @@ export function DashboardView({
   editingId,
   onTitleChange,
   onAmountChange,
+  onQuantityChange,
   onCategoryChange,
   onDateChange,
   onExpenseSubmit,
@@ -101,10 +105,12 @@ export function DashboardView({
         <ExpenseForm
           title={title}
           amount={amount}
+          quantity={quantity}
           category={category}
           date={date}
           onTitleChange={onTitleChange}
           onAmountChange={onAmountChange}
+          onQuantityChange={onQuantityChange}
           onCategoryChange={onCategoryChange}
           onDateChange={onDateChange}
           onSubmit={onExpenseSubmit}

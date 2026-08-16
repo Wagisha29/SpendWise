@@ -4,10 +4,12 @@ import { CARD } from "../lib/ui";
 interface ExpenseFormProps {
   title: string;
   amount: string;
+  quantity: string;
   category: string;
   date: string;
   onTitleChange: (value: string) => void;
   onAmountChange: (value: string) => void;
+  onQuantityChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
   onDateChange: (value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -23,10 +25,12 @@ const INPUT_CLASS =
 export function ExpenseForm({
   title,
   amount,
+  quantity,
   category,
   date,
   onTitleChange,
   onAmountChange,
+  onQuantityChange,
   onCategoryChange,
   onDateChange,
   onSubmit,
@@ -35,12 +39,17 @@ export function ExpenseForm({
   isEditing,
   bare = false,
 }: ExpenseFormProps) {
+  const unitPrice = Number(amount);
+  const qty = Number(quantity);
+  const total =
+    unitPrice > 0 && qty > 0 ? (unitPrice * qty).toFixed(2) : null;
+
   return (
     <form
       className={
         bare
           ? "flex flex-col gap-3"
-          : `${CARD} mb-6 grid grid-cols-2 gap-2.5 p-[1.1rem] hover:shadow-md md:grid-cols-[2fr_1fr_1fr_1fr_auto]`
+          : `${CARD} mb-6 grid grid-cols-2 gap-2.5 p-[1.1rem] hover:shadow-md md:grid-cols-[2fr_1fr_0.7fr_1fr_1fr_auto]`
       }
       onSubmit={onSubmit}
     >
@@ -55,11 +64,21 @@ export function ExpenseForm({
       <input
         className={INPUT_CLASS}
         type="number"
-        placeholder="Amount"
+        placeholder="Unit price"
         value={amount}
         onChange={(e) => onAmountChange(e.target.value)}
         min="0.01"
         step="0.01"
+        required
+      />
+      <input
+        className={INPUT_CLASS}
+        type="number"
+        placeholder="Qty"
+        value={quantity}
+        onChange={(e) => onQuantityChange(e.target.value)}
+        min="1"
+        step="1"
         required
       />
       <select
@@ -80,6 +99,13 @@ export function ExpenseForm({
         onChange={(e) => onDateChange(e.target.value)}
         required
       />
+      {total !== null && (
+        <p
+          className={`col-span-full m-0 text-sm text-[#7a7590] ${bare ? "" : "md:col-span-full"}`}
+        >
+          Total: ₹{total}
+        </p>
+      )}
       <button
         type="submit"
         className={`cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-rose-300 to-orange-300 px-[1.15rem] py-[0.6rem] font-semibold whitespace-nowrap text-rose-900 shadow-[0_4px_14px_-4px_rgba(251,113,133,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(251,113,133,0.6)] active:scale-[0.97] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 ${bare ? "w-full" : ""}`}

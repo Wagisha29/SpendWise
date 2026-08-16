@@ -27,7 +27,10 @@ def create_expense(
     db: Session = Depends(get_db),
     user: CurrentUser = Depends(get_current_user),
 ):
-    db_expense = Expense(**expense.model_dump(), user_id=user.id)
+    data = expense.model_dump()
+    quantity = data.pop("quantity")
+    data["amount"] = data["amount"] * quantity
+    db_expense = Expense(**data, user_id=user.id)
     db.add(db_expense)
     db.commit()
     db.refresh(db_expense)
@@ -58,7 +61,15 @@ def update_expense(
     user: CurrentUser = Depends(get_current_user),
 ):
     db_expense = _get_owned_expense(db, expense_id, user)
-    for field, value in expense.model_dump(exclude_unset=True).items():
+    data = expense.model_dump(exclude_unset=True)
+    quantity = data.pop("quantity", None)
+    if "amount" in data and quantity is not None:
+        data["amount"] = data["amount"] * quantity
+    elif quantity is not None and "amount" not in data:
+        raise HTTPException(
+            status_code=400, detail="Send amount (unit price) with quantity"
+        )
+    for field, value in data.items():
         setattr(db_expense, field, value)
     db.commit()
     db.refresh(db_expense)
