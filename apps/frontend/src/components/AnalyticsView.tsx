@@ -57,37 +57,47 @@ export function AnalyticsView({
 
   return (
     <div className="animate-fade-in-up">
-      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h2 className="m-0 text-xl font-extrabold tracking-tight text-[#28223f]">
             Analytics & Financial Insights
           </h2>
           <p className="mt-1 mb-0 text-sm text-[#8c86a3]">
             {mode === "monthly"
-              ? `Monthly trends for ${selectedYear}.`
-              : "Year-over-year income, expense, and category shifts."}
+              ? `Jan–Dec bars for ${selectedYear}.`
+              : "Yearly totals across the last 5 years."}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
-          {mode === "monthly" && (
-            <label className="flex items-center gap-2 text-sm text-[#6f6888]">
-              <span className="font-medium">Year</span>
-              <select
-                className="cursor-pointer rounded-[9px] border border-[#ece9f4] bg-white px-3 py-2 text-sm text-[#3f3b52] outline-none focus:border-indigo-300 focus:shadow-[0_0_0_3px_rgba(129,140,248,0.2)]"
-                value={selectedYear}
-                onChange={(e) => setYear(Number(e.target.value))}
-              >
-                {years.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
+        <div className="flex flex-wrap items-center gap-2">
+          <div
+            className={`inline-flex h-10 items-center gap-2 rounded-[10px] border border-[#ece9f4] bg-white px-3 transition-opacity ${
+              mode === "yearly" ? "pointer-events-none opacity-40" : ""
+            }`}
+          >
+            <span className="text-xs font-semibold tracking-wide text-[#8c86a3] uppercase">
+              Year
+            </span>
+            <select
+              className="h-full cursor-pointer border-none bg-transparent py-0 pr-1 text-sm font-semibold text-[#3f3b52] outline-none disabled:cursor-not-allowed"
+              value={selectedYear}
+              onChange={(e) => setYear(Number(e.target.value))}
+              disabled={mode === "yearly"}
+              aria-label="Select year"
+            >
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <div className="inline-flex rounded-[10px] border border-[#ece9f4] bg-white p-0.5">
+          <div
+            className="inline-flex h-10 items-center rounded-[10px] border border-[#ece9f4] bg-white p-0.5"
+            role="group"
+            aria-label="Chart period"
+          >
             <ModeButton active={mode === "monthly"} onClick={() => setMode("monthly")}>
               Monthly
             </ModeButton>
@@ -104,14 +114,24 @@ export function AnalyticsView({
         hideAmounts={hideAmounts}
       />
 
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income vs Expense Trend
       </h3>
+      <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
+        {mode === "monthly"
+          ? `12 months in ${selectedYear} (Jan–Dec).`
+          : "One bar group per year for the last 5 years."}
+      </p>
       <IncomeExpenseTrendChart data={incomeExpenseData} hideAmounts={hideAmounts} />
 
-      <h3 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mt-8 mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> Category Spending Shift
       </h3>
+      <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
+        {mode === "monthly"
+          ? `Category mix by month in ${selectedYear}.`
+          : "Category mix by year for the last 5 years."}
+      </p>
       <CategoryTrendChart
         data={categorySeries.data}
         activeCategories={categorySeries.activeCategories}
@@ -175,7 +195,7 @@ function ModeButton({
     <button
       type="button"
       onClick={onClick}
-      className={`cursor-pointer rounded-[8px] border-none px-3.5 py-1.5 text-sm font-semibold transition-all duration-200 ${
+      className={`h-9 cursor-pointer rounded-[8px] border-none px-3.5 text-sm font-semibold transition-all duration-200 ${
         active
           ? "bg-indigo-500 text-white shadow-sm"
           : "bg-transparent text-[#7a7590] hover:text-[#3f3b52]"

@@ -69,6 +69,7 @@ export function buildMonthlySeries(
 export function buildYearlySeries(
   income: Income[],
   expenses: Expense[],
+  windowSize = 5,
 ): IncomeExpensePoint[] {
   const byYear = new Map<number, { income: number; expense: number }>();
 
@@ -85,15 +86,14 @@ export function buildYearlySeries(
     byYear.set(y, row);
   }
 
-  const years = Array.from(byYear.keys()).sort((a, b) => a - b);
-  if (years.length === 0) {
-    return [{ label: String(new Date().getFullYear()), income: 0, expense: 0 }];
+  const current = new Date().getFullYear();
+  const start = current - windowSize + 1;
+  const points: IncomeExpensePoint[] = [];
+  for (let y = start; y <= current; y++) {
+    const row = byYear.get(y) ?? { income: 0, expense: 0 };
+    points.push({ label: String(y), income: row.income, expense: row.expense });
   }
-
-  return years.map((y) => {
-    const row = byYear.get(y)!;
-    return { label: String(y), income: row.income, expense: row.expense };
-  });
+  return points;
 }
 
 export function buildCategoryMonthlySeries(
@@ -125,6 +125,7 @@ export function buildCategoryMonthlySeries(
 
 export function buildCategoryYearlySeries(
   expenses: Expense[],
+  windowSize = 5,
 ): { data: CategoryMonthPoint[]; activeCategories: string[] } {
   const byYear = new Map<number, Record<string, number>>();
 
@@ -138,9 +139,12 @@ export function buildCategoryYearlySeries(
     byYear.set(y, row);
   }
 
-  const years = Array.from(byYear.keys()).sort((a, b) => a - b);
+  const current = new Date().getFullYear();
+  const start = current - windowSize + 1;
   const used = new Set<string>();
-  const data: CategoryMonthPoint[] = years.map((y) => {
+  const data: CategoryMonthPoint[] = [];
+
+  for (let y = start; y <= current; y++) {
     const row = byYear.get(y) ?? {};
     const point: CategoryMonthPoint = { label: String(y) };
     for (const category of CATEGORIES) {
@@ -148,13 +152,7 @@ export function buildCategoryYearlySeries(
       point[category] = value;
       if (value > 0) used.add(category);
     }
-    return point;
-  });
-
-  if (data.length === 0) {
-    const empty: CategoryMonthPoint = { label: String(new Date().getFullYear()) };
-    for (const category of CATEGORIES) empty[category] = 0;
-    return { data: [empty], activeCategories: [] };
+    data.push(point);
   }
 
   return { data, activeCategories: CATEGORIES.filter((c) => used.has(c)) };

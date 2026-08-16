@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
+import { CHART_COLORS } from "../categories";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { IncomeExpensePoint } from "../lib/analyticsAggregates";
 
@@ -66,8 +67,18 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
               formatter={(value) => (value === "income" ? "Income" : "Expense")}
               wrapperStyle={{ fontSize: "0.8rem", color: "#6f6888" }}
             />
-            <Bar dataKey="income" fill="#34d399" radius={[6, 6, 0, 0]} maxBarSize={36} />
-            <Bar dataKey="expense" fill="#fb7185" radius={[6, 6, 0, 0]} maxBarSize={36} />
+            <Bar
+              dataKey="income"
+              fill={CHART_COLORS.income}
+              radius={[6, 6, 0, 0]}
+              maxBarSize={36}
+            />
+            <Bar
+              dataKey="expense"
+              fill={CHART_COLORS.expense}
+              radius={[6, 6, 0, 0]}
+              maxBarSize={36}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

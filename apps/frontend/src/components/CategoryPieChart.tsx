@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-import { getCategoryMeta } from "../categories";
+import { getCategoryColor, getCategoryMeta } from "../categories";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { Expense } from "../types";
 
@@ -28,7 +28,12 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
     return Array.from(totals.entries())
       .map(([category, amount]) => {
         const meta = getCategoryMeta(category);
-        return { category, amount, color: meta.color, icon: meta.icon };
+        return {
+          category,
+          amount,
+          color: getCategoryColor(category),
+          icon: meta.icon,
+        };
       })
       .sort((a, b) => b.amount - a.amount);
   }, [expenses]);
