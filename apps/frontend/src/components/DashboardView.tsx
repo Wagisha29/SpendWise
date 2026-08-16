@@ -36,6 +36,10 @@ interface DashboardViewProps {
   onExpenseCancel: () => void;
 
   transactions: Transaction[];
+  expensePage: number;
+  expenseTotalPages: number;
+  expenseTotal: number;
+  onExpensePageChange: (page: number) => void;
   onEditIncome: (entry: Income) => void;
   onDeleteIncome: (id: number) => void;
   onEditExpense: (expense: Expense) => void;
@@ -72,6 +76,10 @@ export function DashboardView({
   onExpenseSubmit,
   onExpenseCancel,
   transactions,
+  expensePage,
+  expenseTotalPages,
+  expenseTotal,
+  onExpensePageChange,
   onEditIncome,
   onDeleteIncome,
   onEditExpense,
@@ -130,6 +138,10 @@ export function DashboardView({
         transactions={transactions}
         loading={loading}
         hideAmounts={hideAmounts}
+        page={expensePage}
+        totalPages={expenseTotalPages}
+        total={expenseTotal}
+        onPageChange={onExpensePageChange}
         onEditIncome={onEditIncome}
         onDeleteIncome={onDeleteIncome}
         onEditExpense={onEditExpense}

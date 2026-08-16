@@ -8,6 +8,14 @@ export interface Expense {
 
 export type ExpenseInput = Omit<Expense, "id"> & { quantity?: number };
 
+export interface ExpenseListResponse {
+  items: Expense[];
+  page: number;
+  page_size: number;
+  total: number;
+  total_pages: number;
+}
+
 export interface Income {
   id: number;
   source: string;

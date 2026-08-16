@@ -28,3 +28,10 @@ class ExpenseOut(ExpenseBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+class ExpenseListOut(BaseModel):
+    items: list[ExpenseOut]
+    page: int
+    page_size: int
+    total: int
+    total_pages: int
