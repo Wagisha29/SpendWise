@@ -7,6 +7,7 @@ function SummaryCard({
   accent,
   percent,
   percentLabel,
+  momDelta,
 }: {
   label: string;
   amount: number;
@@ -14,6 +15,7 @@ function SummaryCard({
   accent: "emerald" | "rose" | "indigo";
   percent?: number | null;
   percentLabel?: string;
+  momDelta?: number | null;
 }) {
   const animated = useCountUp(amount);
 
@@ -42,6 +44,8 @@ function SummaryCard({
   }[accent];
 
   const hasPercent = percent !== undefined && percent !== null;
+  const hasMom = momDelta !== undefined && momDelta !== null;
+  const momDown = hasMom && momDelta <= 0;
 
   return (
     <div
@@ -52,7 +56,23 @@ function SummaryCard({
       <span
         className={`absolute -top-6 -right-6 h-16 w-16 rounded-full opacity-30 blur-2xl transition-transform duration-500 group-hover:scale-150 ${styles.dot}`}
       />
-      <span className={`text-xs font-semibold tracking-wider uppercase ${styles.label}`}>{label}</span>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className={`text-xs font-semibold tracking-wider uppercase ${styles.label}`}>{label}</span>
+        {hasMom && (
+          <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shadow-sm ${
+              momDown
+                ? "bg-emerald-600/90 text-white"
+                : "bg-rose-700/90 text-white"
+            }`}
+            title="Change vs last month"
+          >
+            {hideAmounts
+              ? "••% vs last month"
+              : `${momDown ? "↓" : "↑"} ${Math.abs(momDelta).toFixed(0)}% vs last month`}
+          </span>
+        )}
+      </div>
       <span className={`text-2xl font-extrabold tabular-nums ${styles.value}`}>
         ₹{hideAmounts ? AMOUNT_MASK : animated.toFixed(2)}
       </span>
@@ -73,11 +93,13 @@ export function SummaryCards({
   expense,
   savings,
   hideAmounts,
+  expenseMomDelta = null,
 }: {
   income: number;
   expense: number;
   savings: number;
   hideAmounts: boolean;
+  expenseMomDelta?: number | null;
 }) {
   const expensePercent = income > 0 ? (expense / income) * 100 : null;
   const savingsPercent = income > 0 ? (savings / income) * 100 : null;
@@ -92,6 +114,7 @@ export function SummaryCards({
         accent="rose"
         percent={expensePercent}
         percentLabel="% of income spent"
+        momDelta={expenseMomDelta}
       />
       <SummaryCard
         label="Savings (this month)"

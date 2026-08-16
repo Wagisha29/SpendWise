@@ -7,6 +7,13 @@ import { Header, type AppTab } from "./components/Header";
 import { LandingPage } from "./components/LandingPage";
 import { SummaryCards } from "./components/SummaryCards";
 import { useAuth } from "./context/AuthContext";
+import {
+  averageDailySpend,
+  monthOverMonthDeltaPercent,
+  previousMonthKey,
+  sumExpensesForMonth,
+  topSpendingCategory,
+} from "./lib/insights";
 import type { Expense, Income, Transaction } from "./types";
 
 function todayISO() {
@@ -247,6 +254,31 @@ function SpendWiseApp({
     [expenses],
   );
 
+  const monthlyExpenses = useMemo(
+    () => expenses.filter((expense) => isCurrentMonth(expense.date)),
+    [expenses],
+  );
+
+  const lastMonthExpenseTotal = useMemo(
+    () => sumExpensesForMonth(expenses, previousMonthKey()),
+    [expenses],
+  );
+
+  const expenseMomDelta = useMemo(
+    () => monthOverMonthDeltaPercent(monthlyExpenseTotal, lastMonthExpenseTotal),
+    [monthlyExpenseTotal, lastMonthExpenseTotal],
+  );
+
+  const dailyAverageSpend = useMemo(
+    () => averageDailySpend(monthlyExpenseTotal),
+    [monthlyExpenseTotal],
+  );
+
+  const topCategoryInsight = useMemo(
+    () => topSpendingCategory(monthlyExpenses),
+    [monthlyExpenses],
+  );
+
   const monthlyIncomeTotal = useMemo(
     () =>
       income
@@ -256,11 +288,6 @@ function SpendWiseApp({
   );
 
   const savings = monthlyIncomeTotal - monthlyExpenseTotal;
-
-  const monthlyExpenses = useMemo(
-    () => expenses.filter((expense) => isCurrentMonth(expense.date)),
-    [expenses],
-  );
 
   const topExpenses = useMemo(
     () => [...monthlyExpenses].sort((a, b) => b.amount - a.amount).slice(0, 5),
@@ -295,6 +322,7 @@ function SpendWiseApp({
         expense={monthlyExpenseTotal}
         savings={savings}
         hideAmounts={privacyMode}
+        expenseMomDelta={expenseMomDelta}
       />
 
       {activeTab === "dashboard" && (
@@ -337,9 +365,13 @@ function SpendWiseApp({
 
       {activeTab === "analytics" && (
         <AnalyticsView
+          expenses={expenses}
+          income={income}
           monthlyExpenses={monthlyExpenses}
           topExpenses={topExpenses}
           hideAmounts={privacyMode}
+          dailyAverage={dailyAverageSpend}
+          topCategory={topCategoryInsight}
         />
       )}
     </div>
