@@ -14,6 +14,7 @@ import {
   sumExpensesForMonth,
   topSpendingCategory,
 } from "./lib/insights";
+import { startApiKeepAlive } from "./lib/keepAlive";
 import type { Expense, Income, Summary, Transaction } from "./types";
 
 const EXPENSE_PAGE_SIZE = 10;
@@ -32,6 +33,8 @@ function isCurrentMonth(dateStr: string) {
 
 function App() {
   const { session, loading: authLoading, signInWithGoogle, signOut } = useAuth();
+
+  useEffect(() => startApiKeepAlive(), []);
 
   if (authLoading) {
     return (
