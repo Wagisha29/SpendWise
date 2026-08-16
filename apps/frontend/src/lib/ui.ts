@@ -5,8 +5,14 @@ export const CARD =
 
 export const AMOUNT_MASK = "•••••";
 
+const inrFormatter = new Intl.NumberFormat("en-IN", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+/** Formats amounts with Indian grouping, e.g. 33000 → 33,000.00 */
 export function formatAmount(amount: number, hideAmounts: boolean): string {
-  return hideAmounts ? AMOUNT_MASK : amount.toFixed(2);
+  return hideAmounts ? AMOUNT_MASK : inrFormatter.format(amount);
 }
 
 export function useCountUp(target: number, durationMs = 700): number {

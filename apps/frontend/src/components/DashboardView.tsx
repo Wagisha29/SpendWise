@@ -79,46 +79,48 @@ export function DashboardView({
 }: DashboardViewProps) {
   return (
     <>
-      <div id="income-section">
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income
-        </h2>
-        <IncomeForm
-          source={incomeSource}
-          amount={incomeAmount}
-          date={incomeDate}
-          onSourceChange={onIncomeSourceChange}
-          onAmountChange={onIncomeAmountChange}
-          onDateChange={onIncomeDateChange}
-          onSubmit={onIncomeSubmit}
-          onCancel={onIncomeCancel}
-          submitting={incomeSubmitting}
-          isEditing={editingIncomeId !== null}
-        />
-        {incomeError && <p className="mb-4 text-sm text-red-500">{incomeError}</p>}
-      </div>
+      <div className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch">
+        <div id="income-section" className="flex flex-col">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income
+          </h2>
+          <IncomeForm
+            source={incomeSource}
+            amount={incomeAmount}
+            date={incomeDate}
+            onSourceChange={onIncomeSourceChange}
+            onAmountChange={onIncomeAmountChange}
+            onDateChange={onIncomeDateChange}
+            onSubmit={onIncomeSubmit}
+            onCancel={onIncomeCancel}
+            submitting={incomeSubmitting}
+            isEditing={editingIncomeId !== null}
+          />
+          {incomeError && <p className="mt-2 text-sm text-red-500">{incomeError}</p>}
+        </div>
 
-      <div id="expense-section">
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-          <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Expenses
-        </h2>
-        <ExpenseForm
-          title={title}
-          amount={amount}
-          quantity={quantity}
-          category={category}
-          date={date}
-          onTitleChange={onTitleChange}
-          onAmountChange={onAmountChange}
-          onQuantityChange={onQuantityChange}
-          onCategoryChange={onCategoryChange}
-          onDateChange={onDateChange}
-          onSubmit={onExpenseSubmit}
-          onCancel={onExpenseCancel}
-          submitting={submitting}
-          isEditing={editingId !== null}
-        />
-        {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+        <div id="expense-section" className="flex flex-col">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Expenses
+          </h2>
+          <ExpenseForm
+            title={title}
+            amount={amount}
+            quantity={quantity}
+            category={category}
+            date={date}
+            onTitleChange={onTitleChange}
+            onAmountChange={onAmountChange}
+            onQuantityChange={onQuantityChange}
+            onCategoryChange={onCategoryChange}
+            onDateChange={onDateChange}
+            onSubmit={onExpenseSubmit}
+            onCancel={onExpenseCancel}
+            submitting={submitting}
+            isEditing={editingId !== null}
+          />
+          {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+        </div>
       </div>
 
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
