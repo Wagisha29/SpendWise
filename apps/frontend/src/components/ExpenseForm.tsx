@@ -1,5 +1,5 @@
 import { CATEGORIES, getCategoryMeta } from "../categories";
-import { CARD } from "../lib/ui";
+import { CARD, formatAmount } from "../lib/ui";
 
 interface ExpenseFormProps {
   title: string;
@@ -41,7 +41,8 @@ export function ExpenseForm({
 }: ExpenseFormProps) {
   const unitPrice = Number(amount);
   const qty = Number(quantity);
-  const total = unitPrice > 0 && qty > 0 ? (unitPrice * qty).toFixed(2) : null;
+  const total =
+    unitPrice > 0 && qty > 0 ? formatAmount(unitPrice * qty, false) : null;
 
   return (
     <form

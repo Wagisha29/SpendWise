@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 import { getCategoryMeta } from "../categories";
-import { AMOUNT_MASK, CARD } from "../lib/ui";
+import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { CategoryMonthPoint } from "../lib/analyticsAggregates";
 
 interface CategoryTrendChartProps {
@@ -58,7 +58,7 @@ export function CategoryTrendChart({
             />
             <Tooltip
               formatter={(value, name) => [
-                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${Number(value).toFixed(2)}`,
+                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${formatAmount(Number(value), false)}`,
                 String(name),
               ]}
               contentStyle={{

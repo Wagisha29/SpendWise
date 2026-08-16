@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { AMOUNT_MASK, CARD } from "../lib/ui";
+import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { IncomeExpensePoint } from "../lib/analyticsAggregates";
 
 interface IncomeExpenseTrendChartProps {
@@ -51,7 +51,7 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
             />
             <Tooltip
               formatter={(value, name) => [
-                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${Number(value).toFixed(2)}`,
+                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${formatAmount(Number(value), false)}`,
                 name === "income" ? "Income" : "Expense",
               ]}
               labelFormatter={(label) => String(label)}

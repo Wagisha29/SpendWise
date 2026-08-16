@@ -76,7 +76,7 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
             </Pie>
             <Tooltip
               formatter={(value, _name, entry) => [
-                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${Number(value).toFixed(2)}`,
+                hideAmounts ? `₹${AMOUNT_MASK}` : `₹${formatAmount(Number(value), false)}`,
                 String(entry.payload?.category ?? ""),
               ]}
               contentStyle={{

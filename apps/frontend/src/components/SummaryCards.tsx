@@ -1,4 +1,4 @@
-import { AMOUNT_MASK, useCountUp } from "../lib/ui";
+import { AMOUNT_MASK, formatAmount, useCountUp } from "../lib/ui";
 
 function SummaryCard({
   label,
@@ -74,7 +74,7 @@ function SummaryCard({
         )}
       </div>
       <span className={`text-2xl font-extrabold tabular-nums ${styles.value}`}>
-        ₹{hideAmounts ? AMOUNT_MASK : animated.toFixed(2)}
+        ₹{hideAmounts ? AMOUNT_MASK : formatAmount(animated, false)}
       </span>
       {hasPercent && (
         <span
