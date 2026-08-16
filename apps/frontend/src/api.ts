@@ -1,5 +1,5 @@
 import { supabase } from "./lib/supabaseClient";
-import type { Expense, ExpenseInput, ExpenseListResponse, Income, IncomeInput } from "./types";
+import type { Expense, ExpenseInput, ExpenseListResponse, Income, IncomeInput, Summary } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -36,6 +36,7 @@ export const api = {
     request<ExpenseListResponse>(
       `/api/expenses?page=${page}&page_size=${pageSize}&op=listExpenses`,
     ),
+  getSummary: () => request<Summary>("/api/summary?op=getSummary"),
   createExpense: (expense: ExpenseInput) =>
     request<Expense>("/api/expenses?op=createExpense", {
       method: "POST",

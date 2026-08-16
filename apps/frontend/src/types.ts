@@ -16,6 +16,12 @@ export interface ExpenseListResponse {
   total_pages: number;
 }
 
+export interface Summary {
+  income: number;
+  expense: number;
+  savings: number;
+}
+
 export interface Income {
   id: number;
   source: string;

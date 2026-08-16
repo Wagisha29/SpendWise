@@ -14,7 +14,7 @@ import {
   sumExpensesForMonth,
   topSpendingCategory,
 } from "./lib/insights";
-import type { Expense, Income, Transaction } from "./types";
+import type { Expense, Income, Summary, Transaction } from "./types";
 
 const EXPENSE_PAGE_SIZE = 10;
 
@@ -68,6 +68,7 @@ function SpendWiseApp({
   const [expensePage, setExpensePage] = useState(1);
   const [expenseTotalPages, setExpenseTotalPages] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
+  const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -97,9 +98,16 @@ function SpendWiseApp({
 
   useEffect(() => {
     void loadExpenses(1);
-    void loadAllExpenses();
-    loadIncome();
+    void loadSummary();
+    void loadIncome();
   }, []);
+
+  // Analytics still needs history; load it only when that tab opens.
+  useEffect(() => {
+    if (activeTab === "analytics") {
+      void loadAllExpenses();
+    }
+  }, [activeTab]);
 
   function handleEditClick(expense: Expense) {
     setActiveTab("dashboard");
@@ -112,6 +120,14 @@ function SpendWiseApp({
     requestAnimationFrame(() => {
       document.getElementById("expense-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+  }
+
+  async function loadSummary() {
+    try {
+      setSummary(await api.getSummary());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load summary");
+    }
   }
 
   async function loadAllExpenses() {
@@ -145,7 +161,11 @@ function SpendWiseApp({
   }
 
   async function refreshExpenses(page = expensePage) {
-    await Promise.all([loadExpenses(page), loadAllExpenses()]);
+    const tasks: Promise<unknown>[] = [loadExpenses(page), loadSummary()];
+    if (activeTab === "analytics") {
+      tasks.push(loadAllExpenses());
+    }
+    await Promise.all(tasks);
   }
 
   function resetForm() {
@@ -255,6 +275,7 @@ function SpendWiseApp({
         setIncome((prev) => [created, ...prev]);
       }
       resetIncomeForm();
+      await loadSummary();
     } catch (err) {
       setIncomeError(
         err instanceof Error
@@ -272,18 +293,15 @@ function SpendWiseApp({
     try {
       await api.deleteIncome(id);
       setIncome((prev) => prev.filter((entry) => entry.id !== id));
+      await loadSummary();
     } catch (err) {
       setIncomeError(err instanceof Error ? err.message : "Failed to delete income");
     }
   }
 
-  const monthlyExpenseTotal = useMemo(
-    () =>
-      allExpenses
-        .filter((expense) => isCurrentMonth(expense.date))
-        .reduce((sum, expense) => sum + expense.amount, 0),
-    [allExpenses],
-  );
+  const monthlyExpenseTotal = summary?.expense ?? 0;
+  const monthlyIncomeTotal = summary?.income ?? 0;
+  const savings = summary?.savings ?? 0;
 
   const monthlyExpenses = useMemo(
     () => allExpenses.filter((expense) => isCurrentMonth(expense.date)),
@@ -309,16 +327,6 @@ function SpendWiseApp({
     () => topSpendingCategory(monthlyExpenses),
     [monthlyExpenses],
   );
-
-  const monthlyIncomeTotal = useMemo(
-    () =>
-      income
-        .filter((entry) => isCurrentMonth(entry.date))
-        .reduce((sum, entry) => sum + entry.amount, 0),
-    [income],
-  );
-
-  const savings = monthlyIncomeTotal - monthlyExpenseTotal;
 
   const topExpenses = useMemo(
     () => [...monthlyExpenses].sort((a, b) => b.amount - a.amount).slice(0, 5),
