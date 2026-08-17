@@ -1,15 +1,15 @@
-import { useState } from "react";
-
 import { getCategoryMeta } from "../categories";
 import { CARD, formatAmount } from "../lib/ui";
 import type { Expense, Income, Transaction } from "../types";
-
-const COLLAPSED_COUNT = 3;
 
 interface TransactionsListProps {
   transactions: Transaction[];
   loading: boolean;
   hideAmounts: boolean;
+  page: number;
+  totalPages: number;
+  total: number;
+  onPageChange: (page: number) => void;
   onEditIncome: (entry: Income) => void;
   onDeleteIncome: (id: number) => void;
   onEditExpense: (expense: Expense) => void;
@@ -20,13 +20,15 @@ export function TransactionsList({
   transactions,
   loading,
   hideAmounts,
+  page,
+  totalPages,
+  total,
+  onPageChange,
   onEditIncome,
   onDeleteIncome,
   onEditExpense,
   onDeleteExpense,
 }: TransactionsListProps) {
-  const [expanded, setExpanded] = useState(false);
-
   if (loading) {
     return (
       <div className="flex min-h-32 items-center justify-center">
@@ -35,7 +37,7 @@ export function TransactionsList({
     );
   }
 
-  if (transactions.length === 0) {
+  if (transactions.length === 0 && total === 0) {
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
         <div className="text-[2.25rem]">🧾</div>
@@ -44,13 +46,10 @@ export function TransactionsList({
     );
   }
 
-  const visibleTransactions = expanded ? transactions : transactions.slice(0, COLLAPSED_COUNT);
-  const hiddenCount = transactions.length - COLLAPSED_COUNT;
-
   return (
     <div className="flex flex-col gap-2.5">
       <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
-        {visibleTransactions.map((item, index) => {
+        {transactions.map((item, index) => {
           if (item.kind === "income") {
             const entry = item.data;
             return (
@@ -132,14 +131,30 @@ export function TransactionsList({
           );
         })}
       </ul>
-      {hiddenCount > 0 && (
-        <button
-          type="button"
-          onClick={() => setExpanded((prev) => !prev)}
-          className="cursor-pointer self-center rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:text-indigo-500 hover:shadow-md active:translate-y-0"
-        >
-          {expanded ? "Show less ▲" : `Show all ${transactions.length} ▾`}
-        </button>
+
+      {totalPages > 1 && (
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            disabled={page <= 1}
+            onClick={() => onPageChange(page - 1)}
+            className="cursor-pointer rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:border-indigo-200 hover:text-indigo-500 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ← Prev
+          </button>
+          <span className="text-sm font-medium text-[#8c86a3] tabular-nums">
+            Page {page} of {totalPages}
+            <span className="text-[#b0a9c4]"> · {total} expenses</span>
+          </span>
+          <button
+            type="button"
+            disabled={page >= totalPages}
+            onClick={() => onPageChange(page + 1)}
+            className="cursor-pointer rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:border-indigo-200 hover:text-indigo-500 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next →
+          </button>
+        </div>
       )}
     </div>
   );

@@ -14,7 +14,10 @@ import {
   sumExpensesForMonth,
   topSpendingCategory,
 } from "./lib/insights";
-import type { Expense, Income, Transaction } from "./types";
+import { startApiKeepAlive } from "./lib/keepAlive";
+import type { Expense, Income, Summary, Transaction } from "./types";
+
+const EXPENSE_PAGE_SIZE = 10;
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -30,6 +33,8 @@ function isCurrentMonth(dateStr: string) {
 
 function App() {
   const { session, loading: authLoading, signInWithGoogle, signOut } = useAuth();
+
+  useEffect(() => startApiKeepAlive(), []);
 
   if (authLoading) {
     return (
@@ -62,6 +67,11 @@ function SpendWiseApp({
   const [activeTab, setActiveTab] = useState<AppTab>("dashboard");
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [allExpenses, setAllExpenses] = useState<Expense[]>([]);
+  const [expensePage, setExpensePage] = useState(1);
+  const [expenseTotalPages, setExpenseTotalPages] = useState(0);
+  const [expenseTotal, setExpenseTotal] = useState(0);
+  const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -90,9 +100,17 @@ function SpendWiseApp({
   const [editingIncomeId, setEditingIncomeId] = useState<number | null>(null);
 
   useEffect(() => {
-    loadExpenses();
-    loadIncome();
+    void loadExpenses(1);
+    void loadSummary();
+    void loadIncome();
   }, []);
+
+  // Analytics still needs history; load it only when that tab opens.
+  useEffect(() => {
+    if (activeTab === "analytics") {
+      void loadAllExpenses();
+    }
+  }, [activeTab]);
 
   function handleEditClick(expense: Expense) {
     setActiveTab("dashboard");
@@ -107,16 +125,50 @@ function SpendWiseApp({
     });
   }
 
-  async function loadExpenses() {
+  async function loadSummary() {
+    try {
+      setSummary(await api.getSummary());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load summary");
+    }
+  }
+
+  async function loadAllExpenses() {
+    try {
+      const first = await api.listExpenses(1, 100);
+      const items = [...first.items];
+      for (let page = 2; page <= first.total_pages; page++) {
+        const next = await api.listExpenses(page, 100);
+        items.push(...next.items);
+      }
+      setAllExpenses(items);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load expenses");
+    }
+  }
+
+  async function loadExpenses(page: number) {
     setLoading(true);
     setError(null);
     try {
-      setExpenses(await api.listExpenses());
+      const result = await api.listExpenses(page, EXPENSE_PAGE_SIZE);
+      setExpenses(result.items);
+      setExpensePage(result.page);
+      setExpenseTotalPages(result.total_pages);
+      setExpenseTotal(result.total);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load expenses");
     } finally {
       setLoading(false);
     }
+  }
+
+  async function refreshExpenses(page = expensePage) {
+    const tasks: Promise<unknown>[] = [loadExpenses(page), loadSummary()];
+    if (activeTab === "analytics") {
+      tasks.push(loadAllExpenses());
+    }
+    await Promise.all(tasks);
   }
 
   function resetForm() {
@@ -147,11 +199,11 @@ function SpendWiseApp({
       };
 
       if (editingId !== null) {
-        const updated = await api.updateExpense(editingId, payload);
-        setExpenses((prev) => prev.map((expense) => (expense.id === editingId ? updated : expense)));
+        await api.updateExpense(editingId, payload);
+        await refreshExpenses(expensePage);
       } else {
-        const created = await api.createExpense(payload);
-        setExpenses((prev) => [created, ...prev]);
+        await api.createExpense(payload);
+        await refreshExpenses(1);
       }
       resetForm();
     } catch (err) {
@@ -170,7 +222,9 @@ function SpendWiseApp({
   async function handleDelete(id: number) {
     try {
       await api.deleteExpense(id);
-      setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+      const nextPage =
+        expenses.length === 1 && expensePage > 1 ? expensePage - 1 : expensePage;
+      await refreshExpenses(nextPage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete expense");
     }
@@ -224,6 +278,7 @@ function SpendWiseApp({
         setIncome((prev) => [created, ...prev]);
       }
       resetIncomeForm();
+      await loadSummary();
     } catch (err) {
       setIncomeError(
         err instanceof Error
@@ -241,27 +296,24 @@ function SpendWiseApp({
     try {
       await api.deleteIncome(id);
       setIncome((prev) => prev.filter((entry) => entry.id !== id));
+      await loadSummary();
     } catch (err) {
       setIncomeError(err instanceof Error ? err.message : "Failed to delete income");
     }
   }
 
-  const monthlyExpenseTotal = useMemo(
-    () =>
-      expenses
-        .filter((expense) => isCurrentMonth(expense.date))
-        .reduce((sum, expense) => sum + expense.amount, 0),
-    [expenses],
-  );
+  const monthlyExpenseTotal = summary?.expense ?? 0;
+  const monthlyIncomeTotal = summary?.income ?? 0;
+  const savings = summary?.savings ?? 0;
 
   const monthlyExpenses = useMemo(
-    () => expenses.filter((expense) => isCurrentMonth(expense.date)),
-    [expenses],
+    () => allExpenses.filter((expense) => isCurrentMonth(expense.date)),
+    [allExpenses],
   );
 
   const lastMonthExpenseTotal = useMemo(
-    () => sumExpensesForMonth(expenses, previousMonthKey()),
-    [expenses],
+    () => sumExpensesForMonth(allExpenses, previousMonthKey()),
+    [allExpenses],
   );
 
   const expenseMomDelta = useMemo(
@@ -279,31 +331,24 @@ function SpendWiseApp({
     [monthlyExpenses],
   );
 
-  const monthlyIncomeTotal = useMemo(
-    () =>
-      income
-        .filter((entry) => isCurrentMonth(entry.date))
-        .reduce((sum, entry) => sum + entry.amount, 0),
-    [income],
-  );
-
-  const savings = monthlyIncomeTotal - monthlyExpenseTotal;
-
   const topExpenses = useMemo(
     () => [...monthlyExpenses].sort((a, b) => b.amount - a.amount).slice(0, 5),
     [monthlyExpenses],
   );
 
   const transactions = useMemo<Transaction[]>(() => {
+    // Income only on page 1 so it doesn't repeat on every expense page.
     const items: Transaction[] = [
-      ...income.map((entry) => ({ kind: "income" as const, data: entry })),
+      ...(expensePage === 1
+        ? income.map((entry) => ({ kind: "income" as const, data: entry }))
+        : []),
       ...expenses.map((entry) => ({ kind: "expense" as const, data: entry })),
     ];
     return items.sort((a, b) => {
       if (a.data.date !== b.data.date) return a.data.date < b.data.date ? 1 : -1;
       return b.data.id - a.data.id;
     });
-  }, [income, expenses]);
+  }, [income, expenses, expensePage]);
 
   return (
     <div className="animate-fade-in-up mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
@@ -356,6 +401,10 @@ function SpendWiseApp({
           onExpenseSubmit={handleSubmit}
           onExpenseCancel={resetForm}
           transactions={transactions}
+          expensePage={expensePage}
+          expenseTotalPages={expenseTotalPages}
+          expenseTotal={expenseTotal}
+          onExpensePageChange={(page) => void loadExpenses(page)}
           onEditIncome={handleIncomeEditClick}
           onDeleteIncome={handleIncomeDelete}
           onEditExpense={handleEditClick}
@@ -365,7 +414,7 @@ function SpendWiseApp({
 
       {activeTab === "analytics" && (
         <AnalyticsView
-          expenses={expenses}
+          expenses={allExpenses}
           income={income}
           monthlyExpenses={monthlyExpenses}
           topExpenses={topExpenses}

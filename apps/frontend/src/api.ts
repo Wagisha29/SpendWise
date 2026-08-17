@@ -1,5 +1,5 @@
 import { supabase } from "./lib/supabaseClient";
-import type { Expense, ExpenseInput, Income, IncomeInput } from "./types";
+import type { Expense, ExpenseInput, ExpenseListResponse, Income, IncomeInput, Summary } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -32,7 +32,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 // since Chrome names requests after the last URL segment + query string.
 // The backend ignores unknown query params, so this has no effect on behavior.
 export const api = {
-  listExpenses: () => request<Expense[]>("/api/expenses?op=listExpenses"),
+  listExpenses: (page = 1, pageSize = 10) =>
+    request<ExpenseListResponse>(
+      `/api/expenses?page=${page}&page_size=${pageSize}&op=listExpenses`,
+    ),
+  getSummary: () => request<Summary>("/api/summary?op=getSummary"),
   createExpense: (expense: ExpenseInput) =>
     request<Expense>("/api/expenses?op=createExpense", {
       method: "POST",

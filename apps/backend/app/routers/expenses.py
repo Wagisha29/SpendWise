@@ -1,24 +1,49 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.auth import CurrentUser, get_current_user
 from app.core.database import get_db
 from app.models.expense import Expense
-from app.schemas.expense import ExpenseCreate, ExpenseOut, ExpenseUpdate
+from app.schemas.expense import ExpenseCreate,ExpenseListOut, ExpenseOut, ExpenseUpdate
 
 router = APIRouter(prefix="/api/expenses", tags=["expenses"])
 
 
-@router.get("", response_model=list[ExpenseOut])
+@router.get("", response_model=ExpenseListOut)
 def list_expenses(
-    db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(10, ge=1, le=100),
 ):
-    return db.scalars(
+    # Total number of expenses for this logged-in user
+    total = db.scalar(
+        select(func.count())
+        .select_from(Expense)
+        .where(Expense.user_id == user.id)
+    ) or 0
+
+    # Skip earlier pages: page 1 → 0, page 2 → 10, page 3 → 20, ...
+    offset = (page - 1) * page_size
+
+    items = db.scalars(
         select(Expense)
         .where(Expense.user_id == user.id)
         .order_by(Expense.date.desc(), Expense.id.desc())
+        .offset(offset)
+        .limit(page_size)
     ).all()
+
+    total_pages = (total + page_size - 1) // page_size if total > 0 else 0
+
+    return ExpenseListOut(
+        items=items,
+        page=page,
+        page_size=page_size,
+        total=total,
+        total_pages=total_pages,
+    )
 
 
 @router.post("", response_model=ExpenseOut, status_code=201)
