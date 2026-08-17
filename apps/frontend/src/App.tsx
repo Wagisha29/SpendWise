@@ -6,6 +6,7 @@ import { DashboardView } from "./components/DashboardView";
 import { Header, type AppTab } from "./components/Header";
 import { LandingPage } from "./components/LandingPage";
 import { SummaryCards } from "./components/SummaryCards";
+import { WiseBot } from "./components/WiseBot";
 import { useAuth } from "./context/AuthContext";
 import {
   averageDailySpend,
@@ -351,79 +352,83 @@ function SpendWiseApp({
   }, [income, expenses, expensePage]);
 
   return (
-    <div className="animate-fade-in-up mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
-      <Header
-        userName={userName}
-        userEmail={userEmail}
-        privacyMode={privacyMode}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        onTogglePrivacy={() => setPrivacyMode((prev) => !prev)}
-        onSignOut={onSignOut}
-      />
-
-      <SummaryCards
-        income={monthlyIncomeTotal}
-        expense={monthlyExpenseTotal}
-        savings={savings}
-        hideAmounts={privacyMode}
-        expenseMomDelta={expenseMomDelta}
-      />
-
-      {activeTab === "dashboard" && (
-        <DashboardView
-          hideAmounts={privacyMode}
-          loading={loading || incomeLoading}
-          incomeSource={incomeSource}
-          incomeAmount={incomeAmount}
-          incomeDate={incomeDate}
-          incomeSubmitting={incomeSubmitting}
-          incomeError={incomeError}
-          editingIncomeId={editingIncomeId}
-          onIncomeSourceChange={setIncomeSource}
-          onIncomeAmountChange={setIncomeAmount}
-          onIncomeDateChange={setIncomeDate}
-          onIncomeSubmit={handleIncomeSubmit}
-          onIncomeCancel={resetIncomeForm}
-          title={title}
-          amount={amount}
-          quantity={quantity}
-          category={category}
-          date={date}
-          submitting={submitting}
-          error={error}
-          editingId={editingId}
-          onTitleChange={setTitle}
-          onAmountChange={setAmount}
-          onQuantityChange={setQuantity}
-          onCategoryChange={setCategory}
-          onDateChange={setDate}
-          onExpenseSubmit={handleSubmit}
-          onExpenseCancel={resetForm}
-          transactions={transactions}
-          expensePage={expensePage}
-          expenseTotalPages={expenseTotalPages}
-          expenseTotal={expenseTotal}
-          onExpensePageChange={(page) => void loadExpenses(page)}
-          onEditIncome={handleIncomeEditClick}
-          onDeleteIncome={handleIncomeDelete}
-          onEditExpense={handleEditClick}
-          onDeleteExpense={handleDelete}
+    <>
+      <div className="animate-fade-in-up mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
+        <Header
+          userName={userName}
+          userEmail={userEmail}
+          privacyMode={privacyMode}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onTogglePrivacy={() => setPrivacyMode((prev) => !prev)}
+          onSignOut={onSignOut}
         />
-      )}
 
-      {activeTab === "analytics" && (
-        <AnalyticsView
-          expenses={allExpenses}
-          income={income}
-          monthlyExpenses={monthlyExpenses}
-          topExpenses={topExpenses}
+        <SummaryCards
+          income={monthlyIncomeTotal}
+          expense={monthlyExpenseTotal}
+          savings={savings}
           hideAmounts={privacyMode}
-          dailyAverage={dailyAverageSpend}
-          topCategory={topCategoryInsight}
+          expenseMomDelta={expenseMomDelta}
         />
-      )}
-    </div>
+
+        {activeTab === "dashboard" && (
+          <DashboardView
+            hideAmounts={privacyMode}
+            loading={loading || incomeLoading}
+            incomeSource={incomeSource}
+            incomeAmount={incomeAmount}
+            incomeDate={incomeDate}
+            incomeSubmitting={incomeSubmitting}
+            incomeError={incomeError}
+            editingIncomeId={editingIncomeId}
+            onIncomeSourceChange={setIncomeSource}
+            onIncomeAmountChange={setIncomeAmount}
+            onIncomeDateChange={setIncomeDate}
+            onIncomeSubmit={handleIncomeSubmit}
+            onIncomeCancel={resetIncomeForm}
+            title={title}
+            amount={amount}
+            quantity={quantity}
+            category={category}
+            date={date}
+            submitting={submitting}
+            error={error}
+            editingId={editingId}
+            onTitleChange={setTitle}
+            onAmountChange={setAmount}
+            onQuantityChange={setQuantity}
+            onCategoryChange={setCategory}
+            onDateChange={setDate}
+            onExpenseSubmit={handleSubmit}
+            onExpenseCancel={resetForm}
+            transactions={transactions}
+            expensePage={expensePage}
+            expenseTotalPages={expenseTotalPages}
+            expenseTotal={expenseTotal}
+            onExpensePageChange={(page) => void loadExpenses(page)}
+            onEditIncome={handleIncomeEditClick}
+            onDeleteIncome={handleIncomeDelete}
+            onEditExpense={handleEditClick}
+            onDeleteExpense={handleDelete}
+          />
+        )}
+
+        {activeTab === "analytics" && (
+          <AnalyticsView
+            expenses={allExpenses}
+            income={income}
+            monthlyExpenses={monthlyExpenses}
+            topExpenses={topExpenses}
+            hideAmounts={privacyMode}
+            dailyAverage={dailyAverageSpend}
+            topCategory={topCategoryInsight}
+          />
+        )}
+      </div>
+
+      <WiseBot />
+    </>
   );
 }
 
