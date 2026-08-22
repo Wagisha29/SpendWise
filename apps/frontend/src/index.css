@@ -111,3 +111,43 @@ body {
 .animate-wisebot-fab {
   animation: wisebot-fab-pulse 2.4s ease-in-out infinite;
 }
+
+/* Compact markdown inside WiseBot chat bubbles */
+.wisebot-md :where(p, ul, ol) {
+  margin: 0.35em 0;
+}
+
+.wisebot-md :where(p:first-child, ul:first-child, ol:first-child) {
+  margin-top: 0;
+}
+
+.wisebot-md :where(p:last-child, ul:last-child, ol:last-child) {
+  margin-bottom: 0;
+}
+
+.wisebot-md :where(ul, ol) {
+  padding-left: 1.15rem;
+}
+
+.wisebot-md :where(li) {
+  margin: 0.15em 0;
+}
+
+.wisebot-md :where(strong) {
+  font-weight: 700;
+  color: #2f2a45;
+}
+
+.wisebot-md :where(code) {
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 0.35rem;
+  background: #f3f1fb;
+}
+
+.wisebot-md :where(h1, h2, h3, h4) {
+  margin: 0.4em 0 0.25em;
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #2f2a45;
+}

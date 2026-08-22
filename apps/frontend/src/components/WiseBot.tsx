@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { api } from "../api";
 import { WiseBotLogo } from "./WiseBotLogo";
 
 type ChatMessage = {
@@ -19,12 +21,6 @@ const SUGGESTIONS = [
   { label: "Savings tip", prompt: "Give me one tip to save more this month." },
   { label: "Budget check", prompt: "Am I on track with my budget?" },
 ] as const;
-
-const BOT_REPLIES = [
-  "I'm still learning your numbers — real answers will plug in soon. Meanwhile, check Analytics for trends.",
-  "Got it! Once I'm connected, I'll pull that straight from your SpendWise data.",
-  "Nice question. For now, open Analytics or your summary cards for a live snapshot.",
-];
 
 function TypingIndicator() {
   return (
@@ -54,8 +50,6 @@ export function WiseBot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const openRef = useRef(false);
   const nextId = useRef(2);
-  const replyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const replyIndex = useRef(0);
 
   openRef.current = open;
 
@@ -68,13 +62,7 @@ export function WiseBot() {
     return () => clearTimeout(focusTimer);
   }, [messages, open, isTyping]);
 
-  useEffect(() => {
-    return () => {
-      if (replyTimer.current) clearTimeout(replyTimer.current);
-    };
-  }, []);
-
-  function sendMessage(raw: string) {
+  async function sendMessage(raw: string) {
     const text = raw.trim();
     if (!text || isTyping) return;
 
@@ -88,22 +76,33 @@ export function WiseBot() {
     setInput("");
     setIsTyping(true);
 
-    if (replyTimer.current) clearTimeout(replyTimer.current);
-    replyTimer.current = setTimeout(() => {
-      const reply = BOT_REPLIES[replyIndex.current % BOT_REPLIES.length];
-      replyIndex.current += 1;
+    try {
+      const { reply } = await api.askWiseBot(text);
       setMessages((prev) => [
         ...prev,
         { id: nextId.current++, role: "bot", text: reply },
       ]);
-      setIsTyping(false);
       if (!openRef.current) setUnread(true);
-    }, 900 + Math.random() * 500);
+    } catch (err) {
+      const detail =
+        err instanceof Error ? err.message : "Something went wrong talking to WiseBot.";
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: nextId.current++,
+          role: "bot",
+          text: `Sorry — I couldn't answer that right now. ${detail}`,
+        },
+      ]);
+      if (!openRef.current) setUnread(true);
+    } finally {
+      setIsTyping(false);
+    }
   }
 
   function handleSend(e: React.FormEvent) {
     e.preventDefault();
-    sendMessage(input);
+    void sendMessage(input);
   }
 
   const canSend = input.trim().length > 0 && !isTyping;
@@ -155,15 +154,15 @@ export function WiseBot() {
                     <WiseBotLogo size={24} />
                   </span>
                 )}
-                <p
-                  className={`m-0 max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed shadow-sm ${
-                    message.role === "user"
-                      ? "rounded-br-md bg-indigo-500 text-white"
-                      : "rounded-bl-md border border-[#eceafb] bg-white text-[#3f3b52]"
-                  }`}
-                >
-                  {message.text}
-                </p>
+                {message.role === "user" ? (
+                  <p className="m-0 max-w-[85%] rounded-2xl rounded-br-md bg-indigo-500 px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap text-white shadow-sm">
+                    {message.text}
+                  </p>
+                ) : (
+                  <div className="wisebot-md m-0 max-w-[85%] rounded-2xl rounded-bl-md border border-[#eceafb] bg-white px-3 py-2 text-sm leading-relaxed text-[#3f3b52] shadow-sm">
+                    <ReactMarkdown>{message.text}</ReactMarkdown>
+                  </div>
+                )}
               </div>
             ))}
 
@@ -179,7 +178,7 @@ export function WiseBot() {
                     <button
                       key={item.label}
                       type="button"
-                      onClick={() => sendMessage(item.prompt)}
+                      onClick={() => void sendMessage(item.prompt)}
                       className="cursor-pointer rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-medium text-indigo-600 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:translate-y-0 active:scale-[0.98]"
                     >
                       {item.label}

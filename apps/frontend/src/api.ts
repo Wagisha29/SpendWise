@@ -17,7 +17,14 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const body = await response.json().catch(() => null);
-    throw new Error(body?.detail ?? `Request failed with status ${response.status}`);
+    const detail = body?.detail;
+    const message =
+      typeof detail === "string"
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((d: { msg?: string }) => d.msg ?? JSON.stringify(d)).join("; ")
+          : `Request failed with status ${response.status}`;
+    throw new Error(message);
   }
 
   if (response.status === 204) {
@@ -61,5 +68,10 @@ export const api = {
     request<Income>(`/api/income/${id}?op=updateIncome`, {
       method: "PATCH",
       body: JSON.stringify(income),
+    }),
+  askWiseBot: (message: string) =>
+    request<{ reply: string }>("/api/wisebot/chat?op=askWiseBot", {
+      method: "POST",
+      body: JSON.stringify({ message }),
     }),
 };
