@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import ALLOWED_ORIGINS
+from app.core.config import ALLOWED_ORIGINS, GEMINI_API_KEY
 from app.core.database import Base, engine
 from app.routers import expenses, income, summary, wisebot
 
@@ -25,4 +25,8 @@ app.include_router(wisebot.router)
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        # True only when Render/local env has a non-empty Gemini key (never returns the key).
+        "wisebot_configured": bool(GEMINI_API_KEY),
+    }
