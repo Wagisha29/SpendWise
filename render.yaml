@@ -17,3 +17,8 @@ services:
       # http://localhost:5173,https://spendwise-io.vercel.app
       - key: ALLOWED_ORIGINS
         sync: false
+      # Google AI Studio key — backend only (never VITE_*)
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
