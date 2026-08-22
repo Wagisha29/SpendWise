@@ -1,4 +1,3 @@
-
 {
   "name": "spendwise-monorepo",
   "private": true,
@@ -12,5 +11,8 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@google/genai": "^2.18.0"
   }
 }
