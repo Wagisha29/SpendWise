@@ -151,3 +151,22 @@ body {
   font-weight: 700;
   color: #2f2a45;
 }
+
+@keyframes wisebot-caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.wisebot-stream-caret {
+  display: inline-block;
+  margin-left: 1px;
+  font-weight: 600;
+  color: #6366f1;
+  animation: wisebot-caret-blink 0.9s step-end infinite;
+}

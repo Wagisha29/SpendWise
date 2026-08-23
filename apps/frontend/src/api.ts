@@ -74,4 +74,75 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ message }),
     }),
+  askWiseBotStream: async (
+    message: string,
+    onDelta: (delta: string) => void,
+  ): Promise<void> => {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+
+    const response = await fetch(`${API_BASE_URL}/api/wisebot/chat/stream?op=askWiseBotStream`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/event-stream",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      const detail = body?.detail;
+      const errMessage =
+        typeof detail === "string"
+          ? detail
+          : Array.isArray(detail)
+            ? detail.map((d: { msg?: string }) => d.msg ?? JSON.stringify(d)).join("; ")
+            : `Request failed with status ${response.status}`;
+      throw new Error(errMessage);
+    }
+
+    if (!response.body) {
+      throw new Error("Streaming is not supported in this browser.");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const frames = buffer.split("\n\n");
+      buffer = frames.pop() ?? "";
+
+      for (const frame of frames) {
+        const dataLine = frame
+          .split("\n")
+          .map((line) => line.trimEnd())
+          .find((line) => line.startsWith("data:"));
+        if (!dataLine) continue;
+
+        const raw = dataLine.replace(/^data:\s?/, "");
+        if (!raw || raw === "[DONE]") continue;
+
+        let payload: { delta?: string; done?: boolean; error?: string };
+        try {
+          payload = JSON.parse(raw) as { delta?: string; done?: boolean; error?: string };
+        } catch {
+          continue;
+        }
+
+        if (payload.error) {
+          throw new Error(payload.error);
+        }
+        if (payload.delta) {
+          onDelta(payload.delta);
+        }
+      }
+    }
+  },
 };
