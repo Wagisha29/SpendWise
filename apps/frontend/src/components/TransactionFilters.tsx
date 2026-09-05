@@ -32,16 +32,20 @@ type TransactionFiltersProps = {
   onClear: () => void;
 };
 
+export function countActiveFilters(value: TransactionFilterValues): number {
+  let count = 0;
+  if (value.type !== "all") count += 1;
+  if (value.category !== "") count += 1;
+  if (value.dateFrom !== "") count += 1;
+  if (value.dateTo !== "") count += 1;
+  if (value.minAmount !== "") count += 1;
+  if (value.maxAmount !== "") count += 1;
+  if (value.query.trim() !== "") count += 1;
+  return count;
+}
+
 function hasActiveFilters(value: TransactionFilterValues): boolean {
-  return (
-    value.type !== "all" ||
-    value.category !== "" ||
-    value.dateFrom !== "" ||
-    value.dateTo !== "" ||
-    value.minAmount !== "" ||
-    value.maxAmount !== "" ||
-    value.query.trim() !== ""
-  );
+  return countActiveFilters(value) > 0;
 }
 
 export function TransactionFilters({ value, onChange, onClear }: TransactionFiltersProps) {
