@@ -1,83 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { api } from "../api";
 import { createWordStreamPacer } from "../lib/wordStreamPacer";
 import { WiseBotLogo } from "./WiseBotLogo";
-
-type ChatMessage = {
-  id: number;
-  role: "bot" | "user";
-  text: string;
-  failed?: boolean;
-  streaming?: boolean;
-};
-
-const WELCOME_MESSAGE: ChatMessage = {
-  id: 1,
-  role: "bot",
-  text: "Hi, I'm WiseBot — your SpendWise assistant. Pick a quick question below, or type your own.",
-};
-
-const SUGGESTIONS = [
-  { label: "This month's spend", prompt: "How much did I spend this month?" },
-  { label: "Top category", prompt: "Which category am I spending the most on?" },
-  { label: "Savings tip", prompt: "Give me one tip to save more this month." },
-  { label: "Budget check", prompt: "Am I on track with my budget?" },
-] as const;
-
-const FOLLOW_UPS = [
-  { label: "Compare to income", prompt: "How does my spending compare to my income this month?" },
-  { label: "Biggest expense", prompt: "What was my single biggest expense recently?" },
-  { label: "Savings left", prompt: "How much have I saved this month so far?" },
-  { label: "Cut one habit", prompt: "Based on my categories, where can I cut spending first?" },
-] as const;
-
-const THINKING_LABELS = [
-  "Reading your transactions…",
-  "Crunching totals…",
-  "Finding patterns…",
-  "Almost ready…",
-] as const;
-
-function TypingIndicator({ label }: { label: string }) {
-  return (
-    <div className="animate-chat-bubble flex justify-start">
-      <span className="mt-0.5 mr-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-        <WiseBotLogo size={24} />
-      </span>
-      <div className="rounded-2xl rounded-bl-md border border-[#eceafb] bg-white px-3.5 py-2.5 shadow-sm">
-        <div className="mb-1.5 flex items-center gap-1" aria-hidden>
-          <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
-          <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
-          <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
-        </div>
-        <p className="m-0 text-[0.7rem] text-[#8b86a3]">{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function SendIcon({ spinning }: { spinning?: boolean }) {
-  if (spinning) {
-    return (
-      <span
-        className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
-        aria-hidden
-      />
-    );
-  }
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M2.5 8h9M8.5 3.5 13 8l-4.5 4.5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+import {
+  FOLLOW_UPS,
+  SUGGESTIONS,
+  THINKING_LABELS,
+  WELCOME_MESSAGE,
+  type ChatMessage,
+} from "./wisebot/constants";
+import { SuggestionChips } from "./wisebot/SuggestionChips";
+import { SendIcon, TypingIndicator } from "./wisebot/WiseBotChrome";
+import { WiseBotMessage } from "./wisebot/WiseBotMessage";
 
 export function WiseBot() {
   const [open, setOpen] = useState(false);
@@ -219,13 +153,14 @@ export function WiseBot() {
   const streamingMessage = messages.find((message) => message.streaming);
   const showTypingWait = isTyping && !streamingMessage?.text;
   const showStarterChips = !hasConversation && !isTyping;
+  const lastMessage = messages[messages.length - 1];
   const showFollowUps =
     hasConversation &&
     !isTyping &&
-    messages[messages.length - 1]?.role === "bot" &&
-    !messages[messages.length - 1]?.failed &&
-    !messages[messages.length - 1]?.streaming;
-  const lastFailed = messages[messages.length - 1]?.failed;
+    lastMessage?.role === "bot" &&
+    !lastMessage?.failed &&
+    !lastMessage?.streaming;
+  const lastFailed = lastMessage?.failed;
 
   return (
     <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
@@ -272,103 +207,34 @@ export function WiseBot() {
           </header>
 
           <div ref={listRef} className="relative flex-1 space-y-3 overflow-y-auto bg-[#faf9ff] px-3 py-3">
-            {messages.map((message) => {
-              if (message.role === "bot" && message.streaming && !message.text) {
-                return null;
-              }
-
-              return (
-              <div
+            {messages.map((message) => (
+              <WiseBotMessage
                 key={message.id}
-                className={`animate-chat-bubble group flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                {message.role === "bot" && (
-                  <span className="mt-0.5 mr-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 transition group-hover:scale-105">
-                    <WiseBotLogo size={24} />
-                  </span>
-                )}
-                {message.role === "user" ? (
-                  <p className="m-0 max-w-[85%] rounded-2xl rounded-br-md bg-indigo-500 px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap text-white shadow-sm transition hover:shadow-md">
-                    {message.text}
-                  </p>
-                ) : (
-                  <div className="max-w-[85%]">
-                    <div
-                      className={`wisebot-md m-0 rounded-2xl rounded-bl-md border px-3 py-2 text-sm leading-relaxed shadow-sm transition hover:shadow-md ${
-                        message.failed
-                          ? "border-rose-200 bg-rose-50 text-[#5c3145]"
-                          : "border-[#eceafb] bg-white text-[#3f3b52]"
-                      }`}
-                    >
-                      <ReactMarkdown>{message.text}</ReactMarkdown>
-                      {message.streaming && (
-                        <span className="wisebot-stream-caret" aria-hidden>
-                          |
-                        </span>
-                      )}
-                    </div>
-                    {!message.streaming && message.failed && lastPromptRef.current && (
-                      <div className="mt-1 ml-0.5 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => void sendMessage(lastPromptRef.current)}
-                          disabled={isTyping}
-                          className="cursor-pointer rounded-md border-none bg-transparent px-1.5 py-0.5 text-[0.65rem] font-medium text-rose-500 transition hover:bg-rose-50 disabled:opacity-50"
-                        >
-                          Retry
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              );
-            })}
+                message={message}
+                lastPrompt={lastPromptRef.current}
+                isTyping={isTyping}
+                onRetry={(prompt) => void sendMessage(prompt)}
+              />
+            ))}
 
             {showTypingWait && <TypingIndicator label={THINKING_LABELS[thinkingIdx]} />}
 
             {showStarterChips && (
-              <div className="animate-chat-bubble pt-1 pl-9">
-                <p className="mb-2 text-[0.7rem] font-medium tracking-wide text-[#8b86a3] uppercase">
-                  Try asking
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {SUGGESTIONS.map((item, index) => (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() => void sendMessage(item.prompt)}
-                      style={{ animationDelay: `${index * 60}ms` }}
-                      className="animate-chat-bubble cursor-pointer rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-medium text-indigo-600 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:translate-y-0 active:scale-[0.98]"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SuggestionChips
+                title="Try asking"
+                items={SUGGESTIONS}
+                variant="starter"
+                onSelect={(prompt) => void sendMessage(prompt)}
+              />
             )}
 
             {showFollowUps && (
-              <div className="animate-chat-bubble pl-9">
-                <p className="mb-2 text-[0.7rem] font-medium tracking-wide text-[#8b86a3] uppercase">
-                  Ask next
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {FOLLOW_UPS.map((item, index) => (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() => void sendMessage(item.prompt)}
-                      style={{ animationDelay: `${index * 50}ms` }}
-                      className="animate-chat-bubble cursor-pointer rounded-full border border-[#e4e0f4] bg-[#f6f4ff] px-3 py-1.5 text-xs font-medium text-[#5b5480] transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-white hover:text-indigo-600 hover:shadow-sm active:scale-[0.98]"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SuggestionChips
+                title="Ask next"
+                items={FOLLOW_UPS}
+                variant="followup"
+                onSelect={(prompt) => void sendMessage(prompt)}
+              />
             )}
 
             {lastFailed && !isTyping && (
