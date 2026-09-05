@@ -1,10 +1,6 @@
 import { ExpenseForm } from "./ExpenseForm";
 import { IncomeForm } from "./IncomeForm";
-import {
-  EMPTY_TRANSACTION_FILTERS,
-  TransactionFilters,
-  type TransactionFilterValues,
-} from "./TransactionFilters";
+import { TransactionFilters, type TransactionFilterValues } from "./TransactionFilters";
 import { TransactionsList } from "./TransactionsList";
 import type { Expense, Income, Transaction } from "../types";
 
@@ -167,6 +163,3 @@ export function DashboardView({
     </>
   );
 }
-
-export { EMPTY_TRANSACTION_FILTERS };
-export type { TransactionFilterValues };
