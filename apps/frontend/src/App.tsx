@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
 import { CATEGORIES } from "./categories";
 import { AnalyticsView } from "./components/AnalyticsView";
-import { DashboardView } from "./components/DashboardView";
+import {
+  DashboardView,
+  EMPTY_TRANSACTION_FILTERS,
+  type TransactionFilterValues,
+} from "./components/DashboardView";
 import { Header, type AppTab } from "./components/Header";
 import { LandingPage } from "./components/LandingPage";
 import { SummaryCards } from "./components/SummaryCards";
@@ -16,9 +20,9 @@ import {
   topSpendingCategory,
 } from "./lib/insights";
 import { startApiKeepAlive } from "./lib/keepAlive";
-import type { Expense, Income, Summary, Transaction } from "./types";
+import type { Expense, Income, Summary, Transaction, TransactionFilterParams } from "./types";
 
-const EXPENSE_PAGE_SIZE = 10;
+const PAGE_SIZE = 10;
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -30,6 +34,24 @@ function currentMonthKey() {
 
 function isCurrentMonth(dateStr: string) {
   return dateStr.slice(0, 7) === currentMonthKey();
+}
+
+function toFilterParams(
+  filters: TransactionFilterValues,
+  page: number,
+): TransactionFilterParams {
+  return {
+    type: filters.type,
+    category:
+      filters.type === "income" || !filters.category ? undefined : filters.category,
+    date_from: filters.dateFrom || undefined,
+    date_to: filters.dateTo || undefined,
+    min_amount: filters.minAmount || undefined,
+    max_amount: filters.maxAmount || undefined,
+    q: filters.query.trim() || undefined,
+    page,
+    page_size: PAGE_SIZE,
+  };
 }
 
 function App() {
@@ -67,11 +89,15 @@ function SpendWiseApp({
 }) {
   const [activeTab, setActiveTab] = useState<AppTab>("dashboard");
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [filters, setFilters] = useState<TransactionFilterValues>(EMPTY_TRANSACTION_FILTERS);
+  const [txPage, setTxPage] = useState(1);
+  const [txTotalPages, setTxTotalPages] = useState(0);
+  const [txTotal, setTxTotal] = useState(0);
+  const filtersRef = useRef(filters);
+  filtersRef.current = filters;
+
   const [allExpenses, setAllExpenses] = useState<Expense[]>([]);
-  const [expensePage, setExpensePage] = useState(1);
-  const [expenseTotalPages, setExpenseTotalPages] = useState(0);
-  const [expenseTotal, setExpenseTotal] = useState(0);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,12 +127,19 @@ function SpendWiseApp({
   const [editingIncomeId, setEditingIncomeId] = useState<number | null>(null);
 
   useEffect(() => {
-    void loadExpenses(1);
     void loadSummary();
     void loadIncome();
   }, []);
 
-  // Analytics still needs history; load it only when that tab opens.
+  // Refetch transactions whenever filters change (debounced for search typing).
+  useEffect(() => {
+    const delayMs = filters.query.trim() ? 300 : 0;
+    const timer = window.setTimeout(() => {
+      void loadTransactions(1, filters);
+    }, delayMs);
+    return () => window.clearTimeout(timer);
+  }, [filters]);
+
   useEffect(() => {
     if (activeTab === "analytics") {
       void loadAllExpenses();
@@ -148,24 +181,24 @@ function SpendWiseApp({
     }
   }
 
-  async function loadExpenses(page: number) {
+  async function loadTransactions(page: number, filterValues = filtersRef.current) {
     setLoading(true);
     setError(null);
     try {
-      const result = await api.listExpenses(page, EXPENSE_PAGE_SIZE);
-      setExpenses(result.items);
-      setExpensePage(result.page);
-      setExpenseTotalPages(result.total_pages);
-      setExpenseTotal(result.total);
+      const result = await api.listFilters(toFilterParams(filterValues, page));
+      setTransactions(result.items);
+      setTxPage(result.page);
+      setTxTotalPages(result.total_pages);
+      setTxTotal(result.total);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load expenses");
+      setError(err instanceof Error ? err.message : "Failed to load transactions");
     } finally {
       setLoading(false);
     }
   }
 
-  async function refreshExpenses(page = expensePage) {
-    const tasks: Promise<unknown>[] = [loadExpenses(page), loadSummary()];
+  async function refreshDashboard(page = txPage) {
+    const tasks: Promise<unknown>[] = [loadTransactions(page), loadSummary(), loadIncome()];
     if (activeTab === "analytics") {
       tasks.push(loadAllExpenses());
     }
@@ -201,10 +234,10 @@ function SpendWiseApp({
 
       if (editingId !== null) {
         await api.updateExpense(editingId, payload);
-        await refreshExpenses(expensePage);
+        await refreshDashboard(txPage);
       } else {
         await api.createExpense(payload);
-        await refreshExpenses(1);
+        await refreshDashboard(1);
       }
       resetForm();
     } catch (err) {
@@ -223,9 +256,10 @@ function SpendWiseApp({
   async function handleDelete(id: number) {
     try {
       await api.deleteExpense(id);
+      const expenseCountOnPage = transactions.filter((item) => item.kind === "expense").length;
       const nextPage =
-        expenses.length === 1 && expensePage > 1 ? expensePage - 1 : expensePage;
-      await refreshExpenses(nextPage);
+        expenseCountOnPage <= 1 && txPage > 1 ? txPage - 1 : txPage;
+      await refreshDashboard(nextPage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete expense");
     }
@@ -272,14 +306,13 @@ function SpendWiseApp({
       const payload = { source: incomeSource.trim(), amount: parsedAmount, date: incomeDate };
 
       if (editingIncomeId !== null) {
-        const updated = await api.updateIncome(editingIncomeId, payload);
-        setIncome((prev) => prev.map((entry) => (entry.id === editingIncomeId ? updated : entry)));
+        await api.updateIncome(editingIncomeId, payload);
+        await refreshDashboard(txPage);
       } else {
-        const created = await api.createIncome(payload);
-        setIncome((prev) => [created, ...prev]);
+        await api.createIncome(payload);
+        await refreshDashboard(1);
       }
       resetIncomeForm();
-      await loadSummary();
     } catch (err) {
       setIncomeError(
         err instanceof Error
@@ -296,8 +329,10 @@ function SpendWiseApp({
   async function handleIncomeDelete(id: number) {
     try {
       await api.deleteIncome(id);
-      setIncome((prev) => prev.filter((entry) => entry.id !== id));
-      await loadSummary();
+      const incomeCountOnPage = transactions.filter((item) => item.kind === "income").length;
+      const nextPage =
+        incomeCountOnPage <= 1 && txPage > 1 ? txPage - 1 : txPage;
+      await refreshDashboard(nextPage);
     } catch (err) {
       setIncomeError(err instanceof Error ? err.message : "Failed to delete income");
     }
@@ -336,20 +371,6 @@ function SpendWiseApp({
     () => [...monthlyExpenses].sort((a, b) => b.amount - a.amount).slice(0, 5),
     [monthlyExpenses],
   );
-
-  const transactions = useMemo<Transaction[]>(() => {
-    // Income only on page 1 so it doesn't repeat on every expense page.
-    const items: Transaction[] = [
-      ...(expensePage === 1
-        ? income.map((entry) => ({ kind: "income" as const, data: entry }))
-        : []),
-      ...expenses.map((entry) => ({ kind: "expense" as const, data: entry })),
-    ];
-    return items.sort((a, b) => {
-      if (a.data.date !== b.data.date) return a.data.date < b.data.date ? 1 : -1;
-      return b.data.id - a.data.id;
-    });
-  }, [income, expenses, expensePage]);
 
   return (
     <>
@@ -402,11 +423,14 @@ function SpendWiseApp({
             onDateChange={setDate}
             onExpenseSubmit={handleSubmit}
             onExpenseCancel={resetForm}
+            filters={filters}
+            onFiltersChange={setFilters}
+            onFiltersClear={() => setFilters(EMPTY_TRANSACTION_FILTERS)}
             transactions={transactions}
-            expensePage={expensePage}
-            expenseTotalPages={expenseTotalPages}
-            expenseTotal={expenseTotal}
-            onExpensePageChange={(page) => void loadExpenses(page)}
+            page={txPage}
+            totalPages={txTotalPages}
+            total={txTotal}
+            onPageChange={(page) => void loadTransactions(page)}
             onEditIncome={handleIncomeEditClick}
             onDeleteIncome={handleIncomeDelete}
             onEditExpense={handleEditClick}

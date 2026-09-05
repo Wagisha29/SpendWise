@@ -1,5 +1,10 @@
 import { ExpenseForm } from "./ExpenseForm";
 import { IncomeForm } from "./IncomeForm";
+import {
+  EMPTY_TRANSACTION_FILTERS,
+  TransactionFilters,
+  type TransactionFilterValues,
+} from "./TransactionFilters";
 import { TransactionsList } from "./TransactionsList";
 import type { Expense, Income, Transaction } from "../types";
 
@@ -35,11 +40,15 @@ interface DashboardViewProps {
   onExpenseSubmit: (e: React.FormEvent) => void;
   onExpenseCancel: () => void;
 
+  filters: TransactionFilterValues;
+  onFiltersChange: (next: TransactionFilterValues) => void;
+  onFiltersClear: () => void;
+
   transactions: Transaction[];
-  expensePage: number;
-  expenseTotalPages: number;
-  expenseTotal: number;
-  onExpensePageChange: (page: number) => void;
+  page: number;
+  totalPages: number;
+  total: number;
+  onPageChange: (page: number) => void;
   onEditIncome: (entry: Income) => void;
   onDeleteIncome: (id: number) => void;
   onEditExpense: (expense: Expense) => void;
@@ -75,11 +84,14 @@ export function DashboardView({
   onDateChange,
   onExpenseSubmit,
   onExpenseCancel,
+  filters,
+  onFiltersChange,
+  onFiltersClear,
   transactions,
-  expensePage,
-  expenseTotalPages,
-  expenseTotal,
-  onExpensePageChange,
+  page,
+  totalPages,
+  total,
+  onPageChange,
   onEditIncome,
   onDeleteIncome,
   onEditExpense,
@@ -134,14 +146,19 @@ export function DashboardView({
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> Transactions
       </h2>
+      <TransactionFilters
+        value={filters}
+        onChange={onFiltersChange}
+        onClear={onFiltersClear}
+      />
       <TransactionsList
         transactions={transactions}
         loading={loading}
         hideAmounts={hideAmounts}
-        page={expensePage}
-        totalPages={expenseTotalPages}
-        total={expenseTotal}
-        onPageChange={onExpensePageChange}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={onPageChange}
         onEditIncome={onEditIncome}
         onDeleteIncome={onDeleteIncome}
         onEditExpense={onEditExpense}
@@ -150,3 +167,6 @@ export function DashboardView({
     </>
   );
 }
+
+export { EMPTY_TRANSACTION_FILTERS };
+export type { TransactionFilterValues };

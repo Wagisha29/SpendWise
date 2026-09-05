@@ -144,7 +144,7 @@ export function TransactionsList({
           </button>
           <span className="text-sm font-medium text-[#8c86a3] tabular-nums">
             Page {page} of {totalPages}
-            <span className="text-[#b0a9c4]"> · {total} expenses</span>
+            <span className="text-[#b0a9c4]"> · {total} results</span>
           </span>
           <button
             type="button"

@@ -34,3 +34,23 @@ export type IncomeInput = Omit<Income, "id">;
 export type Transaction =
   | { kind: "income"; data: Income }
   | { kind: "expense"; data: Expense };
+
+export interface FilterListResponse {
+  items: Transaction[];
+  page: number;
+  page_size: number;
+  total: number;
+  total_pages: number;
+}
+
+export type TransactionFilterParams = {
+  type?: "all" | "income" | "expense";
+  category?: string;
+  date_from?: string;
+  date_to?: string;
+  min_amount?: string;
+  max_amount?: string;
+  q?: string;
+  page?: number;
+  page_size?: number;
+};

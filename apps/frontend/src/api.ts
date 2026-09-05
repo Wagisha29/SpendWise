@@ -1,5 +1,14 @@
 import { supabase } from "./lib/supabaseClient";
-import type { Expense, ExpenseInput, ExpenseListResponse, Income, IncomeInput, Summary } from "./types";
+import type {
+  Expense,
+  ExpenseInput,
+  ExpenseListResponse,
+  FilterListResponse,
+  Income,
+  IncomeInput,
+  Summary,
+  TransactionFilterParams,
+} from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -34,6 +43,15 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function toSearchParams(params: Record<string, string | number | undefined>): string {
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === "") continue;
+    qs.set(key, String(value));
+  }
+  return qs.toString();
+}
+
 // The "?op=" query param is purely cosmetic: it makes each call show up with
 // a readable name (e.g. "6?op=updateExpense") in the browser's Network tab,
 // since Chrome names requests after the last URL segment + query string.
@@ -43,6 +61,21 @@ export const api = {
     request<ExpenseListResponse>(
       `/api/expenses?page=${page}&page_size=${pageSize}&op=listExpenses`,
     ),
+  listFilters: (params: TransactionFilterParams = {}) => {
+    const query = toSearchParams({
+      type: params.type,
+      category: params.category,
+      date_from: params.date_from,
+      date_to: params.date_to,
+      min_amount: params.min_amount,
+      max_amount: params.max_amount,
+      q: params.q,
+      page: params.page ?? 1,
+      page_size: params.page_size ?? 10,
+      op: "listFilters",
+    });
+    return request<FilterListResponse>(`/api/filters?${query}`);
+  },
   getSummary: () => request<Summary>("/api/summary?op=getSummary"),
   createExpense: (expense: ExpenseInput) =>
     request<Expense>("/api/expenses?op=createExpense", {

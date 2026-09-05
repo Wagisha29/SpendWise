@@ -35,10 +35,16 @@ table automatically on startup.
 1. In Supabase: **Authentication → Providers → Google** → toggle it on.
 2. Paste the Google **Client ID** and **Client secret** → **Save**.
 3. Go to **Authentication → URL Configuration**:
-   - Site URL: `https://spendwise-io.vercel.app` (use `http://localhost:5173` for local-only)
-   - Redirect URLs: add
+   - Site URL: keep production `https://spendwise-io.vercel.app` (or `http://localhost:5173` while testing local only)
+   - Redirect URLs: add **all** origins you use (Supabase rejects unknown ones and falls back to Site URL):
+     - `http://localhost:5173`
      - `http://localhost:5173/**`
+     - `http://localhost:5174`
+     - `http://localhost:5174/**`
+     - `https://spendwise-io.vercel.app`
      - `https://spendwise-io.vercel.app/**`
+
+If local sign-in still opens the Vercel URL, you signed in from a port that is **not** in Redirect URLs (common when Vite picks 5174 because 5173 is busy). Either add that port above, or free 5173 and use `http://localhost:5173`.
 
 ## 4. Fill in your `.env` files
 
