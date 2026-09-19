@@ -21,7 +21,7 @@ export const EMPTY_TRANSACTION_FILTERS: TransactionFilterValues = {
 };
 
 const CONTROL =
-  "h-8 w-full min-w-0 rounded-lg border border-[#ebe7f5] bg-white px-2 text-[0.8rem] text-[#3f3b52] outline-none transition focus:border-indigo-300 focus:shadow-[0_0_0_2px_rgba(99,102,241,0.12)] disabled:cursor-not-allowed disabled:opacity-45";
+  "h-8 w-full min-w-0 rounded-lg border border-[#ece9f4] bg-[#faf9ff] px-2 text-[0.8rem] text-[#3f3b52] outline-none transition focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_2px_rgba(99,102,241,0.12)] disabled:cursor-not-allowed disabled:opacity-45";
 
 const LABEL =
   "mb-0.5 block text-[0.65rem] font-semibold tracking-wide text-[#9a93b0] uppercase";
