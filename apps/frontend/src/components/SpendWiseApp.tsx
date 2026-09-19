@@ -4,6 +4,7 @@ import { CATEGORIES } from "../categories";
 import { AnalyticsView } from "./AnalyticsView";
 import { DashboardView } from "./DashboardView";
 import { Header, type AppTab } from "./Header";
+import { MonthlyGoalCard } from "./MonthlyGoalCard";
 import { SummaryCards } from "./SummaryCards";
 import {
   EMPTY_TRANSACTION_FILTERS,
@@ -320,7 +321,7 @@ export function SpendWiseApp({
 
   return (
     <>
-      <div className="animate-fade-in-up mx-auto max-w-[1200px] px-6 pt-10 pb-16 lg:px-12">
+      <div className="animate-fade-in-up mx-auto max-w-[1440px] px-6 pt-10 pb-16 lg:px-12">
         <Header
           userName={userName}
           userEmail={userEmail}
@@ -337,6 +338,12 @@ export function SpendWiseApp({
           savings={savings}
           hideAmounts={privacyMode}
           expenseMomDelta={expenseMomDelta}
+        />
+
+        <MonthlyGoalCard
+          monthlyExpenseTotal={monthlyExpenseTotal}
+          dailyAverage={dailyAverageSpend}
+          hideAmounts={privacyMode}
         />
 
         {activeTab === "dashboard" && (
