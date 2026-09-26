@@ -12,6 +12,11 @@ app = FastAPI(title="SpendWise API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    # Vite falls back to the next free port (5174, 5175, ...) whenever 5173 is
+    # already taken (e.g. a leftover dev server), which otherwise breaks CORS
+    # every time. Allow any localhost/127.0.0.1 port in addition to the
+    # explicit ALLOWED_ORIGINS list (which still gates production origins).
+    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1):\d+$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

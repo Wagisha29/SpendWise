@@ -49,12 +49,10 @@ function SummaryCard({
 
   return (
     <div
-      className={`group relative flex flex-col gap-1 overflow-hidden rounded-2xl border px-6 pt-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-        hasPercent ? "pb-9" : "pb-5"
-      } ${styles.wrap}`}
+      className={`group relative flex h-[110px] flex-col gap-0.5 overflow-hidden rounded-2xl border px-5 pt-3.5 pb-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${styles.wrap}`}
     >
       <span
-        className={`absolute -top-6 -right-6 h-16 w-16 rounded-full opacity-30 blur-2xl transition-transform duration-500 group-hover:scale-150 ${styles.dot}`}
+        className={`absolute -top-6 -right-6 h-14 w-14 rounded-full opacity-30 blur-2xl transition-transform duration-500 group-hover:scale-150 ${styles.dot}`}
       />
       <div className="flex flex-wrap items-center gap-2">
         <span className={`text-xs font-semibold tracking-wider uppercase ${styles.label}`}>{label}</span>
@@ -73,12 +71,12 @@ function SummaryCard({
           </span>
         )}
       </div>
-      <span className={`text-2xl font-extrabold tabular-nums ${styles.value}`}>
+      <span className={`text-xl font-extrabold tabular-nums ${styles.value}`}>
         ₹{hideAmounts ? AMOUNT_MASK : formatAmount(animated, false)}
       </span>
       {hasPercent && (
         <span
-          className={`absolute right-3 bottom-3 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums shadow-sm transition-transform duration-300 group-hover:scale-105 ${styles.badge}`}
+          className={`absolute right-3 bottom-2 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums shadow-sm transition-transform duration-300 group-hover:scale-105 ${styles.badge}`}
           title={percentLabel}
         >
           {hideAmounts ? "••%" : `${percent > 0 ? "" : percent < 0 ? "-" : ""}${Math.abs(percent).toFixed(0)}%`}
@@ -105,7 +103,7 @@ export function SummaryCards({
   const savingsPercent = income > 0 ? (savings / income) * 100 : null;
 
   return (
-    <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <>
       <SummaryCard label="Income (this month)" amount={income} hideAmounts={hideAmounts} accent="emerald" />
       <SummaryCard
         label="Expense (this month)"
@@ -124,6 +122,6 @@ export function SummaryCards({
         percent={savingsPercent}
         percentLabel="% of income saved"
       />
-    </section>
+    </>
   );
 }

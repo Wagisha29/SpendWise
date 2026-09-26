@@ -332,19 +332,20 @@ export function SpendWiseApp({
           onSignOut={onSignOut}
         />
 
-        <SummaryCards
-          income={monthlyIncomeTotal}
-          expense={monthlyExpenseTotal}
-          savings={savings}
-          hideAmounts={privacyMode}
-          expenseMomDelta={expenseMomDelta}
-        />
-
-        <MonthlyGoalCard
-          monthlyExpenseTotal={monthlyExpenseTotal}
-          dailyAverage={dailyAverageSpend}
-          hideAmounts={privacyMode}
-        />
+        <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <SummaryCards
+            income={monthlyIncomeTotal}
+            expense={monthlyExpenseTotal}
+            savings={savings}
+            hideAmounts={privacyMode}
+            expenseMomDelta={expenseMomDelta}
+          />
+          <MonthlyGoalCard
+            monthlyExpenseTotal={monthlyExpenseTotal}
+            dailyAverage={dailyAverageSpend}
+            hideAmounts={privacyMode}
+          />
+        </section>
 
         {activeTab === "dashboard" && (
           <DashboardView

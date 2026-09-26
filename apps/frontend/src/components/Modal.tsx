@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export function Modal({
   open,
@@ -38,7 +39,7 @@ export function Modal({
     emerald: "bg-emerald-400",
   }[accent];
 
-  return (
+  return createPortal(
     <div
       className="animate-fade-in-up fixed inset-0 z-50 flex items-center justify-center bg-[#1a1730]/50 p-4 backdrop-blur-sm"
       onMouseDown={onClose}
@@ -66,6 +67,7 @@ export function Modal({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
