@@ -55,33 +55,46 @@ export function TransactionsList({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
-        {transactions.map((item, index) => {
-          const delay = Math.min(index, 6) * 40;
-          if (item.kind === "income") {
-            return (
-              <IncomeTransactionRow
-                key={`income-${item.data.id}`}
-                entry={item.data}
-                hideAmounts={hideAmounts}
-                animationDelayMs={delay}
-                onEdit={onEditIncome}
-                onDelete={onDeleteIncome}
-              />
-            );
-          }
-          return (
-            <ExpenseTransactionRow
-              key={`expense-${item.data.id}`}
-              expense={item.data}
-              hideAmounts={hideAmounts}
-              animationDelayMs={delay}
-              onEdit={onEditExpense}
-              onDelete={onDeleteExpense}
-            />
-          );
-        })}
-      </ul>
+      <div className={`${CARD} overflow-x-auto`}>
+        <table className="w-full min-w-[560px] border-collapse text-left">
+          <thead>
+            <tr className="border-b border-[#ece9f4] text-[0.68rem] font-semibold tracking-wide text-[#9a93b0] uppercase">
+              <th className="px-4 py-2.5">Title</th>
+              <th className="px-4 py-2.5">Category</th>
+              <th className="px-4 py-2.5">Date</th>
+              <th className="px-4 py-2.5 text-right">Amount</th>
+              <th className="px-4 py-2.5 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((item, index) => {
+              const delay = Math.min(index, 6) * 40;
+              if (item.kind === "income") {
+                return (
+                  <IncomeTransactionRow
+                    key={`income-${item.data.id}`}
+                    entry={item.data}
+                    hideAmounts={hideAmounts}
+                    animationDelayMs={delay}
+                    onEdit={onEditIncome}
+                    onDelete={onDeleteIncome}
+                  />
+                );
+              }
+              return (
+                <ExpenseTransactionRow
+                  key={`expense-${item.data.id}`}
+                  expense={item.data}
+                  hideAmounts={hideAmounts}
+                  animationDelayMs={delay}
+                  onEdit={onEditExpense}
+                  onDelete={onDeleteExpense}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       <TransactionPagination
         page={page}
