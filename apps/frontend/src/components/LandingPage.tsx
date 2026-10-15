@@ -72,7 +72,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
       }}
     >
       {/* Hero — one composition: brand, headline, support, CTA, preview */}
-      <section className="relative mx-auto grid min-h-screen max-w-[1200px] items-center gap-10 px-6 pt-10 pb-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-12 lg:pt-8 lg:pb-12">
+      <section className="relative mx-auto grid min-h-screen max-w-[1440px] items-center gap-10 px-6 pt-10 pb-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-12 lg:pt-8 lg:pb-12">
         <div className="animate-fade-in-up z-10 max-w-xl">
           <div className="mb-7 flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-white shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)]">
@@ -111,7 +111,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-20 lg:px-12">
+      <section className="mx-auto max-w-[1440px] px-6 pb-20 lg:px-12">
         <div className="mb-8 max-w-lg">
           <h2 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">
             Everything you need to spend wiser

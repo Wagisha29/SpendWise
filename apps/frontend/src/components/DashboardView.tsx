@@ -1,6 +1,10 @@
 import { ExpenseForm } from "./ExpenseForm";
 import { IncomeForm } from "./IncomeForm";
-import { TransactionFilters, type TransactionFilterValues } from "./TransactionFilters";
+import {
+  countActiveFilters,
+  TransactionFilters,
+  type TransactionFilterValues,
+} from "./TransactionFilters";
 import { TransactionsList } from "./TransactionsList";
 import type { Expense, Income, Transaction } from "../types";
 
@@ -93,6 +97,8 @@ export function DashboardView({
   onEditExpense,
   onDeleteExpense,
 }: DashboardViewProps) {
+  const activeFilterCount = countActiveFilters(filters);
+
   return (
     <>
       <div className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch">
@@ -139,8 +145,16 @@ export function DashboardView({
         </div>
       </div>
 
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h2 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> Transactions
+        {activeFilterCount > 0 && (
+          <span
+            className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-0.5 text-[0.65rem] font-semibold tracking-wide text-indigo-600 normal-case"
+            title={`${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}`}
+          >
+            Filtered · {activeFilterCount}
+          </span>
+        )}
       </h2>
       <TransactionFilters
         value={filters}
