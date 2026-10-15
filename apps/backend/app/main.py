@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import ALLOWED_ORIGINS, GEMINI_API_KEY
 from app.core.database import Base, engine
-from app.routers import expenses, income, summary, wisebot, filters
+from app.routers import expenses, income, summary, wisebot, filters, goal
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,6 +27,7 @@ app.include_router(income.router)
 app.include_router(summary.router)
 app.include_router(wisebot.router)
 app.include_router(filters.router)
+app.include_router(goal.router)
 
 
 @app.get("/api/health")
