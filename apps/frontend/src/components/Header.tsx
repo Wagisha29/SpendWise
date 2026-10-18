@@ -1,4 +1,5 @@
 import { EyeIcon } from "./EyeIcon";
+import { InstallAppButton } from "./InstallAppButton";
 import { Logo } from "./Logo";
 
 export type AppTab = "dashboard" | "analytics";
@@ -38,6 +39,7 @@ export function Header({
           </div>
         </div>
         <div className="flex items-center gap-3.5">
+          <InstallAppButton />
           <button
             type="button"
             onClick={onTogglePrivacy}
