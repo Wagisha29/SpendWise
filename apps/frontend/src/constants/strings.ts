@@ -77,6 +77,7 @@ export const STRINGS = {
     modalQuestion: "How much do you want to spend this month?",
     amountPlaceholder: "e.g. 25000",
     save: "Save Goal",
+    saving: "Saving…",
     pace: (projected: string) => `At this pace: ~₹${projected} by month end`,
   },
 
@@ -245,5 +246,7 @@ export const STRINGS = {
     updateIncome: "Failed to update income",
     addIncome: "Failed to add income",
     deleteIncome: "Failed to delete income",
+    loadGoal: "Failed to load goal",
+    saveGoal: "Failed to save goal",
   },
 } as const;

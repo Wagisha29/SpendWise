@@ -43,6 +43,14 @@ export interface FilterListResponse {
   total_pages: number;
 }
 
+export interface Goal {
+  id: number;
+  month: string;
+  amount: number;
+}
+
+export type GoalInput = Pick<Goal, "amount">;
+
 export type TransactionFilterParams = {
   type?: "all" | "income" | "expense";
   category?: string;
