@@ -163,7 +163,7 @@ export function WiseBot() {
   const lastFailed = lastMessage?.failed;
 
   return (
-    <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
+    <div className="fixed right-4 bottom-[calc(var(--bottom-nav-h)+0.75rem+var(--sab))] z-50 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
       {open && (
         <section
           className="animate-pop-in flex h-[min(34rem,78vh)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#eceafb] bg-white shadow-[0_20px_50px_-20px_rgba(40,20,120,0.35)]"

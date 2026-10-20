@@ -25,7 +25,14 @@ function DownloadIcon() {
  * (see `useInstallPrompt`). Clicking it triggers the native "Install app?"
  * confirmation — we can't skip that dialog, only trigger it on demand.
  */
-export function InstallAppButton({ className }: { className?: string }) {
+export function InstallAppButton({
+  className,
+  iconOnly = false,
+}: {
+  className?: string;
+  /** Renders just the icon (for compact mobile headers) with an a11y label instead of visible text. */
+  iconOnly?: boolean;
+}) {
   const { canInstall, promptInstall } = useInstallPrompt();
 
   if (!canInstall) {
@@ -37,13 +44,14 @@ export function InstallAppButton({ className }: { className?: string }) {
       type="button"
       onClick={promptInstall}
       title="Install SpendWise as an app"
+      aria-label={iconOnly ? "Install SpendWise as an app" : undefined}
       className={
         className ??
         "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-[0.8rem] font-semibold text-indigo-600 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-100 hover:shadow-md active:translate-y-0"
       }
     >
       <DownloadIcon />
-      Install app
+      {!iconOnly && "Install app"}
     </button>
   );
 }

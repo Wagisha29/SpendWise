@@ -89,21 +89,21 @@ export function MonthlyGoalCard({
   if (goal === null) {
     return (
       <>
-        <div className="group relative flex h-[110px] flex-col gap-0.5 overflow-hidden rounded-2xl border border-dashed border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50/60 to-fuchsia-100/50 px-5 pt-3.5 pb-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <div className="group relative flex h-[92px] flex-col gap-0.5 overflow-hidden rounded-2xl border border-dashed border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50/60 to-fuchsia-100/50 px-3.5 pt-3 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-[110px] sm:px-5 sm:pt-3.5 sm:pb-3.5">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold tracking-wider text-indigo-700/70 uppercase">
-              🎯 Monthly Goal
+            <span className="truncate text-[0.65rem] font-semibold tracking-wider text-indigo-700/70 uppercase sm:text-xs">
+              🎯 Goal
             </span>
             <button
               type="button"
               onClick={openModal}
-              className="rounded-full bg-indigo-600/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100"
+              className="shrink-0 rounded-full bg-indigo-600/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100"
             >
               Set Goal
             </button>
           </div>
-          <p className="m-0 text-base font-extrabold text-[#3f3b52]">No goal set</p>
-          <p className="m-0 text-xs text-[#8c86a3]">Cap your spending for {monthLabel}.</p>
+          <p className="m-0 truncate text-sm font-extrabold text-[#3f3b52] sm:text-base">No goal set</p>
+          <p className="m-0 truncate text-[0.68rem] text-[#8c86a3] sm:text-xs">Cap spending for {monthLabel}.</p>
         </div>
         <GoalModal
           open={modalOpen}
@@ -131,43 +131,43 @@ export function MonthlyGoalCard({
   return (
     <>
       <div
-        className={`group relative flex h-[110px] flex-col gap-0.5 overflow-hidden rounded-2xl border px-5 pt-3.5 pb-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${styles.wrap}`}
+        className={`group relative flex h-[92px] flex-col gap-0.5 overflow-hidden rounded-2xl border px-3.5 pt-3 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-[110px] sm:px-5 sm:pt-3.5 sm:pb-3.5 ${styles.wrap}`}
       >
         <span
           className={`absolute -top-6 -right-6 h-14 w-14 rounded-full opacity-30 blur-2xl transition-transform duration-500 group-hover:scale-150 ${styles.dot}`}
         />
         <div className="flex items-center justify-between gap-2">
-          <span className={`text-xs font-semibold tracking-wider uppercase ${styles.label}`}>
-            🎯 Monthly Goal
+          <span className={`truncate text-[0.65rem] font-semibold tracking-wider uppercase sm:text-xs ${styles.label}`}>
+            🎯 Goal
           </span>
           <button
             type="button"
             onClick={openModal}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100 ${styles.badge}`}
+            className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100 ${styles.badge}`}
           >
             Edit
           </button>
         </div>
 
-        <span className={`text-xl font-extrabold tabular-nums ${styles.value}`}>
+        <span className={`truncate text-base font-extrabold tabular-nums sm:text-xl ${styles.value}`}>
           ₹{hideAmounts ? AMOUNT_MASK : formatAmount(Math.abs(remaining), false)}
-          <span className="ml-1 text-xs font-semibold opacity-70">
+          <span className="ml-1 text-[0.65rem] font-semibold opacity-70 sm:text-xs">
             {status === "over" ? "over" : "left"}
           </span>
         </span>
-        <p className={`m-0 text-xs font-medium ${styles.sub}`}>
+        <p className={`m-0 truncate text-[0.68rem] font-medium sm:text-xs ${styles.sub}`}>
           of ₹{hideAmounts ? AMOUNT_MASK : formatAmount(goal, false)} goal
         </p>
 
-        <div className="absolute right-3 bottom-2 left-5 flex items-center gap-2">
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/50">
+        <div className="absolute right-2.5 bottom-2 left-3.5 flex items-center justify-end gap-2 sm:right-3 sm:left-5">
+          <div className="hidden h-1.5 flex-1 overflow-hidden rounded-full bg-white/50 sm:block">
             <div
               className={`h-full rounded-full bg-gradient-to-r transition-all duration-500 ${styles.bar}`}
               style={{ width: `${Math.min(Math.max(percent, 0), 100)}%` }}
             />
           </div>
           <span
-            className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums shadow-sm transition-transform duration-300 group-hover:scale-105 ${styles.badge}`}
+            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums shadow-sm transition-transform duration-300 group-hover:scale-105 sm:px-2 sm:text-[11px] ${styles.badge}`}
             title={paceTitle}
           >
             {hideAmounts ? "••%" : `${percent.toFixed(0)}%`}

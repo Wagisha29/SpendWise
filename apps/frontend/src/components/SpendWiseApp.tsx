@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { CATEGORIES } from "../categories";
 import { AnalyticsView } from "./AnalyticsView";
+import { BottomNav } from "./BottomNav";
 import { DashboardView } from "./DashboardView";
 import { Header, type AppTab } from "./Header";
 import { MonthlyGoalCard } from "./MonthlyGoalCard";
@@ -321,7 +322,7 @@ export function SpendWiseApp({
 
   return (
     <>
-      <div className="animate-fade-in-up mx-auto max-w-[1440px] px-6 pt-10 pb-16 lg:px-12">
+      <div className="animate-fade-in-up mx-auto max-w-[1440px] px-4 pt-3 pb-24 sm:px-6 sm:pt-10 sm:pb-16 lg:px-12">
         <Header
           userName={userName}
           userEmail={userEmail}
@@ -332,7 +333,7 @@ export function SpendWiseApp({
           onSignOut={onSignOut}
         />
 
-        <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-6 grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
           <SummaryCards
             income={monthlyIncomeTotal}
             expense={monthlyExpenseTotal}
@@ -405,6 +406,7 @@ export function SpendWiseApp({
         )}
       </div>
 
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
       <WiseBot />
     </>
   );

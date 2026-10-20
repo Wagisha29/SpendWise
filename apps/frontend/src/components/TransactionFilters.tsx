@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CATEGORIES, getCategoryMeta } from "../categories";
 
 export type TransactionFilterValues = {
@@ -50,7 +51,9 @@ function hasActiveFilters(value: TransactionFilterValues): boolean {
 
 export function TransactionFilters({ value, onChange, onClear }: TransactionFiltersProps) {
   const active = hasActiveFilters(value);
+  const activeCount = countActiveFilters(value);
   const categoryDisabled = value.type === "income";
+  const [expanded, setExpanded] = useState(false);
 
   function patch(partial: Partial<TransactionFilterValues>) {
     onChange({ ...value, ...partial });
@@ -58,8 +61,47 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
 
   return (
     <section className="mb-3 w-full" aria-label="Transaction filters">
-      <div className="grid w-full grid-cols-2 gap-x-2 gap-y-2 sm:grid-cols-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.85fr)_minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_auto] lg:items-end lg:gap-1.5">
-        <label className="relative col-span-2 min-w-0 sm:col-span-4 lg:col-span-1">
+      <div className="mb-2 flex items-center gap-2 sm:hidden">
+        <label className="relative min-w-0 flex-1">
+          <input
+            type="search"
+            placeholder="Search title or source…"
+            className={`${CONTROL} h-9 pl-7`}
+            value={value.query}
+            onChange={(e) => patch({ query: e.target.value })}
+          />
+          <span
+            className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-[0.75rem] text-[#b0a9c4]"
+            aria-hidden
+          >
+            ⌕
+          </span>
+        </label>
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+          className={`relative flex h-9 shrink-0 cursor-pointer items-center gap-1 rounded-lg border px-3 text-[0.78rem] font-semibold transition ${
+            active
+              ? "border-indigo-300 bg-indigo-50 text-indigo-600"
+              : "border-[#ece9f4] bg-white text-[#7a7590]"
+          }`}
+        >
+          ⚙ Filters
+          {activeCount > 0 && (
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-600 px-1 text-[0.6rem] font-bold text-white">
+              {activeCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <div
+        className={`grid w-full grid-cols-2 gap-x-2 gap-y-2 sm:grid-cols-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.85fr)_minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_auto] lg:items-end lg:gap-1.5 ${
+          expanded ? "grid" : "hidden sm:grid"
+        }`}
+      >
+        <label className="relative col-span-2 hidden min-w-0 sm:col-span-4 sm:block lg:col-span-1">
           <span className={LABEL}>Search</span>
           <input
             type="search"

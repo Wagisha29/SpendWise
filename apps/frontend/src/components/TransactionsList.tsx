@@ -1,6 +1,8 @@
 import { CARD } from "../lib/ui";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { ExpenseTransactionCard } from "./transactions/ExpenseTransactionCard";
 import { ExpenseTransactionRow } from "./transactions/ExpenseTransactionRow";
+import { IncomeTransactionCard } from "./transactions/IncomeTransactionCard";
 import { IncomeTransactionRow } from "./transactions/IncomeTransactionRow";
 import { TransactionPagination } from "./transactions/TransactionPagination";
 import type { Expense, Income, Transaction } from "../types";
@@ -55,7 +57,37 @@ export function TransactionsList({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <div className={`${CARD} overflow-x-auto`}>
+      {/* Mobile: compact card list (no horizontal scrolling needed). */}
+      <ul className="m-0 flex list-none flex-col gap-2 p-0 sm:hidden">
+        {transactions.map((item, index) => {
+          const delay = Math.min(index, 6) * 40;
+          if (item.kind === "income") {
+            return (
+              <IncomeTransactionCard
+                key={`income-${item.data.id}`}
+                entry={item.data}
+                hideAmounts={hideAmounts}
+                animationDelayMs={delay}
+                onEdit={onEditIncome}
+                onDelete={onDeleteIncome}
+              />
+            );
+          }
+          return (
+            <ExpenseTransactionCard
+              key={`expense-${item.data.id}`}
+              expense={item.data}
+              hideAmounts={hideAmounts}
+              animationDelayMs={delay}
+              onEdit={onEditExpense}
+              onDelete={onDeleteExpense}
+            />
+          );
+        })}
+      </ul>
+
+      {/* sm and up: full table. */}
+      <div className={`${CARD} hidden overflow-x-auto sm:block`}>
         <table className="w-full min-w-[560px] border-collapse text-left">
           <thead>
             <tr className="border-b border-[#ece9f4] text-[0.68rem] font-semibold tracking-wide text-[#9a93b0] uppercase">

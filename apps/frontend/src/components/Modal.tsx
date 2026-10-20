@@ -41,16 +41,17 @@ export function Modal({
 
   return createPortal(
     <div
-      className="animate-fade-in-up fixed inset-0 z-50 flex items-center justify-center bg-[#1a1730]/50 p-4 backdrop-blur-sm"
+      className="animate-fade-in-up fixed inset-0 z-50 flex items-end justify-center bg-[#1a1730]/50 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
       <div
-        className="animate-pop-in w-full max-w-[440px] rounded-2xl border border-[#eceafb] bg-white p-6 shadow-[0_30px_70px_-20px_rgba(40,20,120,0.35)]"
+        className="animate-sheet-in pb-safe w-full max-w-[440px] rounded-t-2xl border border-[#eceafb] bg-white p-6 shadow-[0_30px_70px_-20px_rgba(40,20,120,0.35)] sm:rounded-2xl sm:pb-6"
         onMouseDown={(e) => e.stopPropagation()}
       >
+        <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#ece9f4] sm:hidden" aria-hidden="true" />
         <div className="mb-5 flex items-center justify-between">
           <h3 className="flex items-center gap-2 text-lg font-extrabold text-[#28223f]">
             <span className={`h-2 w-2 rounded-full ${dot}`} />

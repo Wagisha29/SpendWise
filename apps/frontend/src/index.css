@@ -6,6 +6,22 @@
 
 :root {
   color-scheme: light;
+  /* Safe-area insets so the app sits correctly under notches / home
+     indicators when installed as a standalone PWA on iOS & Android. */
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  /* Height of the mobile bottom tab bar, used to keep scrollable content
+     and floating elements (WiseBot FAB) clear of it. */
+  --bottom-nav-h: 64px;
+}
+
+html {
+  /* Stops the iOS/Android "rubber band" overscroll bounce so the app
+     feels like a native app shell rather than a webpage. */
+  overscroll-behavior-y: none;
+  height: 100%;
 }
 
 body {
@@ -16,6 +32,10 @@ body {
     radial-gradient(circle at 92% 12%, rgba(236, 72, 153, 0.09), transparent 40%),
     radial-gradient(circle at 50% 100%, rgba(34, 211, 238, 0.08), transparent 45%);
   background-attachment: fixed;
+  overscroll-behavior-y: none;
+  /* Remove the gray flash Android/iOS shows on tap — native apps don't
+     have this, so it's one of the biggest "feels like a website" tells. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root {
@@ -24,6 +44,23 @@ body {
 
 ::selection {
   background: rgba(99, 102, 241, 0.2);
+}
+
+/* Snappier taps (removes the ~300ms double-tap-to-zoom delay) and no
+   text-selection cursor flicker on interactive controls. */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Utility paddings for safe-area aware fixed elements. */
+.pb-safe {
+  padding-bottom: calc(0.75rem + var(--sab));
+}
+
+.pt-safe {
+  padding-top: var(--sat);
 }
 
 @keyframes fade-in-up {
@@ -54,6 +91,27 @@ body {
 
 .animate-pop-in {
   animation: pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-sheet-in {
+  animation: sheet-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* On larger screens modals are centered dialogs, not bottom sheets, so
+   swap back to the pop-in scale animation. */
+@media (min-width: 640px) {
+  .animate-sheet-in {
+    animation: pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
 }
 
 @keyframes chat-bubble-in {
