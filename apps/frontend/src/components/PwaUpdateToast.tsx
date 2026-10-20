@@ -32,8 +32,8 @@ export function PwaUpdateToast() {
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-indigo-100 bg-white px-4 py-3 text-sm shadow-lg">
-      <span className="text-[#282342]">
+    <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-indigo-100 bg-[var(--surf-card)] px-4 py-3 text-sm shadow-lg dark:border-indigo-800/50">
+      <span className="text-[var(--tx-strong)]">
         {needRefresh ? STRINGS.pwaToast.updateAvailable : STRINGS.pwaToast.readyOffline}
       </span>
       {needRefresh && (
@@ -49,7 +49,7 @@ export function PwaUpdateToast() {
         type="button"
         onClick={close}
         aria-label={STRINGS.pwaToast.dismiss}
-        className="text-[#8b86a3] hover:text-[#282342]"
+        className="text-[var(--tx-muted)] hover:text-[var(--tx-strong)]"
       >
         ✕
       </button>

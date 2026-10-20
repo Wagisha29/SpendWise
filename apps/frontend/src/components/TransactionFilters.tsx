@@ -23,10 +23,10 @@ export const EMPTY_TRANSACTION_FILTERS: TransactionFilterValues = {
 };
 
 const CONTROL =
-  "h-8 w-full min-w-0 rounded-lg border border-[#ece9f4] bg-[#faf9ff] px-2 text-[0.8rem] text-[#3f3b52] outline-none transition focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_2px_rgba(99,102,241,0.12)] disabled:cursor-not-allowed disabled:opacity-45";
+  "h-8 w-full min-w-0 rounded-lg border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-2 text-[0.8rem] text-[var(--tx-strong)] outline-none transition focus:border-indigo-300 focus:bg-[var(--surf-card)] focus:shadow-[0_0_0_2px_rgba(99,102,241,0.12)] disabled:cursor-not-allowed disabled:opacity-45";
 
 const LABEL =
-  "mb-0.5 block text-[0.65rem] font-semibold tracking-wide text-[#9a93b0] uppercase";
+  "mb-0.5 block text-[0.65rem] font-semibold tracking-wide text-[var(--tx-muted)] uppercase";
 
 type TransactionFiltersProps = {
   value: TransactionFilterValues;
@@ -72,7 +72,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
             onChange={(e) => patch({ query: e.target.value })}
           />
           <span
-            className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-[0.75rem] text-[#b0a9c4]"
+            className="pointer-events-none absolute top-1/2 left-2 -translate-y-1/2 text-[0.75rem] text-[var(--tx-muted)]"
             aria-hidden
           >
             ⌕
@@ -84,8 +84,8 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
           aria-expanded={expanded}
           className={`relative flex h-9 shrink-0 cursor-pointer items-center gap-1 rounded-lg border px-3 text-[0.78rem] font-semibold transition ${
             active
-              ? "border-indigo-300 bg-indigo-50 text-indigo-600"
-              : "border-[#ece9f4] bg-white text-[#7a7590]"
+              ? "border-indigo-300 bg-indigo-50 text-indigo-600 dark:border-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"
+              : "border-[var(--bd-subtle)] bg-[var(--surf-card)] text-[var(--tx-muted)]"
           }`}
         >
           ⚙ {STRINGS.filters.toggle}
@@ -112,7 +112,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
             onChange={(e) => patch({ query: e.target.value })}
           />
           <span
-            className="pointer-events-none absolute bottom-2 left-2 text-[0.7rem] text-[#b0a9c4]"
+            className="pointer-events-none absolute bottom-2 left-2 text-[0.7rem] text-[var(--tx-muted)]"
             aria-hidden
           >
             ⌕
@@ -208,7 +208,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
             <button
               type="button"
               onClick={onClear}
-              className="h-8 cursor-pointer rounded-lg border-none bg-transparent px-1.5 text-[0.75rem] font-medium text-[#9a93b0] transition hover:text-indigo-600"
+              className="h-8 cursor-pointer rounded-lg border-none bg-transparent px-1.5 text-[0.75rem] font-medium text-[var(--tx-muted)] transition hover:text-indigo-600"
             >
               {STRINGS.common.clear}
             </button>

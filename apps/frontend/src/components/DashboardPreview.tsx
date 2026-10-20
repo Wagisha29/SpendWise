@@ -2,7 +2,7 @@
 export function DashboardPreview() {
   return (
     <div
-      className="pointer-events-none select-none overflow-hidden rounded-[20px] border border-[#eceafb] bg-white/95 p-4 shadow-[0_30px_80px_-28px_rgba(99,60,220,0.35)] sm:p-5"
+      className="pointer-events-none select-none overflow-hidden rounded-[20px] border border-[var(--bd-subtle)] bg-[var(--surf-card)]/95 p-4 shadow-[0_30px_80px_-28px_rgba(99,60,220,0.35)] sm:p-5"
       aria-hidden="true"
     >
       {/* Mini header */}
@@ -12,8 +12,8 @@ export function DashboardPreview() {
             S
           </div>
           <div>
-            <div className="text-[0.8rem] font-extrabold tracking-tight text-[#28223f]">SpendWise</div>
-            <div className="text-[0.65rem] text-[#8c86a3]">Alex Rivera</div>
+            <div className="text-[0.8rem] font-extrabold tracking-tight text-[var(--tx-strong)]">SpendWise</div>
+            <div className="text-[0.65rem] text-[var(--tx-muted)]">Alex Rivera</div>
           </div>
         </div>
         <div className="h-6 w-11 rounded-full bg-gradient-to-r from-indigo-400 to-fuchsia-400 opacity-80" />
@@ -42,7 +42,7 @@ export function DashboardPreview() {
       </div>
 
       {/* Transactions */}
-      <div className="mb-1 text-[0.65rem] font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <div className="mb-1 text-[0.65rem] font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         Recent activity
       </div>
       <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
@@ -54,14 +54,14 @@ export function DashboardPreview() {
         ].map((row) => (
           <li
             key={row.label}
-            className="flex items-center gap-2.5 rounded-xl border border-[#eceafb] bg-[#faf9ff] px-2.5 py-2"
+            className="flex items-center gap-2.5 rounded-xl border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-2.5 py-2"
           >
             <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm ${row.bg}`}>
               {row.icon}
             </span>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[0.75rem] font-semibold text-[#3f3b52]">{row.label}</div>
-              <div className="text-[0.65rem] text-[#8c86a3]">{row.meta}</div>
+              <div className="truncate text-[0.75rem] font-semibold text-[var(--tx-strong)]">{row.label}</div>
+              <div className="text-[0.65rem] text-[var(--tx-muted)]">{row.meta}</div>
             </div>
             <span className={`text-[0.75rem] font-bold whitespace-nowrap tabular-nums ${row.tone}`}>{row.amount}</span>
           </li>

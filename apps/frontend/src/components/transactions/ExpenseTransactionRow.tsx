@@ -21,7 +21,7 @@ export function ExpenseTransactionRow({
   return (
     <tr
       style={{ animationDelay: `${animationDelayMs}ms` }}
-      className="animate-fade-in-up group border-b border-[#f3f1fa] text-sm last:border-b-0 hover:bg-rose-50/40"
+      className="animate-fade-in-up group border-b border-[var(--bd-faint)] text-sm last:border-b-0 hover:bg-rose-50/40 dark:hover:bg-rose-500/10"
     >
       <td className="px-4 py-2.5">
         <div className="flex items-center gap-2.5">
@@ -31,7 +31,7 @@ export function ExpenseTransactionRow({
           >
             {meta.icon}
           </span>
-          <span className="truncate font-semibold text-[#3f3b52]">{expense.title}</span>
+          <span className="truncate font-semibold text-[var(--tx-strong)]">{expense.title}</span>
         </div>
       </td>
       <td className="px-4 py-2.5">
@@ -42,7 +42,7 @@ export function ExpenseTransactionRow({
           {expense.category}
         </span>
       </td>
-      <td className="px-4 py-2.5 whitespace-nowrap text-[#8c86a3]">{expense.date}</td>
+      <td className="px-4 py-2.5 whitespace-nowrap text-[var(--tx-muted)]">{expense.date}</td>
       <td className="px-4 py-2.5 text-right">
         <span className="font-bold whitespace-nowrap text-rose-600 tabular-nums">
           - ₹{formatAmount(expense.amount, hideAmounts)}
@@ -51,14 +51,14 @@ export function ExpenseTransactionRow({
       <td className="px-4 py-2.5">
         <div className="flex items-center justify-end gap-1.5">
           <button
-            className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-amber-100 hover:text-amber-600"
+            className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[var(--tx-muted)] transition-all duration-200 hover:scale-110 hover:bg-amber-100 hover:text-amber-600 dark:hover:bg-amber-500/15 dark:hover:text-amber-300"
             onClick={() => onEdit(expense)}
             aria-label={STRINGS.transactions.editExpense}
           >
             ✎
           </button>
           <button
-            className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-rose-100 hover:text-rose-500"
+            className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[var(--tx-muted)] transition-all duration-200 hover:scale-110 hover:bg-rose-100 hover:text-rose-500 dark:hover:bg-rose-500/15 dark:hover:text-rose-300"
             onClick={() => onDelete(expense.id)}
             aria-label={STRINGS.transactions.deleteExpense}
           >

@@ -109,7 +109,7 @@ export function DashboardView({
       */}
       <div className="mb-6 hidden gap-5 sm:grid sm:grid-cols-1 lg:grid-cols-2 lg:items-stretch">
         <div id="income-section" className="flex flex-col">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {STRINGS.dashboard.incomeSection}
           </h2>
           <IncomeForm
@@ -128,7 +128,7 @@ export function DashboardView({
         </div>
 
         <div id="expense-section" className="flex flex-col">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> {STRINGS.dashboard.expenseSection}
           </h2>
           <ExpenseForm
@@ -151,7 +151,7 @@ export function DashboardView({
         </div>
       </div>
 
-      <h2 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h2 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> {STRINGS.dashboard.transactionsSection}
         {activeFilterCount > 0 && (
           <span

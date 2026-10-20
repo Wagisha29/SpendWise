@@ -60,10 +60,10 @@ export function AnalyticsView({
     <div className="animate-fade-in-up">
       <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="m-0 text-xl font-extrabold tracking-tight text-[#28223f]">
+          <h2 className="m-0 text-xl font-extrabold tracking-tight text-[var(--tx-strong)]">
             {STRINGS.analytics.heading}
           </h2>
-          <p className="mt-1 mb-0 text-sm text-[#8c86a3]">
+          <p className="mt-1 mb-0 text-sm text-[var(--tx-muted)]">
             {mode === "monthly"
               ? STRINGS.analytics.monthlySubtitle(selectedYear)
               : STRINGS.analytics.yearlySubtitle}
@@ -72,15 +72,15 @@ export function AnalyticsView({
 
         <div className="flex flex-wrap items-center gap-2">
           <div
-            className={`inline-flex h-10 items-center gap-2 rounded-[10px] border border-[#ece9f4] bg-white px-3 transition-opacity ${
+            className={`inline-flex h-10 items-center gap-2 rounded-[10px] border border-[var(--bd-subtle)] bg-[var(--surf-card)] px-3 transition-opacity ${
               mode === "yearly" ? "pointer-events-none opacity-40" : ""
             }`}
           >
-            <span className="text-xs font-semibold tracking-wide text-[#8c86a3] uppercase">
+            <span className="text-xs font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
               {STRINGS.analytics.yearLabel}
             </span>
             <select
-              className="h-full cursor-pointer border-none bg-transparent py-0 pr-1 text-sm font-semibold text-[#3f3b52] outline-none disabled:cursor-not-allowed"
+              className="h-full cursor-pointer border-none bg-transparent py-0 pr-1 text-sm font-semibold text-[var(--tx-strong)] outline-none disabled:cursor-not-allowed"
               value={selectedYear}
               onChange={(e) => setYear(Number(e.target.value))}
               disabled={mode === "yearly"}
@@ -95,7 +95,7 @@ export function AnalyticsView({
           </div>
 
           <div
-            className="inline-flex h-10 items-center rounded-[10px] border border-[#ece9f4] bg-white p-0.5"
+            className="inline-flex h-10 items-center rounded-[10px] border border-[var(--bd-subtle)] bg-[var(--surf-card)] p-0.5"
             role="group"
             aria-label="Chart period"
           >
@@ -115,20 +115,20 @@ export function AnalyticsView({
         hideAmounts={hideAmounts}
       />
 
-      <h3 className="mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {STRINGS.analytics.incomeExpenseTrend}
       </h3>
-      <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
+      <p className="mt-0 mb-3 text-xs text-[var(--tx-muted)]">
         {mode === "monthly"
           ? STRINGS.analytics.incomeExpenseTrendMonthly(selectedYear)
           : STRINGS.analytics.incomeExpenseTrendYearly}
       </p>
       <IncomeExpenseTrendChart data={incomeExpenseData} hideAmounts={hideAmounts} />
 
-      <h3 className="mt-8 mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mt-8 mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> {STRINGS.analytics.categoryShift}
       </h3>
-      <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
+      <p className="mt-0 mb-3 text-xs text-[var(--tx-muted)]">
         {mode === "monthly"
           ? STRINGS.analytics.categoryShiftMonthly(selectedYear)
           : STRINGS.analytics.categoryShiftYearly}
@@ -139,36 +139,36 @@ export function AnalyticsView({
         hideAmounts={hideAmounts}
       />
 
-      <div className="mt-10 mb-5 border-t border-[#eceafb] pt-8">
-        <h2 className="m-0 text-lg font-extrabold tracking-tight text-[#28223f]">
+      <div className="mt-10 mb-5 border-t border-[var(--bd-subtle)] pt-8">
+        <h2 className="m-0 text-lg font-extrabold tracking-tight text-[var(--tx-strong)]">
           {STRINGS.analytics.thisMonthHeading}
         </h2>
-        <p className="mt-1 mb-0 text-sm text-[#8c86a3]">{STRINGS.analytics.thisMonthSubtitle}</p>
+        <p className="mt-1 mb-0 text-sm text-[var(--tx-muted)]">{STRINGS.analytics.thisMonthSubtitle}</p>
       </div>
 
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" /> {STRINGS.analytics.spendingByCategory}
       </h3>
       <CategoryPieChart expenses={monthlyExpenses} hideAmounts={hideAmounts} />
 
-      <h3 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
+      <h3 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
         <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> {STRINGS.analytics.topExpenses}
       </h3>
       {topExpenses.length === 0 ? (
-        <p className="text-sm text-[#8c86a3]">{STRINGS.common.noExpensesThisMonth}</p>
+        <p className="text-sm text-[var(--tx-muted)]">{STRINGS.common.noExpensesThisMonth}</p>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {topExpenses.map((expense, index) => (
             <li
               key={expense.id}
-              className="flex items-center gap-3 rounded-2xl border border-[#eceafb] bg-white px-4 py-3 shadow-sm"
+              className="flex items-center gap-3 rounded-2xl border border-[var(--bd-subtle)] bg-[var(--surf-card)] px-4 py-3 shadow-sm"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f2ff] text-sm font-bold text-[#6d5fdb]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--surf-tint)] text-sm font-bold text-[var(--accent-tx)]">
                 {index + 1}
               </span>
               <div className="min-w-0 flex-1">
-                <div className="truncate font-semibold text-[#3f3b52]">{expense.title}</div>
-                <div className="text-[0.8rem] text-[#8c86a3]">
+                <div className="truncate font-semibold text-[var(--tx-strong)]">{expense.title}</div>
+                <div className="text-[0.8rem] text-[var(--tx-muted)]">
                   {expense.category} · {expense.date}
                 </div>
               </div>
@@ -199,7 +199,7 @@ function ModeButton({
       className={`h-9 cursor-pointer rounded-[8px] border-none px-3.5 text-sm font-semibold transition-all duration-200 ${
         active
           ? "bg-indigo-500 text-white shadow-sm"
-          : "bg-transparent text-[#7a7590] hover:text-[#3f3b52]"
+          : "bg-transparent text-[var(--tx-muted)] hover:text-[var(--tx-strong)]"
       }`}
     >
       {children}

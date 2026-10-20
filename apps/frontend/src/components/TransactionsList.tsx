@@ -41,7 +41,7 @@ export function TransactionsList({
 
   if (transactions.length === 0 && total === 0) {
     return (
-      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
+      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[var(--tx-muted)]`}>
         <div className="text-[2.25rem]">🧾</div>
         <p>{STRINGS.transactions.emptyNoData}</p>
       </div>
@@ -50,7 +50,7 @@ export function TransactionsList({
 
   if (transactions.length === 0) {
     return (
-      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
+      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[var(--tx-muted)]`}>
         <p>{STRINGS.transactions.emptyNoResults}</p>
       </div>
     );
@@ -91,7 +91,7 @@ export function TransactionsList({
       <div className={`${CARD} hidden overflow-x-auto sm:block`}>
         <table className="w-full min-w-[560px] border-collapse text-left">
           <thead>
-            <tr className="border-b border-[#ece9f4] text-[0.68rem] font-semibold tracking-wide text-[#9a93b0] uppercase">
+            <tr className="border-b border-[var(--bd-subtle)] text-[0.68rem] font-semibold tracking-wide text-[var(--tx-muted)] uppercase">
               <th className="px-4 py-2.5">{STRINGS.transactions.columnTitle}</th>
               <th className="px-4 py-2.5">{STRINGS.transactions.columnCategory}</th>
               <th className="px-4 py-2.5">{STRINGS.transactions.columnDate}</th>

@@ -3,16 +3,16 @@ import { WiseBotLogo } from "../WiseBotLogo";
 export function TypingIndicator({ label }: { label: string }) {
   return (
     <div className="animate-chat-bubble flex justify-start">
-      <span className="mt-0.5 mr-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+      <span className="mt-0.5 mr-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
         <WiseBotLogo size={24} />
       </span>
-      <div className="rounded-2xl rounded-bl-md border border-[#eceafb] bg-white px-3.5 py-2.5 shadow-sm">
+      <div className="rounded-2xl rounded-bl-md border border-[var(--bd-subtle)] bg-[var(--surf-card)] px-3.5 py-2.5 shadow-sm">
         <div className="mb-1.5 flex items-center gap-1" aria-hidden>
           <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
           <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
           <span className="wisebot-typing-dot h-1.5 w-1.5 rounded-full bg-indigo-400" />
         </div>
-        <p className="m-0 text-[0.7rem] text-[#8b86a3]">{label}</p>
+        <p className="m-0 text-[0.7rem] text-[var(--tx-muted)]">{label}</p>
       </div>
     </div>
   );

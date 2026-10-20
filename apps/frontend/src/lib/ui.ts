@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export const CARD =
-  "bg-white border border-[#eceafb] rounded-2xl shadow-[0_2px_10px_-4px_rgba(76,60,180,0.08)] transition-all duration-300";
+  "bg-[var(--surf-card)] border border-[var(--bd-subtle)] rounded-2xl shadow-[0_2px_10px_-4px_rgba(76,60,180,0.08)] dark:shadow-[0_2px_10px_-4px_rgba(0,0,0,0.4)] transition-all duration-300";
 
 export const AMOUNT_MASK = "•••••";
 

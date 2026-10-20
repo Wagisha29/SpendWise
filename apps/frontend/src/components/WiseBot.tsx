@@ -166,10 +166,10 @@ export function WiseBot() {
     <div className="fixed right-4 bottom-[calc(var(--bottom-nav-h)+0.75rem+var(--sab))] z-50 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
       {open && (
         <section
-          className="animate-pop-in flex h-[min(34rem,78vh)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#eceafb] bg-white shadow-[0_20px_50px_-20px_rgba(40,20,120,0.35)]"
+          className="animate-pop-in flex h-[min(34rem,78vh)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[var(--bd-subtle)] bg-[var(--surf-card)] shadow-[0_20px_50px_-20px_rgba(40,20,120,0.35)]"
           aria-label={STRINGS.wisebot.chatLabel}
         >
-          <header className="flex items-center gap-3 border-b border-[#eceafb] bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-white">
+          <header className="flex items-center gap-3 border-b border-[var(--bd-subtle)] bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-white">
             <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 hover:scale-105">
               <WiseBotLogo size={32} className="text-white" />
               <span
@@ -206,7 +206,7 @@ export function WiseBot() {
             </button>
           </header>
 
-          <div ref={listRef} className="relative flex-1 space-y-3 overflow-y-auto bg-[#faf9ff] px-3 py-3">
+          <div ref={listRef} className="relative flex-1 space-y-3 overflow-y-auto bg-[var(--surf-tint)] px-3 py-3">
             {messages.map((message) => (
               <WiseBotMessage
                 key={message.id}
@@ -242,7 +242,7 @@ export function WiseBot() {
                 <button
                   type="button"
                   onClick={() => void sendMessage(lastPromptRef.current)}
-                  className="cursor-pointer rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs font-semibold text-rose-500 shadow-sm transition hover:-translate-y-0.5 hover:bg-rose-50"
+                  className="cursor-pointer rounded-full border border-rose-200 bg-[var(--surf-card)] px-3 py-1.5 text-xs font-semibold text-rose-500 shadow-sm transition hover:-translate-y-0.5 hover:bg-rose-50 dark:border-rose-800/60 dark:hover:bg-rose-500/10"
                 >
                   {STRINGS.wisebot.retryLastQuestion}
                 </button>
@@ -252,7 +252,7 @@ export function WiseBot() {
 
           <form
             onSubmit={handleSend}
-            className="border-t border-[#eceafb] bg-white p-3"
+            className="border-t border-[var(--bd-subtle)] bg-[var(--surf-card)] p-3"
           >
             <div className="flex gap-2">
               <input
@@ -262,7 +262,7 @@ export function WiseBot() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={isTyping ? STRINGS.wisebot.inputThinking : STRINGS.wisebot.inputPlaceholder}
                 disabled={isTyping}
-                className="min-w-0 flex-1 rounded-xl border border-[#ece9f4] bg-[#faf9ff] px-3 py-2.5 text-sm text-[#3f3b52] outline-none transition focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] disabled:cursor-wait disabled:opacity-70"
+                className="min-w-0 flex-1 rounded-xl border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-3 py-2.5 text-sm text-[var(--tx-strong)] outline-none transition focus:border-indigo-300 focus:bg-[var(--surf-card)] focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] disabled:cursor-wait disabled:opacity-70"
                 aria-label={STRINGS.wisebot.inputLabel}
               />
               <button
@@ -274,7 +274,7 @@ export function WiseBot() {
                 <SendIcon spinning={isTyping} />
               </button>
             </div>
-            <p className="m-0 mt-1.5 text-[0.65rem] text-[#a39eb8]">{STRINGS.wisebot.footer}</p>
+            <p className="m-0 mt-1.5 text-[0.65rem] text-[var(--tx-muted)]">{STRINGS.wisebot.footer}</p>
           </form>
         </section>
       )}
@@ -284,7 +284,7 @@ export function WiseBot() {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="animate-chat-bubble hidden cursor-pointer rounded-2xl rounded-br-md border border-[#eceafb] bg-white px-3 py-2 text-left text-xs font-medium text-[#3f3b52] shadow-md transition hover:-translate-y-0.5 hover:shadow-lg sm:block"
+            className="animate-chat-bubble hidden cursor-pointer rounded-2xl rounded-br-md border border-[var(--bd-subtle)] bg-[var(--surf-card)] px-3 py-2 text-left text-xs font-medium text-[var(--tx-strong)] shadow-md transition hover:-translate-y-0.5 hover:shadow-lg sm:block"
           >
             {STRINGS.wisebot.nudge}
           </button>

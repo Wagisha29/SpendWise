@@ -26,7 +26,7 @@ export function CategoryTrendChart({
 }: CategoryTrendChartProps) {
   if (activeCategories.length === 0) {
     return (
-      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
+      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[var(--tx-muted)]`}>
         <p className="m-0 text-sm">{STRINGS.charts.trendEmpty}</p>
       </div>
     );
@@ -34,13 +34,13 @@ export function CategoryTrendChart({
 
   return (
     <div className={`${CARD} p-5 hover:shadow-md`}>
-      <p className="mt-0 mb-3 text-sm text-[#8c86a3]">{STRINGS.charts.trendHint}</p>
+      <p className="mt-0 mb-3 text-sm text-[var(--tx-muted)]">{STRINGS.charts.trendHint}</p>
 
       <ul className="mb-4 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
         {activeCategories.map((category) => {
           const meta = getCategoryMeta(category);
           return (
-            <li key={category} className="flex items-center gap-1.5 text-xs text-[#6f6888]">
+            <li key={category} className="flex items-center gap-1.5 text-xs text-[var(--tx-muted)]">
               <span
                 className="h-2.5 w-2.5 shrink-0 rounded-sm"
                 style={{ backgroundColor: meta.color }}
@@ -54,15 +54,15 @@ export function CategoryTrendChart({
       <div className="h-[260px] w-full sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 4 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#ece9f4" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--bd-subtle)" vertical={false} />
             <XAxis
               dataKey="label"
-              tick={{ fill: "#8c86a3", fontSize: 12 }}
-              axisLine={{ stroke: "#ece9f4" }}
+              tick={{ fill: "var(--tx-muted)", fontSize: 12 }}
+              axisLine={{ stroke: "var(--bd-subtle)" }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: "#8c86a3", fontSize: 12 }}
+              tick={{ fill: "var(--tx-muted)", fontSize: 12 }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(value: number) =>
@@ -81,7 +81,7 @@ export function CategoryTrendChart({
               wrapperStyle={{ zIndex: 40, outline: "none" }}
               contentStyle={{
                 borderRadius: 10,
-                border: "1px solid #ece9f4",
+                border: "1px solid var(--bd-subtle)",
                 fontSize: "0.85rem",
                 boxShadow: "0 8px 24px -8px rgba(99,60,220,0.25)",
                 maxHeight: 220,
