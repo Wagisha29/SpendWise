@@ -1,3 +1,4 @@
+import { STRINGS } from "../../constants/strings";
 import { formatAmount } from "../../lib/ui";
 import type { Income } from "../../types";
 
@@ -29,7 +30,7 @@ export function IncomeTransactionRow({
       </td>
       <td className="px-4 py-2.5">
         <span className="inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[0.75rem] font-medium text-emerald-600">
-          Income
+          {STRINGS.transactions.incomeBadge}
         </span>
       </td>
       <td className="px-4 py-2.5 whitespace-nowrap text-[#8c86a3]">{entry.date}</td>
@@ -43,14 +44,14 @@ export function IncomeTransactionRow({
           <button
             className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-emerald-100 hover:text-emerald-600"
             onClick={() => onEdit(entry)}
-            aria-label="Edit income"
+            aria-label={STRINGS.transactions.editIncome}
           >
             ✎
           </button>
           <button
             className="cursor-pointer rounded-md border-none bg-transparent p-1.5 text-base leading-none text-[#a39cc0] transition-all duration-200 hover:scale-110 hover:bg-rose-100 hover:text-rose-500"
             onClick={() => onDelete(entry.id)}
-            aria-label="Delete income"
+            aria-label={STRINGS.transactions.deleteIncome}
           >
             ✕
           </button>

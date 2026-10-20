@@ -10,6 +10,7 @@ import {
 } from "recharts";
 
 import { CHART_COLORS } from "../categories";
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { IncomeExpensePoint } from "../lib/analyticsAggregates";
 
@@ -24,7 +25,7 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
   if (!hasData) {
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
-        <p className="m-0 text-sm">No income or expenses in this range yet.</p>
+        <p className="m-0 text-sm">{STRINGS.charts.incomeExpenseEmpty}</p>
       </div>
     );
   }
@@ -53,7 +54,7 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
             <Tooltip
               formatter={(value, name) => [
                 hideAmounts ? `₹${AMOUNT_MASK}` : `₹${formatAmount(Number(value), false)}`,
-                name === "income" ? "Income" : "Expense",
+                name === "income" ? STRINGS.filters.income : STRINGS.filters.expense,
               ]}
               labelFormatter={(label) => String(label)}
               contentStyle={{
@@ -64,7 +65,9 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
               }}
             />
             <Legend
-              formatter={(value) => (value === "income" ? "Income" : "Expense")}
+              formatter={(value) =>
+                value === "income" ? STRINGS.filters.income : STRINGS.filters.expense
+              }
               wrapperStyle={{ fontSize: "0.8rem", color: "#6f6888" }}
             />
             <Bar
@@ -84,7 +87,7 @@ export function IncomeExpenseTrendChart({ data, hideAmounts }: IncomeExpenseTren
       </div>
       {!hideAmounts && (
         <p className="mt-3 mb-0 text-center text-xs text-[#8c86a3]">
-          Totals shown in ₹ · Y-axis may use k for thousands
+          {STRINGS.charts.incomeExpenseFootnote}
         </p>
       )}
     </div>

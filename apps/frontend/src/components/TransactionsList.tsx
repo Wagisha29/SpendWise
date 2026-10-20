@@ -1,6 +1,9 @@
+import { STRINGS } from "../constants/strings";
 import { CARD } from "../lib/ui";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { ExpenseTransactionCard } from "./transactions/ExpenseTransactionCard";
 import { ExpenseTransactionRow } from "./transactions/ExpenseTransactionRow";
+import { IncomeTransactionCard } from "./transactions/IncomeTransactionCard";
 import { IncomeTransactionRow } from "./transactions/IncomeTransactionRow";
 import { TransactionPagination } from "./transactions/TransactionPagination";
 import type { Expense, Income, Transaction } from "../types";
@@ -40,7 +43,7 @@ export function TransactionsList({
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
         <div className="text-[2.25rem]">🧾</div>
-        <p>No transactions yet. Add income or an expense above.</p>
+        <p>{STRINGS.transactions.emptyNoData}</p>
       </div>
     );
   }
@@ -48,22 +51,52 @@ export function TransactionsList({
   if (transactions.length === 0) {
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
-        <p>No results match these filters.</p>
+        <p>{STRINGS.transactions.emptyNoResults}</p>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-2.5">
-      <div className={`${CARD} overflow-x-auto`}>
+      {/* Mobile: compact card list (no horizontal scrolling needed). */}
+      <ul className="m-0 flex list-none flex-col gap-2 p-0 sm:hidden">
+        {transactions.map((item, index) => {
+          const delay = Math.min(index, 6) * 40;
+          if (item.kind === "income") {
+            return (
+              <IncomeTransactionCard
+                key={`income-${item.data.id}`}
+                entry={item.data}
+                hideAmounts={hideAmounts}
+                animationDelayMs={delay}
+                onEdit={onEditIncome}
+                onDelete={onDeleteIncome}
+              />
+            );
+          }
+          return (
+            <ExpenseTransactionCard
+              key={`expense-${item.data.id}`}
+              expense={item.data}
+              hideAmounts={hideAmounts}
+              animationDelayMs={delay}
+              onEdit={onEditExpense}
+              onDelete={onDeleteExpense}
+            />
+          );
+        })}
+      </ul>
+
+      {/* sm and up: full table. */}
+      <div className={`${CARD} hidden overflow-x-auto sm:block`}>
         <table className="w-full min-w-[560px] border-collapse text-left">
           <thead>
             <tr className="border-b border-[#ece9f4] text-[0.68rem] font-semibold tracking-wide text-[#9a93b0] uppercase">
-              <th className="px-4 py-2.5">Title</th>
-              <th className="px-4 py-2.5">Category</th>
-              <th className="px-4 py-2.5">Date</th>
-              <th className="px-4 py-2.5 text-right">Amount</th>
-              <th className="px-4 py-2.5 text-right">Actions</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnTitle}</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnCategory}</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnDate}</th>
+              <th className="px-4 py-2.5 text-right">{STRINGS.transactions.columnAmount}</th>
+              <th className="px-4 py-2.5 text-right">{STRINGS.transactions.columnActions}</th>
             </tr>
           </thead>
           <tbody>

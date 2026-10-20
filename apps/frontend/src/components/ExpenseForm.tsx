@@ -1,7 +1,8 @@
 import { CATEGORIES, getCategoryMeta } from "../categories";
+import { STRINGS } from "../constants/strings";
 import { CARD, formatAmount } from "../lib/ui";
 
-interface ExpenseFormProps {
+export interface ExpenseFormProps {
   title: string;
   amount: string;
   quantity: string;
@@ -57,7 +58,7 @@ export function ExpenseForm({
         <input
           className={INPUT_CLASS}
           type="text"
-          placeholder="Title"
+          placeholder={STRINGS.expenseForm.titlePlaceholder}
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           required
@@ -65,7 +66,7 @@ export function ExpenseForm({
         <input
           className={INPUT_CLASS}
           type="number"
-          placeholder="Unit price"
+          placeholder={STRINGS.expenseForm.unitPricePlaceholder}
           value={amount}
           onChange={(e) => onAmountChange(e.target.value)}
           min="0.01"
@@ -78,7 +79,7 @@ export function ExpenseForm({
         <input
           className={INPUT_CLASS}
           type="number"
-          placeholder="Qty"
+          placeholder={STRINGS.expenseForm.qtyPlaceholder}
           value={quantity}
           onChange={(e) => onQuantityChange(e.target.value)}
           min="1"
@@ -108,7 +109,8 @@ export function ExpenseForm({
       <div className={`mt-auto flex flex-col gap-2 ${bare ? "" : ""}`}>
         {total !== null && (
           <p className="m-0 text-sm font-medium text-[#7a7590]">
-            Total <span className="font-semibold tabular-nums text-rose-700">₹{total}</span>
+            {STRINGS.expenseForm.total}{" "}
+            <span className="font-semibold tabular-nums text-rose-700">₹{total}</span>
           </p>
         )}
         <div className="flex gap-2">
@@ -117,7 +119,13 @@ export function ExpenseForm({
             className="w-full flex-1 cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-rose-300 to-orange-300 px-[1.15rem] py-[0.65rem] font-semibold whitespace-nowrap text-rose-900 shadow-[0_4px_14px_-4px_rgba(251,113,133,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(251,113,133,0.6)] active:scale-[0.97] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={submitting}
           >
-            {submitting ? (isEditing ? "Saving…" : "Adding…") : isEditing ? "Save Changes" : "Add Expense"}
+            {submitting
+              ? isEditing
+                ? STRINGS.expenseForm.saving
+                : STRINGS.expenseForm.adding
+              : isEditing
+                ? STRINGS.expenseForm.saveChanges
+                : STRINGS.expenseForm.add}
           </button>
           {(isEditing || bare) && (
             <button
@@ -125,7 +133,7 @@ export function ExpenseForm({
               className="cursor-pointer rounded-[9px] border border-[#ece9f4] bg-transparent px-[1.15rem] py-[0.65rem] font-semibold text-[#7a7590] transition-all duration-200 hover:border-rose-300 hover:text-rose-500"
               onClick={onCancel}
             >
-              Cancel
+              {STRINGS.common.cancel}
             </button>
           )}
         </div>

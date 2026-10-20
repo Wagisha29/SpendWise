@@ -1,3 +1,5 @@
+import { STRINGS } from "../../constants/strings";
+
 export function TransactionPagination({
   page,
   totalPages,
@@ -19,11 +21,11 @@ export function TransactionPagination({
         onClick={() => onPageChange(page - 1)}
         className="cursor-pointer rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:border-indigo-200 hover:text-indigo-500 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        ← Prev
+        {STRINGS.pagination.prev}
       </button>
       <span className="text-sm font-medium text-[#8c86a3] tabular-nums">
-        Page {page} of {totalPages}
-        <span className="text-[#b0a9c4]"> · {total} results</span>
+        {STRINGS.pagination.pageOf(page, totalPages)}
+        <span className="text-[#b0a9c4]"> {STRINGS.pagination.results(total)}</span>
       </span>
       <button
         type="button"
@@ -31,7 +33,7 @@ export function TransactionPagination({
         onClick={() => onPageChange(page + 1)}
         className="cursor-pointer rounded-full border border-[#ece9f4] bg-white px-4 py-1.5 text-sm font-medium text-[#6b6485] transition-all duration-200 hover:border-indigo-200 hover:text-indigo-500 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        Next →
+        {STRINGS.pagination.next}
       </button>
     </div>
   );
