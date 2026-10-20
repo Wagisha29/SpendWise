@@ -1,4 +1,5 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
+import { STRINGS } from "../constants/strings";
 
 /**
  * Registers the PWA service worker and shows a small toast when:
@@ -33,9 +34,7 @@ export function PwaUpdateToast() {
   return (
     <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-indigo-100 bg-white px-4 py-3 text-sm shadow-lg">
       <span className="text-[#282342]">
-        {needRefresh
-          ? "A new version of SpendWise is available."
-          : "SpendWise is ready to work offline."}
+        {needRefresh ? STRINGS.pwaToast.updateAvailable : STRINGS.pwaToast.readyOffline}
       </span>
       {needRefresh && (
         <button
@@ -43,13 +42,13 @@ export function PwaUpdateToast() {
           onClick={() => updateServiceWorker(true)}
           className="rounded-lg bg-indigo-600 px-3 py-1 font-medium text-white hover:bg-indigo-700"
         >
-          Reload
+          {STRINGS.pwaToast.reload}
         </button>
       )}
       <button
         type="button"
         onClick={close}
-        aria-label="Dismiss"
+        aria-label={STRINGS.pwaToast.dismiss}
         className="text-[#8b86a3] hover:text-[#282342]"
       >
         ✕

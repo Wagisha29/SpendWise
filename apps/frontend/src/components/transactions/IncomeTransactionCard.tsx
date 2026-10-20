@@ -1,3 +1,4 @@
+import { STRINGS } from "../../constants/strings";
 import { CARD, formatAmount } from "../../lib/ui";
 import type { Income } from "../../types";
 
@@ -28,7 +29,9 @@ export function IncomeTransactionCard({
       </span>
       <div className="min-w-0 flex-1">
         <p className="m-0 truncate text-sm font-semibold text-[#3f3b52]">{entry.source}</p>
-        <p className="m-0 mt-0.5 truncate text-[0.72rem] text-[#8c86a3]">Income · {entry.date}</p>
+        <p className="m-0 mt-0.5 truncate text-[0.72rem] text-[#8c86a3]">
+          {STRINGS.transactions.incomeBadge} · {entry.date}
+        </p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <span className="text-sm font-bold whitespace-nowrap text-emerald-600 tabular-nums">
@@ -39,7 +42,7 @@ export function IncomeTransactionCard({
             type="button"
             className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-emerald-100 hover:text-emerald-600"
             onClick={() => onEdit(entry)}
-            aria-label="Edit income"
+            aria-label={STRINGS.transactions.editIncome}
           >
             ✎
           </button>
@@ -47,7 +50,7 @@ export function IncomeTransactionCard({
             type="button"
             className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-rose-100 hover:text-rose-500"
             onClick={() => onDelete(entry.id)}
-            aria-label="Delete income"
+            aria-label={STRINGS.transactions.deleteIncome}
           >
             ✕
           </button>

@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { ExpenseForm, type ExpenseFormProps } from "./ExpenseForm";
 import { IncomeForm, type IncomeFormProps } from "./IncomeForm";
 import { Modal } from "./Modal";
@@ -35,9 +36,9 @@ export function AddTransactionSheet({
   const isEditing = activeType === "income" ? incomeProps.isEditing : expenseProps.isEditing;
   const title = isEditing
     ? activeType === "income"
-      ? "Edit Income"
-      : "Edit Expense"
-    : "Add Transaction";
+      ? STRINGS.addSheet.editIncomeTitle
+      : STRINGS.addSheet.editExpenseTitle
+    : STRINGS.addSheet.addTitle;
 
   return (
     <Modal
@@ -58,7 +59,7 @@ export function AddTransactionSheet({
               : "bg-transparent text-[#7a7590]"
           }`}
         >
-          Expense
+          {STRINGS.addSheet.expenseTab}
         </button>
         <button
           type="button"
@@ -71,7 +72,7 @@ export function AddTransactionSheet({
               : "bg-transparent text-[#7a7590]"
           }`}
         >
-          Income
+          {STRINGS.addSheet.incomeTab}
         </button>
       </div>
 

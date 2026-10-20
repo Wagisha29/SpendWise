@@ -9,6 +9,7 @@ import {
 } from "recharts";
 
 import { getCategoryColor, getCategoryMeta } from "../categories";
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { CategoryMonthPoint } from "../lib/analyticsAggregates";
 
@@ -26,16 +27,14 @@ export function CategoryTrendChart({
   if (activeCategories.length === 0) {
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
-        <p className="m-0 text-sm">No category spending in this range yet.</p>
+        <p className="m-0 text-sm">{STRINGS.charts.trendEmpty}</p>
       </div>
     );
   }
 
   return (
     <div className={`${CARD} p-5 hover:shadow-md`}>
-      <p className="mt-0 mb-3 text-sm text-[#8c86a3]">
-        Each bar is one period. Colors show how much went to each category.
-      </p>
+      <p className="mt-0 mb-3 text-sm text-[#8c86a3]">{STRINGS.charts.trendHint}</p>
 
       <ul className="mb-4 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
         {activeCategories.map((category) => {

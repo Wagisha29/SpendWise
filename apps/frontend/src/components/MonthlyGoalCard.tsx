@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal } from "./Modal";
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, formatAmount } from "../lib/ui";
 import { currentMonthKey } from "../lib/dates";
 import {
@@ -92,18 +93,22 @@ export function MonthlyGoalCard({
         <div className="group relative flex h-[92px] flex-col gap-0.5 overflow-hidden rounded-2xl border border-dashed border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50/60 to-fuchsia-100/50 px-3.5 pt-3 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-[110px] sm:px-5 sm:pt-3.5 sm:pb-3.5">
           <div className="flex items-center justify-between gap-2">
             <span className="truncate text-[0.65rem] font-semibold tracking-wider text-indigo-700/70 uppercase sm:text-xs">
-              🎯 Goal
+              🎯 {STRINGS.goal.label}
             </span>
             <button
               type="button"
               onClick={openModal}
               className="shrink-0 rounded-full bg-indigo-600/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100"
             >
-              Set Goal
+              {STRINGS.goal.setGoal}
             </button>
           </div>
-          <p className="m-0 truncate text-sm font-extrabold text-[#3f3b52] sm:text-base">No goal set</p>
-          <p className="m-0 truncate text-[0.68rem] text-[#8c86a3] sm:text-xs">Cap spending for {monthLabel}.</p>
+          <p className="m-0 truncate text-sm font-extrabold text-[#3f3b52] sm:text-base">
+            {STRINGS.goal.noGoalSet}
+          </p>
+          <p className="m-0 truncate text-[0.68rem] text-[#8c86a3] sm:text-xs">
+            {STRINGS.goal.capSpendingFor(monthLabel)}
+          </p>
         </div>
         <GoalModal
           open={modalOpen}
@@ -125,7 +130,7 @@ export function MonthlyGoalCard({
 
   const paceTitle =
     status !== "over" && dailyAverage > 0
-      ? `At this pace: ~₹${formatAmount(projected, false)} by month end`
+      ? STRINGS.goal.pace(formatAmount(projected, false))
       : undefined;
 
   return (
@@ -138,25 +143,25 @@ export function MonthlyGoalCard({
         />
         <div className="flex items-center justify-between gap-2">
           <span className={`truncate text-[0.65rem] font-semibold tracking-wider uppercase sm:text-xs ${styles.label}`}>
-            🎯 Goal
+            🎯 {STRINGS.goal.label}
           </span>
           <button
             type="button"
             onClick={openModal}
             className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm transition-opacity duration-200 opacity-70 hover:opacity-100 ${styles.badge}`}
           >
-            Edit
+            {STRINGS.goal.edit}
           </button>
         </div>
 
         <span className={`truncate text-base font-extrabold tabular-nums sm:text-xl ${styles.value}`}>
           ₹{hideAmounts ? AMOUNT_MASK : formatAmount(Math.abs(remaining), false)}
           <span className="ml-1 text-[0.65rem] font-semibold opacity-70 sm:text-xs">
-            {status === "over" ? "over" : "left"}
+            {status === "over" ? STRINGS.goal.over : STRINGS.goal.left}
           </span>
         </span>
         <p className={`m-0 truncate text-[0.68rem] font-medium sm:text-xs ${styles.sub}`}>
-          of ₹{hideAmounts ? AMOUNT_MASK : formatAmount(goal, false)} goal
+          {STRINGS.goal.ofGoal(`₹${hideAmounts ? AMOUNT_MASK : formatAmount(goal, false)}`)}
         </p>
 
         <div className="absolute right-2.5 bottom-2 left-3.5 flex items-center justify-end gap-2 sm:right-3 sm:left-5">
@@ -203,15 +208,13 @@ function GoalModal({
   monthLabel: string;
 }) {
   return (
-    <Modal open={open} onClose={onClose} title={`Set Goal for ${monthLabel}`} accent="indigo">
+    <Modal open={open} onClose={onClose} title={STRINGS.goal.modalTitle(monthLabel)} accent="indigo">
       <form className="flex flex-col gap-3" onSubmit={onSubmit}>
-        <label className="text-sm font-medium text-[#6f6888]">
-          How much do you want to spend this month?
-        </label>
+        <label className="text-sm font-medium text-[#6f6888]">{STRINGS.goal.modalQuestion}</label>
         <input
           className="w-full rounded-[9px] border border-[#ece9f4] bg-[#faf9ff] px-[0.7rem] py-[0.6rem] text-[0.9rem] text-inherit transition-all duration-200 focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_3px_rgba(129,80,240,0.15)] focus:outline-none"
           type="number"
-          placeholder="e.g. 25000"
+          placeholder={STRINGS.goal.amountPlaceholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           min="1"
@@ -223,7 +226,7 @@ function GoalModal({
           type="submit"
           className="w-full cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-indigo-400 to-fuchsia-400 px-[1.15rem] py-[0.65rem] font-semibold text-white shadow-[0_4px_14px_-4px_rgba(129,80,240,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(129,80,240,0.6)] active:scale-[0.97]"
         >
-          Save Goal
+          {STRINGS.goal.save}
         </button>
       </form>
     </Modal>

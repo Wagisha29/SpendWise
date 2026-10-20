@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { DashboardPreview } from "./DashboardPreview";
 import { GoogleIcon } from "./GoogleIcon";
 import { Logo } from "./Logo";
@@ -78,15 +79,16 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-white shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)]">
               <Logo size={24} />
             </div>
-            <span className="text-xl font-extrabold tracking-tight text-[#28223f]">SpendWise</span>
+            <span className="text-xl font-extrabold tracking-tight text-[#28223f]">
+              {STRINGS.app.name}
+            </span>
           </div>
 
           <h1 className="m-0 text-[2.15rem] leading-[1.15] font-extrabold tracking-tight text-[#28223f] sm:text-[2.65rem]">
-            Take Control of Your Personal Finances with SpendWise.
+            {STRINGS.landing.headline}
           </h1>
           <p className="mt-4 mb-8 max-w-md text-[1.02rem] leading-relaxed text-[#6f6888]">
-            Track daily expenses, split income vs. savings, and visualize your spending habits
-            effortlessly.
+            {STRINGS.landing.subhead}
           </p>
 
           <button
@@ -97,7 +99,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white">
               <GoogleIcon size={14} />
             </span>
-            Continue with Google
+            {STRINGS.landing.cta}
           </button>
         </div>
 
@@ -114,10 +116,10 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
       <section className="mx-auto max-w-[1440px] px-6 pb-20 lg:px-12">
         <div className="mb-8 max-w-lg">
           <h2 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">
-            Everything you need to spend wiser
+            {STRINGS.landing.featuresHeading}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-[#6f6888]">
-            Built for everyday money tracking — clear, fast, and private.
+            {STRINGS.landing.featuresSubtitle}
           </p>
         </div>
 
@@ -140,14 +142,14 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
         </div>
 
         <div className="mt-12 flex flex-col items-start gap-4 border-t border-[#eceafb] pt-10 sm:flex-row sm:items-center sm:justify-between">
-          <p className="m-0 text-sm text-[#6f6888]">Ready to see where your money goes?</p>
+          <p className="m-0 text-sm text-[#6f6888]">{STRINGS.landing.closingCta}</p>
           <button
             type="button"
             onClick={onSignIn}
             className="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-[#dadce0] bg-white px-6 py-3 text-sm font-semibold text-[#3c4043] transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_8px_20px_-6px_rgba(99,102,241,0.25)] active:scale-[0.98] active:translate-y-0"
           >
             <GoogleIcon size={18} />
-            Continue with Google
+            {STRINGS.landing.cta}
           </button>
         </div>
       </section>

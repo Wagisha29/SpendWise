@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
+import { STRINGS } from "../constants/strings";
 import { createWordStreamPacer } from "../lib/wordStreamPacer";
 import { WiseBotLogo } from "./WiseBotLogo";
 import {
@@ -102,7 +103,7 @@ export function WiseBot() {
           message.id === botId
             ? {
                 ...message,
-                text: message.text.trim() || "I didn't get a reply that time — try again.",
+                text: message.text.trim() || STRINGS.wisebot.noReply,
                 streaming: false,
                 failed: !message.text.trim(),
               }
@@ -112,16 +113,15 @@ export function WiseBot() {
       if (!openRef.current) setUnread(true);
     } catch (err) {
       await pacer.finish().catch(() => undefined);
-      const detail =
-        err instanceof Error ? err.message : "Something went wrong talking to WiseBot.";
+      const detail = err instanceof Error ? err.message : STRINGS.wisebot.genericError;
       setMessages((prev) =>
         prev.map((message) =>
           message.id === botId
             ? {
                 ...message,
                 text: gotDelta
-                  ? `${message.text}\n\n_(interrupted: ${detail})_`
-                  : `Sorry — I couldn't answer that right now. ${detail}`,
+                  ? `${message.text}${STRINGS.wisebot.interruptedSuffix(detail)}`
+                  : `${STRINGS.wisebot.answerFailedPrefix}${detail}`,
                 streaming: false,
                 failed: true,
               }
@@ -167,7 +167,7 @@ export function WiseBot() {
       {open && (
         <section
           className="animate-pop-in flex h-[min(34rem,78vh)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#eceafb] bg-white shadow-[0_20px_50px_-20px_rgba(40,20,120,0.35)]"
-          aria-label="WiseBot chat"
+          aria-label={STRINGS.wisebot.chatLabel}
         >
           <header className="flex items-center gap-3 border-b border-[#eceafb] bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-3 text-white">
             <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 hover:scale-105">
@@ -180,9 +180,9 @@ export function WiseBot() {
               />
             </span>
             <div className="min-w-0 flex-1">
-              <h2 className="m-0 text-sm font-bold tracking-tight">WiseBot</h2>
+              <h2 className="m-0 text-sm font-bold tracking-tight">{STRINGS.wisebot.name}</h2>
               <p className="m-0 text-[0.7rem] text-white/85 transition-opacity">
-                {isTyping ? THINKING_LABELS[thinkingIdx] : "Online · ask about your money"}
+                {isTyping ? THINKING_LABELS[thinkingIdx] : STRINGS.wisebot.online}
               </p>
             </div>
             <button
@@ -190,17 +190,17 @@ export function WiseBot() {
               onClick={resetChat}
               disabled={isTyping || !hasConversation}
               className="cursor-pointer rounded-lg border-none bg-white/15 px-2 py-1.5 text-[0.7rem] font-semibold text-white transition hover:bg-white/25 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Start a new chat"
-              title="New chat"
+              aria-label={STRINGS.wisebot.newChatAriaLabel}
+              title={STRINGS.wisebot.newChatTitle}
             >
-              New
+              {STRINGS.wisebot.newChat}
             </button>
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="cursor-pointer rounded-lg border-none bg-white/15 px-2.5 py-1.5 text-sm text-white transition hover:bg-white/25 active:scale-95"
-              aria-label="Close WiseBot"
-              title="Close (Esc)"
+              aria-label={STRINGS.wisebot.close}
+              title={STRINGS.wisebot.closeTitle}
             >
               ✕
             </button>
@@ -221,7 +221,7 @@ export function WiseBot() {
 
             {showStarterChips && (
               <SuggestionChips
-                title="Try asking"
+                title={STRINGS.wisebot.tryAsking}
                 items={SUGGESTIONS}
                 variant="starter"
                 onSelect={(prompt) => void sendMessage(prompt)}
@@ -230,7 +230,7 @@ export function WiseBot() {
 
             {showFollowUps && (
               <SuggestionChips
-                title="Ask next"
+                title={STRINGS.wisebot.askNext}
                 items={FOLLOW_UPS}
                 variant="followup"
                 onSelect={(prompt) => void sendMessage(prompt)}
@@ -244,7 +244,7 @@ export function WiseBot() {
                   onClick={() => void sendMessage(lastPromptRef.current)}
                   className="cursor-pointer rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs font-semibold text-rose-500 shadow-sm transition hover:-translate-y-0.5 hover:bg-rose-50"
                 >
-                  Retry last question
+                  {STRINGS.wisebot.retryLastQuestion}
                 </button>
               </div>
             )}
@@ -260,23 +260,21 @@ export function WiseBot() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={isTyping ? "WiseBot is thinking…" : "Ask about spending, savings…"}
+                placeholder={isTyping ? STRINGS.wisebot.inputThinking : STRINGS.wisebot.inputPlaceholder}
                 disabled={isTyping}
                 className="min-w-0 flex-1 rounded-xl border border-[#ece9f4] bg-[#faf9ff] px-3 py-2.5 text-sm text-[#3f3b52] outline-none transition focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] disabled:cursor-wait disabled:opacity-70"
-                aria-label="Message WiseBot"
+                aria-label={STRINGS.wisebot.inputLabel}
               />
               <button
                 type="submit"
                 disabled={!canSend && !isTyping}
                 className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-xl border-none bg-indigo-500 text-white transition hover:bg-indigo-600 active:scale-[0.97] disabled:cursor-not-allowed disabled:bg-indigo-300 disabled:active:scale-100"
-                aria-label={isTyping ? "Waiting for reply" : "Send message"}
+                aria-label={isTyping ? STRINGS.wisebot.waitingForReply : STRINGS.wisebot.sendMessage}
               >
                 <SendIcon spinning={isTyping} />
               </button>
             </div>
-            <p className="m-0 mt-1.5 text-[0.65rem] text-[#a39eb8]">
-              Esc to close · answers use your SpendWise data
-            </p>
+            <p className="m-0 mt-1.5 text-[0.65rem] text-[#a39eb8]">{STRINGS.wisebot.footer}</p>
           </form>
         </section>
       )}
@@ -288,7 +286,7 @@ export function WiseBot() {
             onClick={() => setOpen(true)}
             className="animate-chat-bubble hidden cursor-pointer rounded-2xl rounded-br-md border border-[#eceafb] bg-white px-3 py-2 text-left text-xs font-medium text-[#3f3b52] shadow-md transition hover:-translate-y-0.5 hover:shadow-lg sm:block"
           >
-            Ask WiseBot about your spend
+            {STRINGS.wisebot.nudge}
           </button>
         )}
         <button
@@ -300,7 +298,7 @@ export function WiseBot() {
           className={`relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-none bg-gradient-to-br from-indigo-500 to-violet-500 text-white transition hover:-translate-y-0.5 hover:shadow-[0_14px_34px_-8px_rgba(99,102,241,0.8)] active:translate-y-0 active:scale-95 ${
             open ? "shadow-[0_10px_30px_-8px_rgba(99,102,241,0.7)]" : "animate-wisebot-fab"
           }`}
-          aria-label={open ? "Close WiseBot" : "Open WiseBot"}
+          aria-label={open ? STRINGS.wisebot.close : STRINGS.wisebot.open}
           aria-expanded={open}
         >
           {open ? (

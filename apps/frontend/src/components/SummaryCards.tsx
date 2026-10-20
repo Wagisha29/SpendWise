@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, formatAmount, useCountUp } from "../lib/ui";
 
 function SummaryCard({
@@ -68,8 +69,8 @@ function SummaryCard({
             title="Change vs last month"
           >
             {hideAmounts
-              ? "••% vs last month"
-              : `${momDown ? "↓" : "↑"} ${Math.abs(momDelta).toFixed(0)}% vs last month`}
+              ? `${STRINGS.summary.maskedPercent} ${STRINGS.summary.vsLastMonth}`
+              : `${momDown ? "↓" : "↑"} ${Math.abs(momDelta).toFixed(0)}% ${STRINGS.summary.vsLastMonth}`}
           </span>
         )}
       </div>
@@ -80,7 +81,9 @@ function SummaryCard({
         <span
           className={`text-[9px] font-bold tabular-nums sm:hidden ${momDown ? "text-emerald-700" : "text-rose-700"}`}
         >
-          {hideAmounts ? "••% vs last mo" : `${momDown ? "↓" : "↑"} ${Math.abs(momDelta).toFixed(0)}% vs last mo`}
+          {hideAmounts
+            ? `${STRINGS.summary.maskedPercent} ${STRINGS.summary.vsLastMonthShort}`
+            : `${momDown ? "↓" : "↑"} ${Math.abs(momDelta).toFixed(0)}% ${STRINGS.summary.vsLastMonthShort}`}
         </span>
       )}
       {hasPercent && (
@@ -88,7 +91,9 @@ function SummaryCard({
           className={`absolute right-2.5 bottom-2 rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums shadow-sm transition-transform duration-300 group-hover:scale-105 sm:right-3 sm:px-2 sm:text-[11px] ${styles.badge}`}
           title={percentLabel}
         >
-          {hideAmounts ? "••%" : `${percent > 0 ? "" : percent < 0 ? "-" : ""}${Math.abs(percent).toFixed(0)}%`}
+          {hideAmounts
+            ? STRINGS.summary.maskedPercent
+            : `${percent > 0 ? "" : percent < 0 ? "-" : ""}${Math.abs(percent).toFixed(0)}%`}
         </span>
       )}
     </div>
@@ -113,23 +118,28 @@ export function SummaryCards({
 
   return (
     <>
-      <SummaryCard label="Income (this month)" amount={income} hideAmounts={hideAmounts} accent="emerald" />
       <SummaryCard
-        label="Expense (this month)"
+        label={STRINGS.summary.incomeLabel}
+        amount={income}
+        hideAmounts={hideAmounts}
+        accent="emerald"
+      />
+      <SummaryCard
+        label={STRINGS.summary.expenseLabel}
         amount={expense}
         hideAmounts={hideAmounts}
         accent="rose"
         percent={expensePercent}
-        percentLabel="% of income spent"
+        percentLabel={STRINGS.summary.percentOfIncomeSpent}
         momDelta={expenseMomDelta}
       />
       <SummaryCard
-        label="Savings (this month)"
+        label={STRINGS.summary.savingsLabel}
         amount={savings}
         hideAmounts={hideAmounts}
         accent={savings >= 0 ? "indigo" : "rose"}
         percent={savingsPercent}
-        percentLabel="% of income saved"
+        percentLabel={STRINGS.summary.percentOfIncomeSaved}
       />
     </>
   );

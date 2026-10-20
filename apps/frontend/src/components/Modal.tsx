@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { STRINGS } from "../constants/strings";
 
 export function Modal({
   open,
@@ -60,7 +61,7 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={STRINGS.common.close}
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[#a39cc0] transition-all duration-200 hover:bg-[#f4f2ff] hover:text-[#6d5fdb]"
           >
             ✕

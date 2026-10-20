@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import { STRINGS } from "../../constants/strings";
 import { WiseBotLogo } from "../WiseBotLogo";
 import type { ChatMessage } from "./constants";
 
@@ -56,7 +57,7 @@ export function WiseBotMessage({
                 disabled={isTyping}
                 className="cursor-pointer rounded-md border-none bg-transparent px-1.5 py-0.5 text-[0.65rem] font-medium text-rose-500 transition hover:bg-rose-50 disabled:opacity-50"
               >
-                Retry
+                {STRINGS.wisebot.retry}
               </button>
             </div>
           )}

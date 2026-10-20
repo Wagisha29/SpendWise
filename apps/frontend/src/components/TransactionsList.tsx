@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { CARD } from "../lib/ui";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { ExpenseTransactionCard } from "./transactions/ExpenseTransactionCard";
@@ -42,7 +43,7 @@ export function TransactionsList({
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
         <div className="text-[2.25rem]">🧾</div>
-        <p>No transactions yet. Add income or an expense above.</p>
+        <p>{STRINGS.transactions.emptyNoData}</p>
       </div>
     );
   }
@@ -50,7 +51,7 @@ export function TransactionsList({
   if (transactions.length === 0) {
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
-        <p>No results match these filters.</p>
+        <p>{STRINGS.transactions.emptyNoResults}</p>
       </div>
     );
   }
@@ -91,11 +92,11 @@ export function TransactionsList({
         <table className="w-full min-w-[560px] border-collapse text-left">
           <thead>
             <tr className="border-b border-[#ece9f4] text-[0.68rem] font-semibold tracking-wide text-[#9a93b0] uppercase">
-              <th className="px-4 py-2.5">Title</th>
-              <th className="px-4 py-2.5">Category</th>
-              <th className="px-4 py-2.5">Date</th>
-              <th className="px-4 py-2.5 text-right">Amount</th>
-              <th className="px-4 py-2.5 text-right">Actions</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnTitle}</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnCategory}</th>
+              <th className="px-4 py-2.5">{STRINGS.transactions.columnDate}</th>
+              <th className="px-4 py-2.5 text-right">{STRINGS.transactions.columnAmount}</th>
+              <th className="px-4 py-2.5 text-right">{STRINGS.transactions.columnActions}</th>
             </tr>
           </thead>
           <tbody>

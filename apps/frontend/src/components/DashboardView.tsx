@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { ExpenseForm } from "./ExpenseForm";
 import { IncomeForm } from "./IncomeForm";
 import {
@@ -109,7 +110,7 @@ export function DashboardView({
       <div className="mb-6 hidden gap-5 sm:grid sm:grid-cols-1 lg:grid-cols-2 lg:items-stretch">
         <div id="income-section" className="flex flex-col">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {STRINGS.dashboard.incomeSection}
           </h2>
           <IncomeForm
             source={incomeSource}
@@ -128,7 +129,7 @@ export function DashboardView({
 
         <div id="expense-section" className="flex flex-col">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-            <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Expenses
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> {STRINGS.dashboard.expenseSection}
           </h2>
           <ExpenseForm
             title={title}
@@ -151,13 +152,13 @@ export function DashboardView({
       </div>
 
       <h2 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> Transactions
+        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" /> {STRINGS.dashboard.transactionsSection}
         {activeFilterCount > 0 && (
           <span
             className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-0.5 text-[0.65rem] font-semibold tracking-wide text-indigo-600 normal-case"
-            title={`${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}`}
+            title={STRINGS.dashboard.filteredTitle(activeFilterCount)}
           >
-            Filtered · {activeFilterCount}
+            {STRINGS.dashboard.filteredBadge(activeFilterCount)}
           </span>
         )}
       </h2>

@@ -1,4 +1,5 @@
 import { getCategoryMeta } from "../../categories";
+import { STRINGS } from "../../constants/strings";
 import { CARD, formatAmount } from "../../lib/ui";
 import type { Expense } from "../../types";
 
@@ -45,7 +46,7 @@ export function ExpenseTransactionCard({
             type="button"
             className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-amber-100 hover:text-amber-600"
             onClick={() => onEdit(expense)}
-            aria-label="Edit expense"
+            aria-label={STRINGS.transactions.editExpense}
           >
             ✎
           </button>
@@ -53,7 +54,7 @@ export function ExpenseTransactionCard({
             type="button"
             className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-rose-100 hover:text-rose-500"
             onClick={() => onDelete(expense.id)}
-            aria-label="Delete expense"
+            aria-label={STRINGS.transactions.deleteExpense}
           >
             ✕
           </button>

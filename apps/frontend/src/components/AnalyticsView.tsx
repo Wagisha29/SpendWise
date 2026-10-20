@@ -8,6 +8,7 @@ import {
   collectYears,
   type AnalyticsMode,
 } from "../lib/analyticsAggregates";
+import { STRINGS } from "../constants/strings";
 import { formatAmount } from "../lib/ui";
 import type { Expense, Income } from "../types";
 import { CategoryPieChart } from "./CategoryPieChart";
@@ -60,12 +61,12 @@ export function AnalyticsView({
       <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h2 className="m-0 text-xl font-extrabold tracking-tight text-[#28223f]">
-            Analytics & Financial Insights
+            {STRINGS.analytics.heading}
           </h2>
           <p className="mt-1 mb-0 text-sm text-[#8c86a3]">
             {mode === "monthly"
-              ? `Jan–Dec bars for ${selectedYear}.`
-              : "Yearly totals across the last 5 years."}
+              ? STRINGS.analytics.monthlySubtitle(selectedYear)
+              : STRINGS.analytics.yearlySubtitle}
           </p>
         </div>
 
@@ -76,7 +77,7 @@ export function AnalyticsView({
             }`}
           >
             <span className="text-xs font-semibold tracking-wide text-[#8c86a3] uppercase">
-              Year
+              {STRINGS.analytics.yearLabel}
             </span>
             <select
               className="h-full cursor-pointer border-none bg-transparent py-0 pr-1 text-sm font-semibold text-[#3f3b52] outline-none disabled:cursor-not-allowed"
@@ -99,10 +100,10 @@ export function AnalyticsView({
             aria-label="Chart period"
           >
             <ModeButton active={mode === "monthly"} onClick={() => setMode("monthly")}>
-              Monthly
+              {STRINGS.analytics.monthly}
             </ModeButton>
             <ModeButton active={mode === "yearly"} onClick={() => setMode("yearly")}>
-              Yearly
+              {STRINGS.analytics.yearly}
             </ModeButton>
           </div>
         </div>
@@ -115,22 +116,22 @@ export function AnalyticsView({
       />
 
       <h3 className="mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income vs Expense Trend
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {STRINGS.analytics.incomeExpenseTrend}
       </h3>
       <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
         {mode === "monthly"
-          ? `12 months in ${selectedYear} (Jan–Dec).`
-          : "One bar group per year for the last 5 years."}
+          ? STRINGS.analytics.incomeExpenseTrendMonthly(selectedYear)
+          : STRINGS.analytics.incomeExpenseTrendYearly}
       </p>
       <IncomeExpenseTrendChart data={incomeExpenseData} hideAmounts={hideAmounts} />
 
       <h3 className="mt-8 mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> Category Spending Shift
+        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> {STRINGS.analytics.categoryShift}
       </h3>
       <p className="mt-0 mb-3 text-xs text-[#8c86a3]">
         {mode === "monthly"
-          ? `Category mix by month in ${selectedYear}.`
-          : "Category mix by year for the last 5 years."}
+          ? STRINGS.analytics.categoryShiftMonthly(selectedYear)
+          : STRINGS.analytics.categoryShiftYearly}
       </p>
       <CategoryTrendChart
         data={categorySeries.data}
@@ -139,22 +140,22 @@ export function AnalyticsView({
       />
 
       <div className="mt-10 mb-5 border-t border-[#eceafb] pt-8">
-        <h2 className="m-0 text-lg font-extrabold tracking-tight text-[#28223f]">This month</h2>
-        <p className="mt-1 mb-0 text-sm text-[#8c86a3]">
-          Current month spending patterns and top expenses.
-        </p>
+        <h2 className="m-0 text-lg font-extrabold tracking-tight text-[#28223f]">
+          {STRINGS.analytics.thisMonthHeading}
+        </h2>
+        <p className="mt-1 mb-0 text-sm text-[#8c86a3]">{STRINGS.analytics.thisMonthSubtitle}</p>
       </div>
 
       <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" /> Spending by Category
+        <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" /> {STRINGS.analytics.spendingByCategory}
       </h3>
       <CategoryPieChart expenses={monthlyExpenses} hideAmounts={hideAmounts} />
 
       <h3 className="mt-8 mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> Top Expenses
+        <span className="h-1.5 w-1.5 rounded-full bg-rose-400" /> {STRINGS.analytics.topExpenses}
       </h3>
       {topExpenses.length === 0 ? (
-        <p className="text-sm text-[#8c86a3]">No expenses this month yet.</p>
+        <p className="text-sm text-[#8c86a3]">{STRINGS.common.noExpensesThisMonth}</p>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
           {topExpenses.map((expense, index) => (

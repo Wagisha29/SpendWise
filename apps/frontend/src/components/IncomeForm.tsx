@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { CARD } from "../lib/ui";
 
 export interface IncomeFormProps {
@@ -42,7 +43,7 @@ export function IncomeForm({
       <input
         className={INPUT_CLASS}
         type="text"
-        placeholder="Source (e.g. Salary)"
+        placeholder={STRINGS.incomeForm.sourcePlaceholder}
         value={source}
         onChange={(e) => onSourceChange(e.target.value)}
         required
@@ -52,7 +53,7 @@ export function IncomeForm({
         <input
           className={INPUT_CLASS}
           type="number"
-          placeholder="Amount"
+          placeholder={STRINGS.incomeForm.amountPlaceholder}
           value={amount}
           onChange={(e) => onAmountChange(e.target.value)}
           min="0.01"
@@ -74,7 +75,13 @@ export function IncomeForm({
           className="flex-1 cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-emerald-300 to-teal-300 px-[1.15rem] py-[0.65rem] font-semibold text-emerald-900 shadow-[0_4px_14px_-4px_rgba(52,211,153,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(52,211,153,0.6)] active:scale-[0.97] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
           disabled={submitting}
         >
-          {submitting ? (isEditing ? "Saving…" : "Adding…") : isEditing ? "Save Changes" : "Add Income"}
+          {submitting
+            ? isEditing
+              ? STRINGS.incomeForm.saving
+              : STRINGS.incomeForm.adding
+            : isEditing
+              ? STRINGS.incomeForm.saveChanges
+              : STRINGS.incomeForm.add}
         </button>
         {(isEditing || bare) && (
           <button
@@ -82,7 +89,7 @@ export function IncomeForm({
             className="cursor-pointer rounded-[9px] border border-[#ece9f4] bg-transparent px-[1.15rem] py-[0.65rem] font-semibold text-[#7a7590] transition-all duration-200 hover:border-rose-300 hover:text-rose-500"
             onClick={onCancel}
           >
-            Cancel
+            {STRINGS.common.cancel}
           </button>
         )}
       </div>

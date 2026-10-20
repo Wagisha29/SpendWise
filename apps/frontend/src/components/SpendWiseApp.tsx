@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { CATEGORIES } from "../categories";
+import { STRINGS } from "../constants/strings";
 import { AddTransactionSheet, type TransactionSheetType } from "./AddTransactionSheet";
 import { AnalyticsView } from "./AnalyticsView";
 import { BottomNav } from "./BottomNav";
@@ -129,7 +130,7 @@ export function SpendWiseApp({
     try {
       setSummary(await api.getSummary());
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load summary");
+      setError(err instanceof Error ? err.message : STRINGS.errors.loadSummary);
     }
   }
 
@@ -143,7 +144,7 @@ export function SpendWiseApp({
       }
       setAllExpenses(items);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load expenses");
+      setError(err instanceof Error ? err.message : STRINGS.errors.loadExpenses);
     }
   }
 
@@ -157,7 +158,7 @@ export function SpendWiseApp({
       setTxTotalPages(result.total_pages);
       setTxTotal(result.total);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load transactions");
+      setError(err instanceof Error ? err.message : STRINGS.errors.loadTransactions);
     } finally {
       setLoading(false);
     }
@@ -212,8 +213,8 @@ export function SpendWiseApp({
         err instanceof Error
           ? err.message
           : editingId !== null
-            ? "Failed to update expense"
-            : "Failed to add expense",
+            ? STRINGS.errors.updateExpense
+            : STRINGS.errors.addExpense,
       );
     } finally {
       setSubmitting(false);
@@ -227,7 +228,7 @@ export function SpendWiseApp({
       const nextPage = expenseCountOnPage <= 1 && txPage > 1 ? txPage - 1 : txPage;
       await refreshDashboard(nextPage);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete expense");
+      setError(err instanceof Error ? err.message : STRINGS.errors.deleteExpense);
     }
   }
 
@@ -255,7 +256,7 @@ export function SpendWiseApp({
     try {
       setIncome(await api.listIncome());
     } catch (err) {
-      setIncomeError(err instanceof Error ? err.message : "Failed to load income");
+      setIncomeError(err instanceof Error ? err.message : STRINGS.errors.loadIncome);
     } finally {
       setIncomeLoading(false);
     }
@@ -292,8 +293,8 @@ export function SpendWiseApp({
         err instanceof Error
           ? err.message
           : editingIncomeId !== null
-            ? "Failed to update income"
-            : "Failed to add income",
+            ? STRINGS.errors.updateIncome
+            : STRINGS.errors.addIncome,
       );
     } finally {
       setIncomeSubmitting(false);
@@ -307,7 +308,7 @@ export function SpendWiseApp({
       const nextPage = incomeCountOnPage <= 1 && txPage > 1 ? txPage - 1 : txPage;
       await refreshDashboard(nextPage);
     } catch (err) {
-      setIncomeError(err instanceof Error ? err.message : "Failed to delete income");
+      setIncomeError(err instanceof Error ? err.message : STRINGS.errors.deleteIncome);
     }
   }
 

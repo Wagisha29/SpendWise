@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CATEGORIES, getCategoryMeta } from "../categories";
+import { STRINGS } from "../constants/strings";
 
 export type TransactionFilterValues = {
   type: "all" | "income" | "expense";
@@ -65,7 +66,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         <label className="relative min-w-0 flex-1">
           <input
             type="search"
-            placeholder="Search title or source…"
+            placeholder={STRINGS.filters.searchPlaceholderMobile}
             className={`${CONTROL} h-9 pl-7`}
             value={value.query}
             onChange={(e) => patch({ query: e.target.value })}
@@ -87,7 +88,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
               : "border-[#ece9f4] bg-white text-[#7a7590]"
           }`}
         >
-          ⚙ Filters
+          ⚙ {STRINGS.filters.toggle}
           {activeCount > 0 && (
             <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-indigo-600 px-1 text-[0.6rem] font-bold text-white">
               {activeCount}
@@ -102,10 +103,10 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         }`}
       >
         <label className="relative col-span-2 hidden min-w-0 sm:col-span-4 sm:block lg:col-span-1">
-          <span className={LABEL}>Search</span>
+          <span className={LABEL}>{STRINGS.filters.searchLabel}</span>
           <input
             type="search"
-            placeholder="Title or source…"
+            placeholder={STRINGS.filters.searchPlaceholder}
             className={`${CONTROL} pl-7`}
             value={value.query}
             onChange={(e) => patch({ query: e.target.value })}
@@ -119,7 +120,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>Type</span>
+          <span className={LABEL}>{STRINGS.filters.typeLabel}</span>
           <select
             className={`${CONTROL} cursor-pointer`}
             value={value.type}
@@ -131,21 +132,21 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
               });
             }}
           >
-            <option value="all">All</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="all">{STRINGS.filters.all}</option>
+            <option value="income">{STRINGS.filters.income}</option>
+            <option value="expense">{STRINGS.filters.expense}</option>
           </select>
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>Category</span>
+          <span className={LABEL}>{STRINGS.filters.categoryLabel}</span>
           <select
             className={`${CONTROL} cursor-pointer`}
             value={value.category}
             disabled={categoryDisabled}
             onChange={(e) => patch({ category: e.target.value })}
           >
-            <option value="">All</option>
+            <option value="">{STRINGS.filters.all}</option>
             {CATEGORIES.map((category) => (
               <option key={category} value={category}>
                 {getCategoryMeta(category).icon} {category}
@@ -155,7 +156,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>From</span>
+          <span className={LABEL}>{STRINGS.filters.fromLabel}</span>
           <input
             type="date"
             className={CONTROL}
@@ -166,7 +167,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>To</span>
+          <span className={LABEL}>{STRINGS.filters.toLabel}</span>
           <input
             type="date"
             className={CONTROL}
@@ -177,7 +178,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>Min ₹</span>
+          <span className={LABEL}>{STRINGS.filters.minLabel}</span>
           <input
             type="number"
             min="0"
@@ -190,7 +191,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
         </label>
 
         <label className="min-w-0">
-          <span className={LABEL}>Max ₹</span>
+          <span className={LABEL}>{STRINGS.filters.maxLabel}</span>
           <input
             type="number"
             min="0"
@@ -209,7 +210,7 @@ export function TransactionFilters({ value, onChange, onClear }: TransactionFilt
               onClick={onClear}
               className="h-8 cursor-pointer rounded-lg border-none bg-transparent px-1.5 text-[0.75rem] font-medium text-[#9a93b0] transition hover:text-indigo-600"
             >
-              Clear
+              {STRINGS.common.clear}
             </button>
           </div>
         ) : (

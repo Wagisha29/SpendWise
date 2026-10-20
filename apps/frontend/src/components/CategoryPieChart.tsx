@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import { getCategoryColor, getCategoryMeta } from "../categories";
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 import type { Expense } from "../types";
 
@@ -44,7 +45,7 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
     return (
       <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
         <div className="text-[2.25rem]">📊</div>
-        <p>No expenses this month yet. Add one to see the category breakdown.</p>
+        <p>{STRINGS.charts.pieEmpty}</p>
       </div>
     );
   }

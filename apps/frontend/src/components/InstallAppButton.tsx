@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { useInstallPrompt } from "../lib/useInstallPrompt";
 
 function DownloadIcon() {
@@ -43,15 +44,15 @@ export function InstallAppButton({
     <button
       type="button"
       onClick={promptInstall}
-      title="Install SpendWise as an app"
-      aria-label={iconOnly ? "Install SpendWise as an app" : undefined}
+      title={STRINGS.install.title}
+      aria-label={iconOnly ? STRINGS.install.title : undefined}
       className={
         className ??
         "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-[0.8rem] font-semibold text-indigo-600 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-100 hover:shadow-md active:translate-y-0"
       }
     >
       <DownloadIcon />
-      {!iconOnly && "Install app"}
+      {!iconOnly && STRINGS.install.cta}
     </button>
   );
 }

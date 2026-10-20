@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, CARD, formatAmount } from "../lib/ui";
 
 interface InsightCardsProps {
@@ -16,20 +17,18 @@ export function InsightCards({ dailyAverage, topCategory, hideAmounts }: Insight
     <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div className={`${CARD} flex flex-col gap-1 px-5 py-4 hover:shadow-md`}>
         <span className="text-xs font-semibold tracking-wider text-[#8c86a3] uppercase">
-          Average daily spend
+          {STRINGS.insights.averageDailySpend}
         </span>
         <span className="text-xl font-extrabold tabular-nums text-[#3f3b52]">
           ₹{formatAmount(dailyAverage, hideAmounts)}
-          <span className="ml-1 text-sm font-semibold text-[#8c86a3]">/ day</span>
+          <span className="ml-1 text-sm font-semibold text-[#8c86a3]">{STRINGS.insights.perDay}</span>
         </span>
-        <p className="m-0 text-xs text-[#8c86a3]">
-          This month&apos;s expenses ÷ day of month so far
-        </p>
+        <p className="m-0 text-xs text-[#8c86a3]">{STRINGS.insights.averageDailyFootnote}</p>
       </div>
 
       <div className={`${CARD} flex flex-col gap-1 px-5 py-4 hover:shadow-md`}>
         <span className="text-xs font-semibold tracking-wider text-[#8c86a3] uppercase">
-          Top spending category
+          {STRINGS.insights.topSpendingCategory}
         </span>
         {topCategory ? (
           <>
@@ -37,11 +36,11 @@ export function InsightCards({ dailyAverage, topCategory, hideAmounts }: Insight
               {topCategory.icon} {topCategory.category}
             </span>
             <p className="m-0 text-sm text-[#6f6888]">
-              Makes up{" "}
+              {STRINGS.insights.makesUp}{" "}
               <span className="font-bold text-rose-600 tabular-nums">
                 {hideAmounts ? AMOUNT_MASK : `${topCategory.percent.toFixed(0)}%`}
               </span>{" "}
-              of this month&apos;s spending
+              {STRINGS.insights.ofThisMonthsSpending}
               {!hideAmounts && (
                 <span className="text-[#8c86a3]">
                   {" "}
@@ -51,7 +50,7 @@ export function InsightCards({ dailyAverage, topCategory, hideAmounts }: Insight
             </p>
           </>
         ) : (
-          <p className="m-0 text-sm text-[#8c86a3]">No expenses this month yet.</p>
+          <p className="m-0 text-sm text-[#8c86a3]">{STRINGS.common.noExpensesThisMonth}</p>
         )}
       </div>
     </section>

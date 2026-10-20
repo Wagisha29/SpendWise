@@ -1,8 +1,9 @@
+import { STRINGS } from "../constants/strings";
 import type { AppTab } from "./Header";
 
 const TABS: { id: AppTab; label: string; icon: string }[] = [
-  { id: "dashboard", label: "Dashboard", icon: "🏠" },
-  { id: "analytics", label: "Analytics", icon: "📈" },
+  { id: "dashboard", label: STRINGS.nav.dashboard, icon: "🏠" },
+  { id: "analytics", label: STRINGS.nav.analytics, icon: "📈" },
 ];
 
 /**
@@ -35,8 +36,8 @@ export function BottomNav({
         <button
           type="button"
           onClick={onAddClick}
-          aria-label="Add income or expense"
-          title="Add income or expense"
+          aria-label={STRINGS.bottomNav.addLabel}
+          title={STRINGS.bottomNav.addLabel}
           className="relative -top-5 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-4 border-[#f6f5fc] bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-2xl font-semibold text-white shadow-[0_10px_24px_-6px_rgba(129,80,240,0.7)] transition-transform duration-200 active:scale-90"
         >
           +

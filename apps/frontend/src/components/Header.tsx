@@ -1,3 +1,4 @@
+import { STRINGS } from "../constants/strings";
 import { EyeIcon } from "./EyeIcon";
 import { InstallAppButton } from "./InstallAppButton";
 import { Logo } from "./Logo";
@@ -33,7 +34,7 @@ export function Header({
           </div>
           <div className="min-w-0">
             <h1 className="m-0 truncate text-lg font-extrabold tracking-tight text-[#28223f] sm:text-2xl">
-              SpendWise
+              {STRINGS.app.name}
             </h1>
             <p
               className="m-0 mt-0.5 hidden truncate text-[0.8rem] text-[#8c86a3] sm:block"
@@ -53,8 +54,8 @@ export function Header({
             type="button"
             onClick={onTogglePrivacy}
             aria-pressed={privacyMode}
-            aria-label={privacyMode ? "Show amounts" : "Hide amounts"}
-            title={privacyMode ? "Show amounts" : "Hide amounts"}
+            aria-label={privacyMode ? STRINGS.privacy.show : STRINGS.privacy.hide}
+            title={privacyMode ? STRINGS.privacy.show : STRINGS.privacy.hide}
             className={`relative flex h-7 w-[46px] shrink-0 cursor-pointer items-center rounded-full border transition-colors duration-300 sm:h-[30px] sm:w-[54px] ${
               privacyMode
                 ? "border-slate-300 bg-slate-200"
@@ -77,15 +78,15 @@ export function Header({
           </div>
           <button
             type="button"
-            aria-label="Sign out"
-            title="Sign out"
+            aria-label={STRINGS.header.signOut}
+            title={STRINGS.header.signOut}
             className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#ece9f4] bg-white text-[#7a7590] transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-300 hover:text-rose-500 hover:shadow-md active:translate-y-0 sm:h-auto sm:w-auto sm:px-3.5 sm:py-2"
             onClick={onSignOut}
           >
             <span className="sm:hidden" aria-hidden="true">
               ⎋
             </span>
-            <span className="hidden text-[0.8rem] font-medium sm:inline">Sign out</span>
+            <span className="hidden text-[0.8rem] font-medium sm:inline">{STRINGS.header.signOut}</span>
           </button>
         </div>
       </div>
@@ -95,10 +96,10 @@ export function Header({
         aria-label="Primary"
       >
         <TabButton active={activeTab === "dashboard"} onClick={() => onTabChange("dashboard")}>
-          Dashboard
+          {STRINGS.nav.dashboard}
         </TabButton>
         <TabButton active={activeTab === "analytics"} onClick={() => onTabChange("analytics")}>
-          Detailed Analytics
+          {STRINGS.nav.analyticsFull}
           <span aria-hidden="true" className="ml-1">
             📈
           </span>
