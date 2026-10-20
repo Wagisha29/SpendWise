@@ -47,7 +47,7 @@ export function AddTransactionSheet({
       title={title}
       accent={activeType === "income" ? "emerald" : "rose"}
     >
-      <div className="mb-4 flex rounded-xl border border-[#ece9f4] bg-[#faf9ff] p-1" role="tablist">
+      <div className="mb-4 flex rounded-xl border border-[var(--bd-subtle)] bg-[var(--surf-tint)] p-1" role="tablist">
         <button
           type="button"
           role="tab"
@@ -56,7 +56,7 @@ export function AddTransactionSheet({
           className={`flex-1 cursor-pointer rounded-lg border-none py-2 text-sm font-semibold transition-all duration-200 ${
             activeType === "expense"
               ? "bg-gradient-to-br from-rose-300 to-orange-300 text-rose-900 shadow-sm"
-              : "bg-transparent text-[#7a7590]"
+              : "bg-transparent text-[var(--tx-muted)]"
           }`}
         >
           {STRINGS.addSheet.expenseTab}
@@ -69,7 +69,7 @@ export function AddTransactionSheet({
           className={`flex-1 cursor-pointer rounded-lg border-none py-2 text-sm font-semibold transition-all duration-200 ${
             activeType === "income"
               ? "bg-gradient-to-br from-emerald-300 to-teal-300 text-emerald-900 shadow-sm"
-              : "bg-transparent text-[#7a7590]"
+              : "bg-transparent text-[var(--tx-muted)]"
           }`}
         >
           {STRINGS.addSheet.incomeTab}

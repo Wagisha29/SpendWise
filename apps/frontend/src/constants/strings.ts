@@ -225,6 +225,9 @@ export const STRINGS = {
     cta: "Continue with Google",
     featuresHeading: "Everything you need to spend wiser",
     featuresSubtitle: "Built for everyday money tracking — clear, fast, and private.",
+    wisebotFeatureTitle: "Meet WiseBot — Your AI Financial Copilot",
+    wisebotFeatureBody:
+      "Get instant insights on your spending habits, top categories, and personalized saving strategies.",
     closingCta: "Ready to see where your money goes?",
   },
 

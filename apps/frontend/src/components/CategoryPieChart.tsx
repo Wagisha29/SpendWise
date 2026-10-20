@@ -43,7 +43,7 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
 
   if (data.length === 0) {
     return (
-      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[#8c86a3]`}>
+      <div className={`${CARD} flex flex-col items-center gap-2 px-6 py-12 text-center text-[var(--tx-muted)]`}>
         <div className="text-[2.25rem]">📊</div>
         <p>{STRINGS.charts.pieEmpty}</p>
       </div>
@@ -87,7 +87,7 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
               ]}
               contentStyle={{
                 borderRadius: 10,
-                border: "1px solid #ece9f4",
+                border: "1px solid var(--bd-subtle)",
                 fontSize: "0.85rem",
                 boxShadow: "0 8px 24px -8px rgba(99,60,220,0.25)",
               }}
@@ -106,7 +106,7 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
               className={`flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 transition-all duration-200 ${
-                isActive ? "bg-[#f4f2ff] shadow-sm" : "hover:bg-[#faf9ff]"
+                isActive ? "bg-[var(--surf-tint)] shadow-sm" : "hover:bg-[var(--surf-tint)]"
               }`}
             >
               <span
@@ -116,13 +116,13 @@ export function CategoryPieChart({ expenses, hideAmounts }: CategoryPieChartProp
                   transform: isActive ? "scale(1.4)" : "scale(1)",
                 }}
               />
-              <span className="flex-1 truncate text-sm text-[#3f3b52]">
+              <span className="flex-1 truncate text-sm text-[var(--tx-strong)]">
                 {slice.icon} {slice.category}
               </span>
-              <span className="text-sm font-semibold text-[#3f3b52] tabular-nums">
+              <span className="text-sm font-semibold text-[var(--tx-strong)] tabular-nums">
                 ₹{formatAmount(slice.amount, hideAmounts)}
               </span>
-              <span className="w-12 text-right text-xs text-[#8c86a3] tabular-nums">
+              <span className="w-12 text-right text-xs text-[var(--tx-muted)] tabular-nums">
                 {percent.toFixed(0)}%
               </span>
             </li>

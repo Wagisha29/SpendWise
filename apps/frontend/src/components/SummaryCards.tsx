@@ -22,23 +22,23 @@ function SummaryCard({
 
   const styles = {
     emerald: {
-      wrap: "border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-100 hover:shadow-emerald-200/60",
-      label: "text-emerald-700/70",
-      value: "text-emerald-700",
+      wrap: "border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-100 hover:shadow-emerald-200/60 dark:border-emerald-800/50 dark:from-emerald-500/15 dark:via-emerald-500/5 dark:to-teal-500/10 dark:hover:shadow-emerald-900/40",
+      label: "text-emerald-700/70 dark:text-emerald-300/80",
+      value: "text-emerald-700 dark:text-emerald-300",
       dot: "bg-emerald-400",
       badge: "bg-emerald-600/90 text-white",
     },
     rose: {
-      wrap: "border-rose-200 bg-gradient-to-br from-rose-100 via-rose-50 to-orange-100 hover:shadow-rose-200/60",
-      label: "text-rose-700/70",
-      value: "text-rose-700",
+      wrap: "border-rose-200 bg-gradient-to-br from-rose-100 via-rose-50 to-orange-100 hover:shadow-rose-200/60 dark:border-rose-800/50 dark:from-rose-500/15 dark:via-rose-500/5 dark:to-orange-500/10 dark:hover:shadow-rose-900/40",
+      label: "text-rose-700/70 dark:text-rose-300/80",
+      value: "text-rose-700 dark:text-rose-300",
       dot: "bg-rose-400",
       badge: "bg-rose-600/90 text-white",
     },
     indigo: {
-      wrap: "border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50 to-sky-100 hover:shadow-indigo-200/60",
-      label: "text-indigo-700/70",
-      value: "text-indigo-700",
+      wrap: "border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50 to-sky-100 hover:shadow-indigo-200/60 dark:border-indigo-800/50 dark:from-indigo-500/15 dark:via-indigo-500/5 dark:to-sky-500/10 dark:hover:shadow-indigo-900/40",
+      label: "text-indigo-700/70 dark:text-indigo-300/80",
+      value: "text-indigo-700 dark:text-indigo-300",
       dot: "bg-indigo-400",
       badge: "bg-indigo-600/90 text-white",
     },

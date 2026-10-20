@@ -13,12 +13,12 @@ export function SuggestionChips({
 }) {
   const chipClass =
     variant === "starter"
-      ? "animate-chat-bubble cursor-pointer rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-medium text-indigo-600 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:translate-y-0 active:scale-[0.98]"
-      : "animate-chat-bubble cursor-pointer rounded-full border border-[#e4e0f4] bg-[#f6f4ff] px-3 py-1.5 text-xs font-medium text-[#5b5480] transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-white hover:text-indigo-600 hover:shadow-sm active:scale-[0.98]";
+      ? "animate-chat-bubble cursor-pointer rounded-full border border-indigo-200 bg-[var(--surf-card)] px-3 py-1.5 text-xs font-medium text-indigo-600 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:translate-y-0 active:scale-[0.98] dark:border-indigo-800/60 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+      : "animate-chat-bubble cursor-pointer rounded-full border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-3 py-1.5 text-xs font-medium text-[var(--tx-muted)] transition hover:-translate-y-0.5 hover:border-indigo-300 hover:bg-[var(--surf-card)] hover:text-indigo-600 hover:shadow-sm active:scale-[0.98] dark:hover:text-indigo-300";
 
   return (
     <div className={`animate-chat-bubble pl-9 ${variant === "starter" ? "pt-1" : ""}`}>
-      <p className="mb-2 text-[0.7rem] font-medium tracking-wide text-[#8b86a3] uppercase">
+      <p className="mb-2 text-[0.7rem] font-medium tracking-wide text-[var(--tx-muted)] uppercase">
         {title}
       </p>
       <div className="flex flex-wrap gap-2">

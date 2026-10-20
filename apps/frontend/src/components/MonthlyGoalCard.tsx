@@ -16,28 +16,28 @@ const STATUS_STYLES: Record<
   { wrap: string; label: string; value: string; sub: string; dot: string; bar: string; badge: string }
 > = {
   "on-track": {
-    wrap: "border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-100 hover:shadow-emerald-200/60",
-    label: "text-emerald-700/70",
-    value: "text-emerald-700",
-    sub: "text-emerald-700/60",
+    wrap: "border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-100 hover:shadow-emerald-200/60 dark:border-emerald-800/50 dark:from-emerald-500/15 dark:via-emerald-500/5 dark:to-teal-500/10 dark:hover:shadow-emerald-900/40",
+    label: "text-emerald-700/70 dark:text-emerald-300/80",
+    value: "text-emerald-700 dark:text-emerald-300",
+    sub: "text-emerald-700/60 dark:text-emerald-300/70",
     dot: "bg-emerald-400",
     bar: "from-emerald-400 to-teal-400",
     badge: "bg-emerald-600/90 text-white",
   },
   close: {
-    wrap: "border-amber-200 bg-gradient-to-br from-amber-100 via-amber-50 to-orange-100 hover:shadow-amber-200/60",
-    label: "text-amber-700/70",
-    value: "text-amber-700",
-    sub: "text-amber-700/60",
+    wrap: "border-amber-200 bg-gradient-to-br from-amber-100 via-amber-50 to-orange-100 hover:shadow-amber-200/60 dark:border-amber-800/50 dark:from-amber-500/15 dark:via-amber-500/5 dark:to-orange-500/10 dark:hover:shadow-amber-900/40",
+    label: "text-amber-700/70 dark:text-amber-300/80",
+    value: "text-amber-700 dark:text-amber-300",
+    sub: "text-amber-700/60 dark:text-amber-300/70",
     dot: "bg-amber-400",
     bar: "from-amber-400 to-orange-400",
     badge: "bg-amber-600/90 text-white",
   },
   over: {
-    wrap: "border-rose-200 bg-gradient-to-br from-rose-100 via-rose-50 to-orange-100 hover:shadow-rose-200/60",
-    label: "text-rose-700/70",
-    value: "text-rose-700",
-    sub: "text-rose-700/60",
+    wrap: "border-rose-200 bg-gradient-to-br from-rose-100 via-rose-50 to-orange-100 hover:shadow-rose-200/60 dark:border-rose-800/50 dark:from-rose-500/15 dark:via-rose-500/5 dark:to-orange-500/10 dark:hover:shadow-rose-900/40",
+    label: "text-rose-700/70 dark:text-rose-300/80",
+    value: "text-rose-700 dark:text-rose-300",
+    sub: "text-rose-700/60 dark:text-rose-300/70",
     dot: "bg-rose-400",
     bar: "from-rose-500 to-rose-600",
     badge: "bg-rose-600/90 text-white",
@@ -113,9 +113,9 @@ export function MonthlyGoalCard({
   if (goal === null) {
     return (
       <>
-        <div className="group relative flex h-[92px] flex-col gap-0.5 overflow-hidden rounded-2xl border border-dashed border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50/60 to-fuchsia-100/50 px-3.5 pt-3 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-[110px] sm:px-5 sm:pt-3.5 sm:pb-3.5">
+        <div className="group relative flex h-[92px] flex-col gap-0.5 overflow-hidden rounded-2xl border border-dashed border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50/60 to-fuchsia-100/50 px-3.5 pt-3 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-[110px] sm:px-5 sm:pt-3.5 sm:pb-3.5 dark:border-indigo-700/60 dark:from-indigo-500/15 dark:via-indigo-500/5 dark:to-fuchsia-500/10">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate text-[0.65rem] font-semibold tracking-wider text-indigo-700/70 uppercase sm:text-xs">
+            <span className="truncate text-[0.65rem] font-semibold tracking-wider text-indigo-700/70 uppercase sm:text-xs dark:text-indigo-300/80">
               🎯 {STRINGS.goal.label}
             </span>
             <button
@@ -126,10 +126,10 @@ export function MonthlyGoalCard({
               {STRINGS.goal.setGoal}
             </button>
           </div>
-          <p className="m-0 truncate text-sm font-extrabold text-[#3f3b52] sm:text-base">
+          <p className="m-0 truncate text-sm font-extrabold text-[var(--tx-strong)] sm:text-base">
             {STRINGS.goal.noGoalSet}
           </p>
-          <p className="m-0 truncate text-[0.68rem] text-[#8c86a3] sm:text-xs">
+          <p className="m-0 truncate text-[0.68rem] text-[var(--tx-muted)] sm:text-xs">
             {STRINGS.goal.capSpendingFor(monthLabel)}
           </p>
         </div>
@@ -190,7 +190,7 @@ export function MonthlyGoalCard({
         </p>
 
         <div className="absolute right-2.5 bottom-2 left-3.5 flex items-center justify-end gap-2 sm:right-3 sm:left-5">
-          <div className="hidden h-1.5 flex-1 overflow-hidden rounded-full bg-white/50 sm:block">
+          <div className="hidden h-1.5 flex-1 overflow-hidden rounded-full bg-white/50 sm:block dark:bg-black/25">
             <div
               className={`h-full rounded-full bg-gradient-to-r transition-all duration-500 ${styles.bar}`}
               style={{ width: `${Math.min(Math.max(percent, 0), 100)}%` }}
@@ -241,9 +241,9 @@ function GoalModal({
   return (
     <Modal open={open} onClose={onClose} title={STRINGS.goal.modalTitle(monthLabel)} accent="indigo">
       <form className="flex flex-col gap-3" onSubmit={onSubmit}>
-        <label className="text-sm font-medium text-[#6f6888]">{STRINGS.goal.modalQuestion}</label>
+        <label className="text-sm font-medium text-[var(--tx-muted)]">{STRINGS.goal.modalQuestion}</label>
         <input
-          className="w-full rounded-[9px] border border-[#ece9f4] bg-[#faf9ff] px-[0.7rem] py-[0.6rem] text-[0.9rem] text-inherit transition-all duration-200 focus:border-indigo-300 focus:bg-white focus:shadow-[0_0_0_3px_rgba(129,80,240,0.15)] focus:outline-none"
+          className="w-full rounded-[9px] border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-[0.7rem] py-[0.6rem] text-[0.9rem] text-inherit transition-all duration-200 focus:border-indigo-300 focus:bg-[var(--surf-card)] focus:shadow-[0_0_0_3px_rgba(129,80,240,0.15)] focus:outline-none"
           type="number"
           placeholder={STRINGS.goal.amountPlaceholder}
           value={value}

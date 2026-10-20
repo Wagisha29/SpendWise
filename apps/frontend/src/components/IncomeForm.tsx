@@ -16,7 +16,7 @@ export interface IncomeFormProps {
 }
 
 const INPUT_CLASS =
-  "w-full rounded-[9px] border border-[#ece9f4] bg-[#faf9ff] px-[0.7rem] py-[0.6rem] text-[0.9rem] text-inherit transition-all duration-200 focus:border-emerald-300 focus:bg-white focus:shadow-[0_0_0_3px_rgba(52,211,153,0.15)] focus:outline-none";
+  "w-full rounded-[9px] border border-[var(--bd-subtle)] bg-[var(--surf-tint)] px-[0.7rem] py-[0.6rem] text-[0.9rem] text-inherit transition-all duration-200 focus:border-emerald-300 focus:bg-[var(--surf-card)] focus:shadow-[0_0_0_3px_rgba(52,211,153,0.15)] focus:outline-none";
 
 export function IncomeForm({
   source,
@@ -86,7 +86,7 @@ export function IncomeForm({
         {(isEditing || bare) && (
           <button
             type="button"
-            className="cursor-pointer rounded-[9px] border border-[#ece9f4] bg-transparent px-[1.15rem] py-[0.65rem] font-semibold text-[#7a7590] transition-all duration-200 hover:border-rose-300 hover:text-rose-500"
+            className="cursor-pointer rounded-[9px] border border-[var(--bd-subtle)] bg-transparent px-[1.15rem] py-[0.65rem] font-semibold text-[var(--tx-muted)] transition-all duration-200 hover:border-rose-300 hover:text-rose-500"
             onClick={onCancel}
           >
             {STRINGS.common.cancel}

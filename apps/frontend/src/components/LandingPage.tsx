@@ -2,6 +2,8 @@ import { STRINGS } from "../constants/strings";
 import { DashboardPreview } from "./DashboardPreview";
 import { GoogleIcon } from "./GoogleIcon";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
+import { WiseBotLogo } from "./WiseBotLogo";
 
 const FEATURES = [
   {
@@ -21,6 +23,12 @@ const FEATURES = [
     body: "Cloud-synced transactions tied to your Google Account.",
     accent: "from-emerald-300 to-teal-300",
     Icon: LockIcon,
+  },
+  {
+    title: STRINGS.landing.wisebotFeatureTitle,
+    body: STRINGS.landing.wisebotFeatureBody,
+    accent: "from-fuchsia-300 to-violet-300",
+    Icon: WiseBotFeatureIcon,
   },
 ] as const;
 
@@ -63,15 +71,23 @@ function LockIcon() {
   );
 }
 
+function WiseBotFeatureIcon() {
+  return <WiseBotLogo size={22} />;
+}
+
 export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
   return (
     <div
       className="min-h-screen overflow-x-hidden"
       style={{
         background:
-          "radial-gradient(circle at 12% 8%, rgba(99,102,241,0.16), transparent 42%), radial-gradient(circle at 88% 18%, rgba(236,72,153,0.12), transparent 40%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.1), transparent 42%), #f6f5fc",
+          "radial-gradient(circle at 12% 8%, rgba(99,102,241,0.16), transparent 42%), radial-gradient(circle at 88% 18%, rgba(236,72,153,0.12), transparent 40%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.1), transparent 42%), var(--page-bg)",
       }}
     >
+      <div className="pt-safe absolute top-4 right-4 z-20 sm:top-6 sm:right-6">
+        <ThemeToggle />
+      </div>
+
       {/* Hero — one composition: brand, headline, support, CTA, preview */}
       <section className="relative mx-auto grid min-h-screen max-w-[1440px] items-center gap-10 px-6 pt-10 pb-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-12 lg:pt-8 lg:pb-12">
         <div className="animate-fade-in-up z-10 max-w-xl">
@@ -79,15 +95,15 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-fuchsia-400 text-white shadow-[0_10px_26px_-8px_rgba(129,80,240,0.55)]">
               <Logo size={24} />
             </div>
-            <span className="text-xl font-extrabold tracking-tight text-[#28223f]">
+            <span className="text-xl font-extrabold tracking-tight text-[var(--tx-strong)]">
               {STRINGS.app.name}
             </span>
           </div>
 
-          <h1 className="m-0 text-[2.15rem] leading-[1.15] font-extrabold tracking-tight text-[#28223f] sm:text-[2.65rem]">
+          <h1 className="m-0 text-[2.15rem] leading-[1.15] font-extrabold tracking-tight text-[var(--tx-strong)] sm:text-[2.65rem]">
             {STRINGS.landing.headline}
           </h1>
-          <p className="mt-4 mb-8 max-w-md text-[1.02rem] leading-relaxed text-[#6f6888]">
+          <p className="mt-4 mb-8 max-w-md text-[1.02rem] leading-relaxed text-[var(--tx-muted)]">
             {STRINGS.landing.subhead}
           </p>
 
@@ -115,38 +131,38 @@ export function LandingPage({ onSignIn }: { onSignIn: () => Promise<void> }) {
       {/* Features */}
       <section className="mx-auto max-w-[1440px] px-6 pb-20 lg:px-12">
         <div className="mb-8 max-w-lg">
-          <h2 className="m-0 text-2xl font-extrabold tracking-tight text-[#28223f]">
+          <h2 className="m-0 text-2xl font-extrabold tracking-tight text-[var(--tx-strong)]">
             {STRINGS.landing.featuresHeading}
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#6f6888]">
+          <p className="mt-2 text-sm leading-relaxed text-[var(--tx-muted)]">
             {STRINGS.landing.featuresSubtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((feature, index) => (
             <article
               key={feature.title}
-              className="animate-fade-in-up group rounded-2xl border border-[#eceafb] bg-white/80 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md"
+              className="animate-fade-in-up group rounded-2xl border border-[var(--bd-subtle)] bg-[var(--surf-card)]/80 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md"
               style={{ animationDelay: `${index * 80}ms` }}
             >
               <div
-                className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br text-[#28223f] ${feature.accent} transition-transform duration-300 group-hover:scale-110`}
+                className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br text-slate-900/80 ${feature.accent} transition-transform duration-300 group-hover:scale-110`}
               >
                 <feature.Icon />
               </div>
-              <h3 className="m-0 text-base font-bold text-[#28223f]">{feature.title}</h3>
-              <p className="mt-2 mb-0 text-sm leading-relaxed text-[#6f6888]">{feature.body}</p>
+              <h3 className="m-0 text-base font-bold text-[var(--tx-strong)]">{feature.title}</h3>
+              <p className="mt-2 mb-0 text-sm leading-relaxed text-[var(--tx-muted)]">{feature.body}</p>
             </article>
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-start gap-4 border-t border-[#eceafb] pt-10 sm:flex-row sm:items-center sm:justify-between">
-          <p className="m-0 text-sm text-[#6f6888]">{STRINGS.landing.closingCta}</p>
+        <div className="mt-12 flex flex-col items-start gap-4 border-t border-[var(--bd-subtle)] pt-10 sm:flex-row sm:items-center sm:justify-between">
+          <p className="m-0 text-sm text-[var(--tx-muted)]">{STRINGS.landing.closingCta}</p>
           <button
             type="button"
             onClick={onSignIn}
-            className="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-[#dadce0] bg-white px-6 py-3 text-sm font-semibold text-[#3c4043] transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_8px_20px_-6px_rgba(99,102,241,0.25)] active:scale-[0.98] active:translate-y-0"
+            className="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-[var(--google-border)] bg-[var(--surf-card)] px-6 py-3 text-sm font-semibold text-[var(--google-text)] transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_8px_20px_-6px_rgba(99,102,241,0.25)] active:scale-[0.98] active:translate-y-0"
           >
             <GoogleIcon size={18} />
             {STRINGS.landing.cta}

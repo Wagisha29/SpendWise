@@ -22,14 +22,14 @@ export function IncomeTransactionCard({
       className={`${CARD} animate-fade-in-up flex items-center gap-3 p-3`}
     >
       <span
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-base text-emerald-600"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-base text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"
         aria-hidden="true"
       >
         💰
       </span>
       <div className="min-w-0 flex-1">
-        <p className="m-0 truncate text-sm font-semibold text-[#3f3b52]">{entry.source}</p>
-        <p className="m-0 mt-0.5 truncate text-[0.72rem] text-[#8c86a3]">
+        <p className="m-0 truncate text-sm font-semibold text-[var(--tx-strong)]">{entry.source}</p>
+        <p className="m-0 mt-0.5 truncate text-[0.72rem] text-[var(--tx-muted)]">
           {STRINGS.transactions.incomeBadge} · {entry.date}
         </p>
       </div>
@@ -40,7 +40,7 @@ export function IncomeTransactionCard({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-emerald-100 hover:text-emerald-600"
+            className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[var(--tx-muted)] transition-all duration-200 hover:bg-emerald-100 hover:text-emerald-600 dark:hover:bg-emerald-500/15 dark:hover:text-emerald-300"
             onClick={() => onEdit(entry)}
             aria-label={STRINGS.transactions.editIncome}
           >
@@ -48,7 +48,7 @@ export function IncomeTransactionCard({
           </button>
           <button
             type="button"
-            className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[#a39cc0] transition-all duration-200 hover:bg-rose-100 hover:text-rose-500"
+            className="cursor-pointer rounded-md border-none bg-transparent p-1 text-sm leading-none text-[var(--tx-muted)] transition-all duration-200 hover:bg-rose-100 hover:text-rose-500 dark:hover:bg-rose-500/15 dark:hover:text-rose-300"
             onClick={() => onDelete(entry.id)}
             aria-label={STRINGS.transactions.deleteIncome}
           >
