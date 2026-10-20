@@ -4,6 +4,7 @@ import type {
   ExpenseInput,
   ExpenseListResponse,
   FilterListResponse,
+  Goal,
   Income,
   IncomeInput,
   Summary,
@@ -101,6 +102,18 @@ export const api = {
     request<Income>(`/api/income/${id}?op=updateIncome`, {
       method: "PATCH",
       body: JSON.stringify(income),
+    }),
+  // Returns null when no goal has been set for that month yet (backend
+  // responds 404 in that case — see routers/goal.py).
+  getGoal: (month: string) =>
+    request<Goal>(`/api/goals/${month}?op=getGoal`).catch((err: Error) => {
+      if (err.message === "No goal set for this month") return null;
+      throw err;
+    }),
+  upsertGoal: (month: string, amount: number) =>
+    request<Goal>(`/api/goals/${month}?op=upsertGoal`, {
+      method: "PUT",
+      body: JSON.stringify({ amount }),
     }),
   askWiseBot: (message: string) =>
     request<{ reply: string }>("/api/wisebot/chat?op=askWiseBot", {

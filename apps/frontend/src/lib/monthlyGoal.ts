@@ -1,24 +1,8 @@
 /**
- * Placeholder client-side storage for monthly spending goals.
- * TODO: replace with real API calls once the backend goals endpoint exists.
+ * Pure display/calculation helpers for the monthly goal card.
+ * Goal persistence itself lives server-side — see src/api.ts (getGoal /
+ * upsertGoal) and the backend's apps/backend/app/routers/goal.py.
  */
-
-const STORAGE_PREFIX = "monthlyGoal:";
-
-export function getMonthlyGoal(monthKey: string): number | null {
-  const raw = localStorage.getItem(STORAGE_PREFIX + monthKey);
-  if (!raw) return null;
-  const value = Number(raw);
-  return Number.isFinite(value) && value > 0 ? value : null;
-}
-
-export function setMonthlyGoal(monthKey: string, amount: number): void {
-  localStorage.setItem(STORAGE_PREFIX + monthKey, String(amount));
-}
-
-export function clearMonthlyGoal(monthKey: string): void {
-  localStorage.removeItem(STORAGE_PREFIX + monthKey);
-}
 
 export type GoalStatus = "on-track" | "close" | "over";
 

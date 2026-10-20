@@ -3,12 +3,11 @@ import { Modal } from "./Modal";
 import { STRINGS } from "../constants/strings";
 import { AMOUNT_MASK, formatAmount } from "../lib/ui";
 import { currentMonthKey } from "../lib/dates";
+import { api } from "../api";
 import {
   formatMonthLabel,
   getGoalStatus,
-  getMonthlyGoal,
   projectedMonthEndSpend,
-  setMonthlyGoal,
   type GoalStatus,
 } from "../lib/monthlyGoal";
 
@@ -53,8 +52,8 @@ interface MonthlyGoalCardProps {
 
 /**
  * Renders as the 4th card alongside Income / Expense / Savings.
- * Goal is stored client-side per month for now (see lib/monthlyGoal.ts);
- * swap for a real API call once the backend goals endpoint exists.
+ * Goal is persisted server-side via GET/PUT /api/goals/{month} — see
+ * src/api.ts and apps/backend/app/routers/goal.py.
  */
 export function MonthlyGoalCard({
   monthlyExpenseTotal,
@@ -62,29 +61,53 @@ export function MonthlyGoalCard({
   hideAmounts,
 }: MonthlyGoalCardProps) {
   const monthKey = currentMonthKey();
-  const [goal, setGoal] = useState<number | null>(() => getMonthlyGoal(monthKey));
+  const [goal, setGoal] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [goalInput, setGoalInput] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setGoal(getMonthlyGoal(monthKey));
+    let cancelled = false;
+    api
+      .getGoal(monthKey)
+      .then((result) => {
+        if (!cancelled) setGoal(result?.amount ?? null);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : STRINGS.errors.loadGoal);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [monthKey]);
 
   const monthLabel = formatMonthLabel(monthKey);
 
   function openModal() {
+    setError(null);
     setGoalInput(goal !== null ? String(goal) : "");
     setModalOpen(true);
   }
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     const parsed = Number(goalInput);
     if (!parsed || parsed <= 0) return;
-    // TODO: call backend API to persist the goal once it exists.
-    setMonthlyGoal(monthKey, parsed);
-    setGoal(parsed);
-    setModalOpen(false);
+
+    setSaving(true);
+    setError(null);
+    try {
+      const saved = await api.upsertGoal(monthKey, parsed);
+      setGoal(saved.amount);
+      setModalOpen(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : STRINGS.errors.saveGoal);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (goal === null) {
@@ -117,6 +140,8 @@ export function MonthlyGoalCard({
           onSubmit={handleSave}
           onClose={() => setModalOpen(false)}
           monthLabel={monthLabel}
+          saving={saving}
+          error={error}
         />
       </>
     );
@@ -187,6 +212,8 @@ export function MonthlyGoalCard({
         onSubmit={handleSave}
         onClose={() => setModalOpen(false)}
         monthLabel={monthLabel}
+        saving={saving}
+        error={error}
       />
     </>
   );
@@ -199,6 +226,8 @@ function GoalModal({
   onSubmit,
   onClose,
   monthLabel,
+  saving,
+  error,
 }: {
   open: boolean;
   value: string;
@@ -206,6 +235,8 @@ function GoalModal({
   onSubmit: (e: React.FormEvent) => void;
   onClose: () => void;
   monthLabel: string;
+  saving: boolean;
+  error: string | null;
 }) {
   return (
     <Modal open={open} onClose={onClose} title={STRINGS.goal.modalTitle(monthLabel)} accent="indigo">
@@ -222,11 +253,13 @@ function GoalModal({
           autoFocus
           required
         />
+        {error && <p className="m-0 text-sm font-medium text-rose-600">{error}</p>}
         <button
           type="submit"
-          className="w-full cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-indigo-400 to-fuchsia-400 px-[1.15rem] py-[0.65rem] font-semibold text-white shadow-[0_4px_14px_-4px_rgba(129,80,240,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(129,80,240,0.6)] active:scale-[0.97]"
+          disabled={saving}
+          className="w-full cursor-pointer rounded-[9px] border-none bg-gradient-to-br from-indigo-400 to-fuchsia-400 px-[1.15rem] py-[0.65rem] font-semibold text-white shadow-[0_4px_14px_-4px_rgba(129,80,240,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(129,80,240,0.6)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {STRINGS.goal.save}
+          {saving ? STRINGS.goal.saving : STRINGS.goal.save}
         </button>
       </form>
     </Modal>
