@@ -14,7 +14,7 @@
   --sal: env(safe-area-inset-left, 0px);
   /* Height of the mobile bottom tab bar, used to keep scrollable content
      and floating elements (WiseBot FAB) clear of it. */
-  --bottom-nav-h: 64px;
+  --bottom-nav-h: 76px;
 }
 
 html {

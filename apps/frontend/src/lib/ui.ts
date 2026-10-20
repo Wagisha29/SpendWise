@@ -5,6 +5,19 @@ export const CARD =
 
 export const AMOUNT_MASK = "•••••";
 
+/**
+ * Point-in-time check for whether we're on a small (mobile) viewport,
+ * matching Tailwind's `sm` breakpoint (640px). Used for one-off decisions
+ * made inside event handlers (e.g. "should this edit action open the
+ * mobile bottom-sheet or scroll to the inline desktop form?") rather than
+ * reactive rendering, so a plain matchMedia check is enough — no resize
+ * listener needed.
+ */
+export function isMobileViewport(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 639px)").matches;
+}
+
 const inrFormatter = new Intl.NumberFormat("en-IN", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,

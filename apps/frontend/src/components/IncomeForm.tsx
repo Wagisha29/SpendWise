@@ -1,6 +1,6 @@
 import { CARD } from "../lib/ui";
 
-interface IncomeFormProps {
+export interface IncomeFormProps {
   source: string;
   amount: string;
   date: string;

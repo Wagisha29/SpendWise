@@ -101,7 +101,12 @@ export function DashboardView({
 
   return (
     <>
-      <div className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch">
+      {/*
+        On mobile these inline forms are hidden — adding/editing happens via
+        the bottom-nav "+" sheet instead, so the page opens straight to the
+        summary + transaction list. sm+ keeps the classic two-column layout.
+      */}
+      <div className="mb-6 hidden gap-5 sm:grid sm:grid-cols-1 lg:grid-cols-2 lg:items-stretch">
         <div id="income-section" className="flex flex-col">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide text-[#8c86a3] uppercase">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Income

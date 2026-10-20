@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { CATEGORIES } from "../categories";
+import { AddTransactionSheet, type TransactionSheetType } from "./AddTransactionSheet";
 import { AnalyticsView } from "./AnalyticsView";
 import { BottomNav } from "./BottomNav";
 import { DashboardView } from "./DashboardView";
@@ -21,6 +22,7 @@ import {
   sumExpensesForMonth,
   topSpendingCategory,
 } from "../lib/insights";
+import { isMobileViewport } from "../lib/ui";
 import type { Expense, Income, Summary, Transaction } from "../types";
 
 export function SpendWiseApp({
@@ -73,6 +75,17 @@ export function SpendWiseApp({
   const [incomeDate, setIncomeDate] = useState(todayISO());
   const [editingIncomeId, setEditingIncomeId] = useState<number | null>(null);
 
+  // Mobile-only "add transaction" bottom sheet (see BottomNav's "+" FAB).
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetType, setSheetType] = useState<TransactionSheetType>("expense");
+
+  function openAddSheet(type: TransactionSheetType) {
+    resetForm();
+    resetIncomeForm();
+    setSheetType(type);
+    setSheetOpen(true);
+  }
+
   useEffect(() => {
     void loadSummary();
     void loadIncome();
@@ -100,6 +113,11 @@ export function SpendWiseApp({
     setQuantity("1");
     setCategory(expense.category);
     setDate(expense.date);
+    if (isMobileViewport()) {
+      setSheetType("expense");
+      setSheetOpen(true);
+      return;
+    }
     requestAnimationFrame(() => {
       document
         .getElementById("expense-section")
@@ -160,6 +178,7 @@ export function SpendWiseApp({
     setQuantity("1");
     setCategory(CATEGORIES[0]);
     setDate(todayISO());
+    setSheetOpen(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -218,6 +237,11 @@ export function SpendWiseApp({
     setIncomeSource(incomeEntry.source);
     setIncomeAmount(String(incomeEntry.amount));
     setIncomeDate(incomeEntry.date);
+    if (isMobileViewport()) {
+      setSheetType("income");
+      setSheetOpen(true);
+      return;
+    }
     requestAnimationFrame(() => {
       document
         .getElementById("income-section")
@@ -242,6 +266,7 @@ export function SpendWiseApp({
     setIncomeSource("");
     setIncomeAmount("");
     setIncomeDate(todayISO());
+    setSheetOpen(false);
   }
 
   async function handleIncomeSubmit(e: React.FormEvent) {
@@ -322,7 +347,7 @@ export function SpendWiseApp({
 
   return (
     <>
-      <div className="animate-fade-in-up mx-auto max-w-[1440px] px-4 pt-3 pb-24 sm:px-6 sm:pt-10 sm:pb-16 lg:px-12">
+      <div className="animate-fade-in-up mx-auto max-w-[1440px] px-4 pt-3 pb-[calc(var(--bottom-nav-h)+1.5rem+var(--sab))] sm:px-6 sm:pt-10 sm:pb-16 lg:px-12">
         <Header
           userName={userName}
           userEmail={userEmail}
@@ -406,7 +431,47 @@ export function SpendWiseApp({
         )}
       </div>
 
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onAddClick={() => openAddSheet(sheetType)}
+      />
+      <AddTransactionSheet
+        open={sheetOpen}
+        activeType={sheetType}
+        onTypeChange={setSheetType}
+        onClose={() => setSheetOpen(false)}
+        expenseProps={{
+          title,
+          amount,
+          quantity,
+          category,
+          date,
+          onTitleChange: setTitle,
+          onAmountChange: setAmount,
+          onQuantityChange: setQuantity,
+          onCategoryChange: setCategory,
+          onDateChange: setDate,
+          onSubmit: handleSubmit,
+          onCancel: resetForm,
+          submitting,
+          isEditing: editingId !== null,
+        }}
+        expenseError={error}
+        incomeProps={{
+          source: incomeSource,
+          amount: incomeAmount,
+          date: incomeDate,
+          onSourceChange: setIncomeSource,
+          onAmountChange: setIncomeAmount,
+          onDateChange: setIncomeDate,
+          onSubmit: handleIncomeSubmit,
+          onCancel: resetIncomeForm,
+          submitting: incomeSubmitting,
+          isEditing: editingIncomeId !== null,
+        }}
+        incomeError={incomeError}
+      />
       <WiseBot />
     </>
   );

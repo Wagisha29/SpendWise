@@ -1,7 +1,7 @@
 import { CATEGORIES, getCategoryMeta } from "../categories";
 import { CARD, formatAmount } from "../lib/ui";
 
-interface ExpenseFormProps {
+export interface ExpenseFormProps {
   title: string;
   amount: string;
   quantity: string;
