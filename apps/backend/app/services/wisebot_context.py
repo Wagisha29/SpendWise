@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.models.expense import Expense
 from app.models.income import Income
+from app.models.goal import Goal
 
 
 def _month_bounds(today: Optional[date] = None) -> Tuple[date, date]:
@@ -46,6 +47,10 @@ def build_user_finance_context(
             Expense.date >= start,
             Expense.date <= end,
         )
+    )
+
+    goal_row = db.scalar(
+        select(Goal).where(Goal.user_id == user_id, Goal.month == period)
     )
 
     income = float(income_total or 0)
@@ -114,4 +119,8 @@ def build_user_finance_context(
         "by_category": by_category,
         "recent_expenses": recent_expenses,
         "recent_income": recent_income,
+        "goal": {
+            "amount": round(float(goal_row.amount), 2),
+            "progress_pct": round((expense/ goal_row.amount) * 100, 1),
+        } if goal_row else None,
     }
